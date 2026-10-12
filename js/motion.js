@@ -64,7 +64,19 @@
     if (!canvas || !canvas.getContext) return;
 
     var ctx = canvas.getContext("2d");
-    var COUNT = 14;
+    var BASE = 14;
+    var COUNT = BASE;
+
+    // The test panel's bubble slider (<html data-bubbles>) scales the hero too:
+    // the default number per bottle in config.js equals these 14.
+    function applyAmount() {
+      var value = root.getAttribute("data-bubbles");
+      var config = window.SITE_CONFIG || {};
+      var normal = config.BUBBLES_PER_BOTTLE || 24;
+      COUNT = value === null ? BASE : Math.round(BASE * Number(value) / normal);
+      bubbles.length = Math.min(bubbles.length, COUNT);
+      while (bubbles.length < COUNT && width) bubbles.push(spawn({}, true));
+    }
     var bubbles = [];
     var width = 0, height = 0, color = "#fff";
     var frame = null, inView = true, last = 0;
@@ -140,6 +152,8 @@
     }
     document.addEventListener("visibilitychange", update);
     document.addEventListener("motion:change", update);
+    document.addEventListener("bubbles:change", applyAmount);
+    applyAmount();
     // The testing panel fires this; it also decides whether the canvas is shown at all.
     document.addEventListener("theme:change", function () {
       if (frame) { cancelAnimationFrame(frame); frame = null; }
@@ -202,6 +216,9 @@
     var sections = document.querySelectorAll("[data-settle]");
     var header = document.querySelector(".site-header");
     if (!sections.length) return;
+    // Touch screens lock with native CSS scroll snapping instead (base.css):
+    // it follows the finger's momentum, which a scripted glide cannot do well.
+    if (window.matchMedia && window.matchMedia("(hover: none) and (pointer: coarse)").matches) return;
 
     var touching = false;
     var timer = null;
@@ -218,6 +235,7 @@
       var range = window.innerHeight * SETTLE_RANGE;
       var best = null;
       for (var i = 0; i < sections.length; i++) {
+        if (!sections[i].getClientRects().length) continue; // dissolved on this screen size
         var gap = sections[i].getBoundingClientRect().top - offset;
         if (Math.abs(gap) <= range && (best === null || Math.abs(gap) < Math.abs(best))) best = gap;
       }

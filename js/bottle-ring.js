@@ -1,14 +1,22 @@
 /*
- * bottle-ring.js — TEST PAGE (selection.html): the bottles stand in a ring.
+ * bottle-ring.js — TEST PAGE (selection.html).
  *
- * The cuvée at the front is the selected one. It can be changed with the
- * arrows, the I–IV buttons, the left/right keys, by dragging the ring, or by
- * clicking a bottle. The text of the page (name, details, order link) follows
- * the selection. Clicking the bottle already in front scrolls to its details.
+ * The bottles stand in a ring on a stage that stays pinned to the screen while
+ * the page scrolls. The cuvée at the front is the selected one. Scrolling does
+ * not move the bottle away: it moves the camera.
+ *
+ *   screen 1  the ring: pick a cuvée (arrows, I–IV, left/right keys, drag, click)
+ *   screen 2  the other bottles step back, the chosen one slides aside for its sheet
+ *   screen 3  close-up of the top of the bottle
+ *   screen 4  close-up of the label
+ *
+ * Each screen has a camera "pose" (POSES below); between two screens the
+ * camera glides from one pose to the next. The text of the page (name, notes,
+ * order link) follows the selection.
  *
  * Uses the same model files and the same lazy Three.js loader as bottle-3d.js.
- * Without WebGL, with reduced motion, or opened by double-click, the ring is
- * replaced by the placeholder image; selecting still works.
+ * Without WebGL, with reduced motion, or opened by double-click, the stage
+ * shows the placeholder image; selecting still works.
  */
 (function () {
   "use strict";
@@ -25,12 +33,38 @@
 
   var SPACING = 2.5;        // ring radius, in bottle widths
   var FRONT_SCALE = 1.16;   // the selected bottle stands a little larger
-  var FOLLOW = 5.5;         // how briskly the ring reaches its place (per second; lower = slower)
-  var CAMERA_PITCH = 0.3;   // radians: how far above the ring the camera looks from
+  var FOLLOW = 5.5;         // how briskly things reach their place (per second; lower = slower)
+
+  /*
+   * One pose per screen, for wide screens and for phones (portrait).
+   *   focus   0 = look at the middle of the ring, 1 = look at the chosen bottle
+   *   look    height looked at, as a share of the bottle (0 base, 1 top)
+   *   view    how much height the camera takes in, in bottle heights (0 = fit the ring)
+   *   pitch   how far above the camera sits, in radians
+   *   right   where the subject sits on screen: +0.2 = a fifth of the width to the right
+   *   up      same, vertically
+   *   turn    extra turn of the chosen bottle, in radians
+   *   solo    0 = all bottles shown, 1 = only the chosen one
+   */
+  var POSES = {
+    wide: [
+      { focus: 0, look: 0.5, view: 0, pitch: 0.3, right: 0, up: 0.14, turn: 0, solo: 0 },
+      { focus: 1, look: 0.5, view: 1.45, pitch: 0.06, right: 0.2, up: 0, turn: -0.4, solo: 1 },
+      { focus: 1, look: 0.86, view: 0.46, pitch: 0.14, right: 0.2, up: 0, turn: 0.55, solo: 1 },
+      { focus: 1, look: 0.3, view: 0.56, pitch: 0, right: 0.2, up: 0, turn: -0.5, solo: 1 }
+    ],
+    tall: [
+      { focus: 0, look: 0.5, view: 0, pitch: 0.3, right: 0, up: 0.14, turn: 0, solo: 0 },
+      { focus: 1, look: 0.5, view: 3.0, pitch: 0.06, right: 0, up: 0.29, turn: -0.3, solo: 1 },
+      { focus: 1, look: 0.84, view: 1.0, pitch: 0.12, right: 0, up: 0.22, turn: 0.5, solo: 1 },
+      { focus: 1, look: 0.32, view: 1.15, pitch: 0, right: 0, up: 0.22, turn: -0.45, solo: 1 }
+    ]
+  };
+  var POSE_KEYS = ["focus", "look", "view", "pitch", "right", "up", "turn", "solo"];
 
   var stage = root.querySelector("[data-ring-stage]");
   var picker = root.querySelector("[data-ring-picker]");
-  var numeral = root.querySelector("[data-ring-numeral]");
+  var screens = root.querySelectorAll("[data-ring-screen]");
   var selected = 0;
   var onSelect = null; // set once the 3D ring exists
 
@@ -60,7 +94,6 @@
     for (i = 0; i < nodes.length; i++) {
       nodes[i].setAttribute("aria-pressed", String(i === selected));
     }
-    numeral.textContent = ROMAN[selected] || String(selected + 1);
 
     if (window.I18n && window.I18n.lang) window.I18n.apply(document);
     if (onSelect) onSelect(selected);
@@ -69,8 +102,14 @@
   CUVEES.forEach(function (cuvee, index) {
     var button = document.createElement("button");
     button.type = "button";
-    button.textContent = ROMAN[index] || String(index + 1);
-    button.setAttribute("data-i18n-attr", "aria-label:cuvees." + index + ".name");
+    var number = document.createElement("span");
+    number.className = "ring__switch-n";
+    number.textContent = ROMAN[index] || String(index + 1);
+    var name = document.createElement("span");
+    name.className = "ring__switch-name";
+    name.setAttribute("data-i18n", "cuvees." + index + ".name");
+    button.appendChild(number);
+    button.appendChild(name);
     button.addEventListener("click", function () { select(index); });
     picker.appendChild(button);
   });
@@ -88,6 +127,53 @@
 
   // Runs before i18n starts, so the first paint already has the right keys.
   select(0);
+
+  // The mobile order bar is always shown on this page.
+  if (document.querySelector("[data-ring-buybar]")) document.documentElement.classList.add("has-buybar");
+
+  // Photo strip: the arrows move it by one plate.
+  (function photoStrip() {
+    var strip = document.querySelector("[data-photo-strip]");
+    if (!strip) return;
+    function move(direction) {
+      var plate = strip.querySelector(".photo");
+      var step = plate ? plate.getBoundingClientRect().width + parseFloat(getComputedStyle(strip).columnGap || 0) : 300;
+      strip.scrollBy({ left: direction * step, behavior: "smooth" });
+    }
+    document.querySelector("[data-photo-prev]").addEventListener("click", function () { move(-1); });
+    document.querySelector("[data-photo-next]").addEventListener("click", function () { move(1); });
+  })();
+
+  function setStatus(text) {
+    if (window.Bottle3D) window.Bottle3D.ringStatus = text;
+  }
+
+  /* ---- How far down the screens the page is ---------------------------------- */
+  // 0 on the ring, 1 on the sheet, 2 and 3 on the close-ups, with every value in between.
+
+  function scrollProgress() {
+    var line = stage.getBoundingClientRect().top; // the stage is pinned here
+    var tops = [];
+    for (var i = 0; i < screens.length; i++) tops.push(screens[i].getBoundingClientRect().top - line);
+    if (tops[0] > 0) return 0;
+    for (var k = tops.length - 1; k >= 0; k--) {
+      if (tops[k] <= 0) {
+        if (k === tops.length - 1) return k;
+        return k + (-tops[k]) / (tops[k + 1] - tops[k]);
+      }
+    }
+    return 0;
+  }
+
+  function poseAt(progress, set) {
+    var from = Math.min(Math.floor(progress), set.length - 1);
+    var to = Math.min(from + 1, set.length - 1);
+    var t = progress - from;
+    t = t * t * (3 - 2 * t); // ease in and out between two screens
+    var pose = {};
+    POSE_KEYS.forEach(function (key) { pose[key] = set[from][key] + (set[to][key] - set[from][key]) * t; });
+    return pose;
+  }
 
   /* ---- The 3D ring ---------------------------------------------------------- */
 
@@ -114,6 +200,7 @@
 
     // One holder per cuvée, standing on the ring and facing outwards.
     var holders = [];
+    var fizz = [];
     var tallest = 0, widest = 0;
     CUVEES.forEach(function (cuvee, index) {
       var model = MODELS[cuvee.id];
@@ -137,34 +224,43 @@
       object.position.y -= box.min.y;
       tallest = Math.max(tallest, size.y);
       widest = Math.max(widest, size.x, size.z);
+
+      Bottle3D.seeThrough(object, model);
+      fizz.push(Bottle3D.bubbles(THREE, holder, {
+        radius: Math.min(size.x, size.z) * 0.27,
+        bottom: size.y * 0.07,
+        top: size.y * 0.6,
+        height: size.y
+      }));
     });
 
     var radius = widest * SPACING;
     holders.forEach(function (holder, index) {
-      var angle = index * STEP;
-      holder.position.set(Math.sin(angle) * radius, 0, Math.cos(angle) * radius);
-      holder.rotation.y = angle;
+      holder.position.set(Math.sin(index * STEP) * radius, 0, Math.cos(index * STEP) * radius);
     });
+    var ringDistance = 1; // camera distance that fits the whole ring; set in resize()
+    var tall = false;     // phone-shaped stage?
 
-    function frameCamera() {
+    function resize() {
       var width = stage.clientWidth, height = stage.clientHeight;
       if (!width || !height) return;
       renderer.setSize(width, height, false);
       camera.aspect = width / height;
+      camera.updateProjectionMatrix();
+      tall = camera.aspect < 0.85;
       var vertical = THREE.MathUtils.degToRad(camera.fov / 2);
       var horizontal = Math.atan(Math.tan(vertical) * camera.aspect);
       var halfWidth = radius + widest * FRONT_SCALE;
-      var halfHeight = (tallest * FRONT_SCALE) / 2 + radius * Math.sin(CAMERA_PITCH);
-      var distance = Math.max(halfHeight / Math.tan(vertical), halfWidth / Math.tan(horizontal)) * 1.06;
-      var target = new THREE.Vector3(0, tallest * 0.5, 0);
-      camera.position.set(0, target.y + Math.sin(CAMERA_PITCH) * distance, Math.cos(CAMERA_PITCH) * distance);
-      camera.lookAt(target);
-      camera.updateProjectionMatrix();
+      var halfHeight = (tallest * FRONT_SCALE) / 2 + radius * Math.sin(POSES.wide[0].pitch);
+      // The ring keeps to the upper part of the stage: the title sits under it.
+      ringDistance = Math.max(halfHeight / Math.tan(vertical) * 1.5, halfWidth / Math.tan(horizontal) * 1.08);
       dirty = true;
     }
 
     // Turning: `goal` is the ring angle that puts the selected bottle in front.
     var angle = 0, goal = 0, drag = 0, dirty = true, raf = null, visible = true, last = 0;
+    var now = null; // the pose currently shown, eased toward the pose the scroll asks for
+    var progress = 0;
 
     onSelect = function (index) {
       var wanted = -index * STEP;
@@ -173,24 +269,58 @@
       goal += delta;
     };
 
-    function tick(now) {
-      raf = requestAnimationFrame(tick);
-      // Time-based easing, so the ring turns at the same speed on any screen.
-      var ease = 1 - Math.exp(-Math.min((now - last) / 1000, 0.1) * FOLLOW);
-      last = now;
-      var settled = Math.abs(goal - angle) < 0.0005;
-      var scaling = false;
+    function applyPose(pose) {
+      var vertical = THREE.MathUtils.degToRad(camera.fov / 2);
+      var distance = pose.view > 0.001
+        ? ringDistance + (((pose.view * tallest) / 2) / Math.tan(vertical) - ringDistance) * Math.min(1, pose.focus)
+        : ringDistance;
+      var viewHeight = 2 * distance * Math.tan(vertical);
+      var viewWidth = viewHeight * camera.aspect;
+
+      // What the camera looks at, then slid sideways/up so the subject sits off-centre.
+      var scale = 1 + (FRONT_SCALE - 1) * pose.focus;
+      var target = new THREE.Vector3(
+        -pose.right * viewWidth,
+        pose.look * tallest * scale - pose.up * viewHeight,
+        radius * pose.focus
+      );
+      camera.position.set(target.x, target.y + Math.sin(pose.pitch) * distance, target.z + Math.cos(pose.pitch) * distance);
+      camera.lookAt(target);
+
       for (var i = 0; i < holders.length; i++) {
-        var wantedScale = i === selected ? FRONT_SCALE : 1;
-        var scale = holders[i].scale.x;
-        if (Math.abs(wantedScale - scale) > 0.001) {
-          holders[i].scale.setScalar(scale + (wantedScale - scale) * ease);
-          scaling = true;
-        }
+        var chosen = i === selected;
+        var wanted = chosen ? FRONT_SCALE : 1 - pose.solo;
+        var holder = holders[i];
+        holder.userData.scale = holder.userData.scale === undefined ? wanted : holder.userData.scale + (wanted - holder.userData.scale) * pose.ease;
+        holder.scale.setScalar(Math.max(holder.userData.scale, 0.0001));
+        holder.visible = holder.userData.scale > 0.02;
+        holder.rotation.y = i * STEP + (chosen ? pose.turn : 0);
       }
-      if (settled && !scaling && !dirty) return;
+    }
+
+    function tick(time) {
+      raf = requestAnimationFrame(tick);
+      // Time-based easing, so everything moves at the same speed on any screen.
+      var dt = Math.min((time - last) / 1000, 0.1);
+      var ease = 1 - Math.exp(-dt * FOLLOW);
+      last = time;
+
+      progress = scrollProgress();
+      var wanted = poseAt(progress, tall ? POSES.tall : POSES.wide);
+      var moving = Math.abs(goal - angle) > 0.0005;
+      if (!now) { now = wanted; moving = true; }
+      POSE_KEYS.forEach(function (key) {
+        if (Math.abs(wanted[key] - now[key]) > 0.0005) moving = true;
+        now[key] += (wanted[key] - now[key]) * ease;
+      });
+      var bubbling = fizz.length && fizz[0].count > 0;
+      if (!moving && !dirty && !bubbling) return;
+
       angle += (goal - angle) * ease;
       ring.rotation.y = angle + drag;
+      now.ease = ease;
+      applyPose(now);
+      if (bubbling) fizz.forEach(function (system) { system.update(dt, time); });
       dirty = false;
       renderer.render(scene, camera);
     }
@@ -207,10 +337,15 @@
       raf = null;
     }
 
-    /* Pointer: drag to turn, click a bottle to bring it to the front. */
+    /* Pointer: drag to turn, click a bottle to bring it to the front.
+       Only on the ring screen: further down, the bottle is no longer a control. */
     var canvas = renderer.domElement;
     var pointer = { id: null, startX: 0, dragging: false };
     var raycaster = new THREE.Raycaster();
+
+    function onRing() {
+      return progress < 0.35;
+    }
 
     function bottleAt(event) {
       var rect = canvas.getBoundingClientRect();
@@ -219,14 +354,18 @@
         -((event.clientY - rect.top) / rect.height) * 2 + 1
       );
       raycaster.setFromCamera(point, camera);
-      var hits = raycaster.intersectObjects(holders, true);
-      if (!hits.length) return -1;
-      var node = hits[0].object;
-      while (node && holders.indexOf(node) === -1) node = node.parent;
-      return holders.indexOf(node);
+      var hits = raycaster.intersectObjects(holders.filter(function (holder) { return holder.visible; }), true);
+      for (var h = 0; h < hits.length; h++) {
+        if (hits[h].object.isPoints) continue; // bubbles are not clickable
+        var node = hits[h].object;
+        while (node && holders.indexOf(node) === -1) node = node.parent;
+        return holders.indexOf(node);
+      }
+      return -1;
     }
 
     canvas.addEventListener("pointerdown", function (event) {
+      if (!onRing()) return;
       pointer.id = event.pointerId;
       pointer.startX = event.clientX;
       pointer.dragging = false;
@@ -234,7 +373,9 @@
 
     canvas.addEventListener("pointermove", function (event) {
       if (pointer.id !== event.pointerId) {
-        if (event.pointerType === "mouse") canvas.style.cursor = bottleAt(event) === -1 ? "grab" : "pointer";
+        if (event.pointerType === "mouse") {
+          canvas.style.cursor = !onRing() ? "default" : (bottleAt(event) === -1 ? "grab" : "pointer");
+        }
         return;
       }
       var dx = event.clientX - pointer.startX;
@@ -274,34 +415,38 @@
 
     stage.appendChild(canvas);
     stage.classList.add("is-live");
-    frameCamera();
+    resize();
     onSelect(selected);
     angle = goal; // no opening spin
 
-    if ("ResizeObserver" in window) new ResizeObserver(frameCamera).observe(stage);
+    if ("ResizeObserver" in window) new ResizeObserver(resize).observe(stage);
     if ("IntersectionObserver" in window) {
       new IntersectionObserver(function (entries) {
         visible = entries[0].isIntersecting;
         if (visible) start(); else stop();
-      }).observe(stage);
+      }).observe(root);
     }
     document.addEventListener("theme:change", function () {
       scene.background.set(Bottle3D.pageColor());
       dirty = true;
     });
+    document.addEventListener("bubbles:change", function () { dirty = true; });
     document.addEventListener("motion:change", function () {
       var on = Bottle3D.motionAllows();
       stage.classList.toggle("is-live", on);
+      setStatus(on ? "live" : Bottle3D.blocker());
       if (on) start(); else stop();
     });
     canvas.addEventListener("webglcontextlost", function (event) {
       event.preventDefault();
       stop();
       stage.classList.remove("is-live");
+      setStatus("failed: the WebGL context was lost");
       console.warn("[3d] ring: the WebGL context was lost. Showing the placeholder image.");
     });
 
     start();
+    setStatus("live");
     console.info("[3d] ring ready:", holders.length, "bottles");
   }
 
@@ -312,10 +457,13 @@
     if (started || !Bottle3D) return;
     if (location.protocol === "file:") {
       console.info("[3d] The ring needs a local server (npx serve). Showing the placeholder image.");
+      setStatus("off: page opened by double-click; 3D needs a server");
       return;
     }
-    if (!Bottle3D.motionAllows() || !Bottle3D.hasWebGL()) return;
+    var reason = Bottle3D.blocker();
+    if (reason) { setStatus(reason); return; }
     started = true;
+    setStatus("loading");
 
     Bottle3D.libraries().then(function (lib) {
       return Promise.all(CUVEES.map(function (cuvee) {
@@ -323,6 +471,7 @@
         return model && model.src ? Bottle3D.file(lib, model.src) : null;
       })).then(function (gltfs) { buildRing(lib, gltfs); });
     }).catch(function (error) {
+      setStatus("failed: " + ((error && error.message) || "network error"));
       console.warn("[3d] ring: could not load (" + ((error && error.message) || "network error") + "). Showing the placeholder image.");
     });
   }

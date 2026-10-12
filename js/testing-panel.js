@@ -11,6 +11,7 @@
  * Review shortcuts in the URL (handy for screenshots):
  *   ?theme=terre-vigneron  ?fonts=pair-c  ?lang=ja  ?motion=off
  *   ?age=ok (skip the age gate)   ?age=reset (show it again)
+ *   ?loader=1 (play the test loading screen)   ?bubbles=60 (bubbles per bottle)
  */
 (function () {
   "use strict";
@@ -198,6 +199,55 @@
     });
     panel.appendChild(pages);
 
+    // Bubbles: how many rise inside each 3D bottle (the hero bubbles scale with it).
+    if (window.Bottle3D) {
+      var fizz = document.createElement("fieldset");
+      var fizzLegend = document.createElement("legend");
+      fizzLegend.textContent = "Bubbles per bottle";
+      var slider = document.createElement("input");
+      slider.type = "range";
+      slider.min = "0";
+      slider.max = String(window.Bottle3D.bubblesMax);
+      slider.step = "4";
+      slider.setAttribute("aria-label", "Bubbles per bottle");
+      var amount = document.createElement("output");
+      function setBubbles(value, save) {
+        root.setAttribute("data-bubbles", value);
+        slider.value = value;
+        amount.textContent = value;
+        if (save) store("bubbles", value);
+        document.dispatchEvent(new CustomEvent("bubbles:change"));
+      }
+      slider.addEventListener("input", function () { setBubbles(slider.value, true); });
+      fizz.appendChild(fizzLegend);
+      fizz.appendChild(slider);
+      fizz.appendChild(amount);
+      panel.appendChild(fizz);
+      var savedBubbles = params.get("bubbles") || stored("bubbles");
+      if (savedBubbles !== null && !isNaN(Number(savedBubbles))) setBubbles(String(Number(savedBubbles)), false);
+      else { slider.value = window.Bottle3D.bubbleCount(); amount.textContent = slider.value; }
+    }
+
+    // Says why the 3D bottles are, or are not, running on this device.
+    var three = document.createElement("fieldset");
+    var threeLegend = document.createElement("legend");
+    threeLegend.textContent = "3D status";
+    var threeStatus = document.createElement("p");
+    threeStatus.className = "test-panel__3d";
+    three.appendChild(threeLegend);
+    three.appendChild(threeStatus);
+    panel.appendChild(three);
+    setInterval(function () {
+      if (panel.hidden || !window.Bottle3D) return;
+      threeStatus.textContent = window.Bottle3D.status().join("\n");
+    }, 600);
+
+    var loader = document.createElement("button");
+    loader.type = "button";
+    loader.textContent = "Play loading screen";
+    loader.addEventListener("click", function () { window.Loader.play(); });
+    panel.appendChild(loader);
+
     var reset = document.createElement("button");
     reset.type = "button";
     reset.className = "test-panel__reset";
@@ -231,5 +281,11 @@
   }
 
   if (params.get("test") === "1") toggle(true);
+  if (params.get("loader") === "1" && window.Loader) {
+    document.addEventListener("i18n:change", function once() {
+      document.removeEventListener("i18n:change", once);
+      window.Loader.play();
+    });
+  }
   sync();
 })();

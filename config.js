@@ -20,12 +20,16 @@ window.SITE_CONFIG = {
   // placeholder image. See assets/models/README.md for the options.
   // One downloaded file holds four bottles; `node` picks one of them by name.
   // PLACEHOLDER models: generic wine bottles with made-up labels, not the house's.
+  // `wine` recolours the liquid inside (the downloaded bottles hold red wine).
   MODELS: {
-    1: { src: "assets/models/wine_bottles_01_1k.gltf", node: "wine_bottles_01_champagne" },
-    2: { src: "assets/models/wine_bottles_01_1k.gltf", node: "wine_bottles_01_burgundy" },
-    3: { src: "assets/models/wine_bottles_01_1k.gltf", node: "wine_bottles_01_alsace" },
-    4: { src: "assets/models/wine_bottles_01_1k.gltf", node: "wine_bottles_01_bordeaux" }
+    1: { src: "assets/models/wine_bottles_01_1k.gltf", node: "wine_bottles_01_champagne", wine: "#E6D596" },
+    2: { src: "assets/models/wine_bottles_01_1k.gltf", node: "wine_bottles_01_burgundy", wine: "#ECDCAE" },
+    3: { src: "assets/models/wine_bottles_01_1k.gltf", node: "wine_bottles_01_alsace", wine: "#E9B7A0" },
+    4: { src: "assets/models/wine_bottles_01_1k.gltf", node: "wine_bottles_01_bordeaux", wine: "#DCC27A" }
   },
+
+  // Bubbles rising inside each 3D bottle (0 = none). The test panel has a slider.
+  BUBBLES_PER_BOTTLE: 24,
 
   AGE_GATE_ENABLED: true,
 

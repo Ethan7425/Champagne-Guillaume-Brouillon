@@ -27,6 +27,7 @@ js/
   motion.js             motion levels, scroll reveal, hero bubbles, tilt, scroll settle
   bottle-3d.js          PROTOTYPE TEST: 3D model in a bottle stage (loads Three.js on demand)
   bottle-ring.js        TEST PAGE only: the bottle ring of selection.html
+  loader.js             TEST: loading screen, played from the test panel
   age-gate.js           18+ overlay
   testing-panel.js      TESTING ONLY review panel
 i18n/
@@ -100,6 +101,8 @@ Set by `<html data-motion>`: `full`, `reduced` or `off` (`js/motion.js`).
 - Bottle tilt: on hover, a bottle leans a few degrees toward the pointer (`TILT_X` / `TILT_Y` in `motion.js`). Mouse only.
 - Scroll settle: when scrolling stops within 35% of a screen from the top of a cuvée section, the page glides the rest of the way, so the bottle and its information are fully on screen (`SETTLE_RANGE` in `motion.js`; glide time is `SETTLE_MIN_MS` to `SETTLE_MAX_MS`). On desktop each cuvée section is exactly one screen tall for this reason.
 - Tilt, settle, floating bottle and bubbles run in `full` only.
+- Phones and tablets: the hero is one screen, and each cuvée is two screens (the bottle, then the text and cellar card). On touch screens the lock uses native CSS scroll snapping (`base.css`); the scripted settle is for mouse and trackpad only.
+- Loading screen (test): `js/loader.js` draws a bottle that fills up. Nothing shows it automatically; play it from the test panel or with `?loader=1`.
 
 ## Before launch: delete the testing controls
 
@@ -139,11 +142,20 @@ Future: 3D bottle scroll animation (Three.js or similar) goes into the `.bottle-
 **3D test (in progress).** `js/bottle-3d.js` shows a 3D bottle in each cuvée's bottle stage. The models are PLACEHOLDERS: four generic wine bottles from one downloaded file (`assets/models/`, see the README there), carrying invented labels. `config.js` (`MODELS`) says which bottle goes to which cuvée. The hero keeps its placeholder image.
 
 - Three.js 0.170.0 is loaded from unpkg only when a bottle stage first scrolls into view; nothing 3D is downloaded with the page. The model files total about 3.8 MB.
-- Each bottle turns with the scroll and faces the front when its section is locked in place. Its label, cork and wine move away from the glass as the section scrolls away. Hovering leans it toward the pointer.
+- Each bottle turns with the scroll and faces the front when its section is locked in place. Hovering leans it toward the pointer.
+- The test panel has a "3D status" line that says, for the device in hand, whether each bottle is live and, if not, why (reduced motion, no WebGL, old browser, missing file).
 - One WebGL renderer is shared by the four stages.
 - The bottles have no panel behind them: the 3D scene is filled with the theme's own background colour.
+- Bubbles rise inside each bottle. `BUBBLES_PER_BOTTLE` in `config.js` sets how many (0 = none); the test panel has a slider (0–160) that also scales the hero bubbles. `wine` in `MODELS` colours the liquid.
 
-**Bottle ring test page (`selection.html`).** A second way to present the cuvées, kept apart from the home page for comparison. The four bottles stand in a ring; the one in front is selected. Change it with the arrows, the I–IV buttons, the left/right keys, by dragging the ring or by clicking a bottle. The name, details and order link follow the selection; "See the details" (or a click on the front bottle) scrolls down to them. Reach it from the test panel ("Pages") or open `selection.html` directly. To remove it: delete `selection.html`, `js/bottle-ring.js`, the "Bottle ring" block in `css/components.css` and the `ring` / `meta.titleRing` keys in `i18n/*.json`.
+**Bottle ring test page (`selection.html`).** A second way to present the cuvées, kept apart from the home page for comparison. Its structure is modelled on moon-shine.fr, converted to wine. The 3D stage is pinned to the screen and four full-height screens scroll over it; scrolling moves the camera, not the bottle off the page:
+
+1. the ring: the four bottles, the name of the one in front set large underneath with three tasting words, arrows either side, and a I–IV switcher (left edge on desktop). Change the selection with the arrows, the switcher, the left/right keys, by dragging the ring or by clicking a bottle;
+2. the cuvée sheet: the other bottles step back, the chosen one slides to the right, label-style rows and the order button come in on the left;
+3. and 4. two close-ups of the bottle (top, then label) with a short text;
+5. a row of five tall photograph placeholders that scrolls sideways (`ring.photos` in the i18n files, `assets/placeholder-photo.svg`; shared by the four cuvées for now).
+
+The camera position for each screen is the `POSES` table at the top of `js/bottle-ring.js`, with one set for wide screens and one for phones. Reach it from the test panel ("Pages") or open `selection.html` directly. To remove it: delete `selection.html`, `js/bottle-ring.js`, the "Bottle ring" block in `css/components.css` and the `ring` / `meta.titleRing` keys in `i18n/*.json`.
 - The placeholder image stays as the fallback: reduced or off motion, no WebGL, missing file, or the page opened by double-click (3D needs a local server).
 - To remove the test: delete `js/bottle-3d.js`, its `<script>` line and the import map in `index.html`, `MODELS` in `config.js`, and `assets/models/`.
 

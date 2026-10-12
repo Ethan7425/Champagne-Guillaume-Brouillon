@@ -1,7 +1,8 @@
 <!doctype html>
 <!--
   PROTOTYPE — NOT FOR PUBLICATION.
-  TEST PAGE: the four bottles in a ring. Pick one, then scroll down for its details.
+  TEST PAGE: the four bottles in a ring. Pick one, then scroll: the chosen bottle stays
+  on screen while its sheet, two close-ups and a row of photographs go by.
   The home page (index.html) is unchanged; this page is reached from the test panel.
   All text comes from /i18n. "{i}" in data-ring-key / data-ring-attr is replaced by the
   position of the selected cuvée (js/bottle-ring.js).
@@ -52,62 +53,135 @@
 
   <main id="main">
 
-    <section class="ring" data-ring aria-labelledby="ring-name">
-      <div class="ring__copy">
-        <p class="label" data-i18n="ring.label"></p>
-        <p class="ring__numeral" aria-hidden="true" data-ring-numeral></p>
-        <p class="label ring__meta" data-ring-key="cuvees.{i}.meta"></p>
-        <h1 class="ring__name" id="ring-name" aria-live="polite" data-ring-key="cuvees.{i}.name"></h1>
-        <p class="ring__hint" data-i18n="ring.hint"></p>
-
-        <div class="ring__controls">
-          <button type="button" class="ring__arrow" data-ring-prev data-i18n-attr="aria-label:ring.prev">
-            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14.5 5.5 8 12l6.5 6.5"/></svg>
-          </button>
-          <!-- I · II · III · IV buttons are added by bottle-ring.js -->
-          <div class="ring__picker" role="group" data-ring-picker data-i18n-attr="aria-label:ring.pick"></div>
-          <button type="button" class="ring__arrow" data-ring-next data-i18n-attr="aria-label:ring.next">
-            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9.5 5.5 16 12l-6.5 6.5"/></svg>
-          </button>
-        </div>
-
-        <a class="btn btn--primary" href="#details" data-i18n="ring.details"></a>
-      </div>
-
-      <!-- The 3D canvas is added here. The image is the fallback (no WebGL, reduced motion, double-click). -->
-      <div class="ring__stage" data-ring-stage>
+    <!--
+      The stage is pinned: the bottles stay on screen while the four "screens"
+      below scroll over them. Scrolling moves the camera, not the page furniture:
+      01 the ring · 02 the chosen cuvée · 03 and 04 close-ups of the bottle.
+    -->
+    <div class="voyage" data-ring>
+      <div class="voyage__stage" data-ring-stage>
+        <!-- Fallback when 3D cannot run (no WebGL, reduced motion, double-click). -->
         <img class="ring__fallback" src="assets/placeholder-bottle.svg" width="400" height="1000" alt="" data-ring-attr="alt:cuvees.{i}.alt">
       </div>
-    </section>
 
-    <section class="ring-details" id="details" data-settle aria-labelledby="details-name">
-      <header class="ring-details__head">
-        <p class="label ring__meta" data-ring-key="cuvees.{i}.meta"></p>
-        <h2 class="ring-details__name" id="details-name" data-ring-key="cuvees.{i}.name"></h2>
+      <!-- 01 · the ring -->
+      <section class="voyage__screen voyage__screen--ring" id="selection" data-ring-screen aria-labelledby="ring-name">
+        <!-- I · II · III · IV, with the name of the one in front (buttons added by bottle-ring.js) -->
+        <div class="ring__switch" role="group" data-ring-picker data-i18n-attr="aria-label:ring.pick"></div>
+
+        <div class="ring__title">
+          <p class="label" data-i18n="ring.kicker"></p>
+          <div class="ring__name-row">
+            <button type="button" class="ring__arrow" data-ring-prev data-i18n-attr="aria-label:ring.prev">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 12H4m6-6-6 6 6 6"/></svg>
+            </button>
+            <h1 class="ring__name" id="ring-name" aria-live="polite" data-ring-key="cuvees.{i}.name"></h1>
+            <button type="button" class="ring__arrow" data-ring-next data-i18n-attr="aria-label:ring.next">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h16m-6-6 6 6-6 6"/></svg>
+            </button>
+          </div>
+          <ul class="ring__tags">
+            <li class="label" data-ring-key="cuvees.{i}.tags.0"></li>
+            <li class="label" data-ring-key="cuvees.{i}.tags.1"></li>
+            <li class="label" data-ring-key="cuvees.{i}.tags.2"></li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 02 · the chosen cuvée: the bottle slides aside, its sheet comes in -->
+      <section class="voyage__screen voyage__screen--text" id="details" data-settle data-ring-screen aria-labelledby="details-name">
+        <div class="voyage__text">
+          <p class="label" data-i18n="ring.kicker"></p>
+          <h2 class="voyage__title" id="details-name" data-ring-key="cuvees.{i}.name"></h2>
+          <dl class="notes">
+            <div class="notes__row">
+              <dt class="label" data-i18n="cuvee.typeLabel"></dt>
+              <dd class="label" data-ring-key="cuvees.{i}.type"></dd>
+            </div>
+            <div class="notes__row">
+              <dt class="label" data-i18n="cuvee.blendLabel"></dt>
+              <dd class="label" data-ring-key="cuvees.{i}.blend"></dd>
+            </div>
+            <div class="notes__row">
+              <dt class="label" data-i18n="cuvee.notesLabel"></dt>
+              <dd class="label" data-ring-key="cuvees.{i}.notes"></dd>
+            </div>
+          </dl>
+          <p class="voyage__body" data-ring-key="cuvees.{i}.lead"></p>
+          <div class="voyage__buy">
+            <p class="voyage__price" data-ring-key="cuvees.{i}.price"></p>
+            <a class="btn btn--primary" href="#" data-ring-shop data-ring-key="cuvees.{i}.buy"></a>
+          </div>
+        </div>
+      </section>
+
+      <!-- 03 · close-up: the top of the bottle -->
+      <section class="voyage__screen voyage__screen--text" id="coiffe" data-settle data-ring-screen aria-labelledby="closeup-a">
+        <div class="voyage__text">
+          <p class="label" data-i18n="ring.bottle"></p>
+          <h2 class="voyage__title" id="closeup-a" data-i18n="ring.closeups.0.title"></h2>
+          <p class="voyage__body" data-i18n="ring.closeups.0.body"></p>
+        </div>
+      </section>
+
+      <!-- 04 · close-up: the label -->
+      <section class="voyage__screen voyage__screen--text" id="etiquette" data-settle data-ring-screen aria-labelledby="closeup-b">
+        <div class="voyage__text">
+          <p class="label" data-i18n="ring.bottle"></p>
+          <h2 class="voyage__title" id="closeup-b" data-i18n="ring.closeups.1.title"></h2>
+          <p class="voyage__body" data-i18n="ring.closeups.1.body"></p>
+        </div>
+      </section>
+    </div>
+
+    <!-- 05 · photographs for the chosen cuvée: a row of tall plates (placeholders) -->
+    <section class="ring-photos" id="planches" data-settle aria-labelledby="photos-title">
+      <header class="ring-photos__head">
+        <div>
+          <p class="label" data-ring-key="cuvees.{i}.name"></p>
+          <h2 class="voyage__title" id="photos-title" data-i18n="ring.photosTitle"></h2>
+        </div>
+        <div class="ring-photos__arrows">
+          <button type="button" class="ring__arrow" data-photo-prev data-i18n-attr="aria-label:ring.photosPrev">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 12H4m6-6-6 6 6 6"/></svg>
+          </button>
+          <button type="button" class="ring__arrow" data-photo-next data-i18n-attr="aria-label:ring.photosNext">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h16m-6-6 6 6-6 6"/></svg>
+          </button>
+        </div>
       </header>
 
-      <p class="cuvee__lead" data-ring-key="cuvees.{i}.lead"></p>
-
-      <div class="cuvee__card">
-        <dl class="spec">
-          <div class="spec__row">
-            <dt class="label" data-i18n="cuvee.typeLabel"></dt>
-            <dd data-ring-key="cuvees.{i}.type"></dd>
+      <div class="photo-strip" data-photo-strip tabindex="0" data-i18n-attr="aria-label:ring.photosTitle">
+        <figure class="photo">
+          <div class="photo__frame">
+            <img src="assets/placeholder-photo.svg" width="1200" height="900" loading="lazy" alt="" data-i18n-attr="alt:ring.photos.0.alt">
           </div>
-          <div class="spec__row">
-            <dt class="label" data-i18n="cuvee.blendLabel"></dt>
-            <dd data-ring-key="cuvees.{i}.blend"></dd>
+          <figcaption class="plate__caption" data-i18n="ring.photos.0.caption"></figcaption>
+        </figure>
+        <figure class="photo">
+          <div class="photo__frame">
+            <img src="assets/placeholder-photo.svg" width="1200" height="900" loading="lazy" alt="" data-i18n-attr="alt:ring.photos.1.alt">
           </div>
-          <div class="spec__row">
-            <dt class="label" data-i18n="cuvee.notesLabel"></dt>
-            <dd data-ring-key="cuvees.{i}.notes"></dd>
+          <figcaption class="plate__caption" data-i18n="ring.photos.1.caption"></figcaption>
+        </figure>
+        <figure class="photo">
+          <div class="photo__frame">
+            <img src="assets/placeholder-photo.svg" width="1200" height="900" loading="lazy" alt="" data-i18n-attr="alt:ring.photos.2.alt">
           </div>
-          <div class="spec__row spec__row--price">
-            <dt class="label" data-i18n="cuvee.priceLabel"></dt>
-            <dd data-ring-key="cuvees.{i}.price"></dd>
+          <figcaption class="plate__caption" data-i18n="ring.photos.2.caption"></figcaption>
+        </figure>
+        <figure class="photo">
+          <div class="photo__frame">
+            <img src="assets/placeholder-photo.svg" width="1200" height="900" loading="lazy" alt="" data-i18n-attr="alt:ring.photos.3.alt">
           </div>
-        </dl>
-        <a class="btn btn--primary cuvee__buy" href="#" data-ring-shop data-ring-key="cuvees.{i}.buy"></a>
+          <figcaption class="plate__caption" data-i18n="ring.photos.3.caption"></figcaption>
+        </figure>
+        <figure class="photo">
+          <div class="photo__frame">
+            <img src="assets/placeholder-photo.svg" width="1200" height="900" loading="lazy" alt="" data-i18n-attr="alt:ring.photos.4.alt">
+          </div>
+          <figcaption class="plate__caption" data-i18n="ring.photos.4.caption"></figcaption>
+        </figure>
       </div>
     </section>
 
@@ -126,10 +200,17 @@
     <p class="label site-footer__copyright" data-i18n="footer.copyright"></p>
   </footer>
 
+  <!-- Mobile only: order the cuvée currently in front of the ring. -->
+  <a class="buybar" data-ring-buybar data-ring-shop href="#">
+    <span class="buybar__label" data-ring-key="cuvees.{i}.buy"></span>
+    <span class="buybar__price" data-ring-key="cuvees.{i}.price"></span>
+  </a>
+
   <script src="config.js"></script>
   <script src="js/i18n.js"></script>
   <script src="js/motion.js"></script>
   <script src="js/age-gate.js"></script>
+  <script src="js/loader.js"></script>
   <script src="js/bottle-3d.js"></script>
   <script src="js/bottle-ring.js"></script>
   <script src="js/main.js"></script>

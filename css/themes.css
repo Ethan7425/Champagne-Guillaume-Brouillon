@@ -195,4 +195,9 @@ html.has-buybar .test-panel { bottom: calc(var(--buybar-h) + 3.25rem); }
 .test-panel button:focus-visible { outline: 2px solid #FFD400; outline-offset: 2px; }
 
 .test-panel p { margin-top: 0.625rem; color: #A8A8A8; }
-.test-panel__fonts { white-space: pre-line; }
+.test-panel input[type="range"] { width: calc(100% - 3.5rem); vertical-align: middle; accent-color: #F2F2F2; }
+.test-panel output { display: inline-block; width: 3rem; text-align: right; }
+
+.test-panel__fonts,
+.test-panel__3d { white-space: pre-line; }
+.test-panel fieldset > .test-panel__3d { margin-top: 0; color: #F2F2F2; }

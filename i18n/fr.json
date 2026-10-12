@@ -35,12 +35,14 @@
   "cuvee": {
     "typeLabel": "Type",
     "blendLabel": "Assemblage",
+    "makingLabel": "Vinification",
     "notesLabel": "Dégustation",
     "priceLabel": "Prix, 75 cl"
   },
   "cuvees": [
     {
       "name": "[CUVÉE 1]",
+      "tags": ["Fruits blancs", "Amande fraîche", "Craie"],
       "meta": "Cuvée N° 01 · Type : TBD · [00] mois sur lattes · dosage [0] g/L",
       "lead": "Texte provisoire : l’assemblage de la maison, issu de [PARCELLE A] et de [PARCELLE B], sur sous-sol de craie. Pressurage dans les heures qui suivent la cueillette, vinification en [CONTENANT À PRÉCISER].",
       "type": "TBD",
@@ -53,6 +55,7 @@
     },
     {
       "name": "[CUVÉE 2]",
+      "tags": ["Zeste d’agrumes", "Fleurs blanches", "Pain grillé"],
       "meta": "Cuvée N° 02 · Type : TBD · [00] mois sur lattes · dosage [0] g/L",
       "lead": "Texte provisoire : un vin de parcelle unique, [PARCELLE C], vignes plantées en [ANNÉE]. Chaque lot est vinifié séparément avant l’assemblage.",
       "type": "TBD",
@@ -65,6 +68,7 @@
     },
     {
       "name": "[CUVÉE 3]",
+      "tags": ["Fruits rouges", "Orange sanguine", "Tanin fin"],
       "meta": "Cuvée N° 03 · Type : TBD · [00] mois sur lattes · dosage [0] g/L",
       "lead": "Texte provisoire : une cuvée construite sur le pinot noir de [PARCELLE D]. La durée de macération et la couleur restent à confirmer avec le producteur.",
       "type": "TBD",
@@ -77,6 +81,7 @@
     },
     {
       "name": "[CUVÉE 4]",
+      "tags": ["Fruits secs", "Noisette", "Brioche"],
       "meta": "Cuvée N° 04 · Type : TBD · [00] mois sur lattes · dosage [0] g/L",
       "lead": "Texte provisoire : le plus long vieillissement de la cave. Vins de réserve de [ANNÉES À PRÉCISER], conservés en [CONTENANT À PRÉCISER] et tirés en petite quantité.",
       "type": "TBD",
@@ -122,7 +127,29 @@
     "pick": "Choisir une cuvée",
     "prev": "Cuvée précédente",
     "next": "Cuvée suivante",
+    "kicker": "Champagne",
+    "bottle": "La bouteille",
+    "closeups": [
+      { "title": "Coiffe et muselet", "body": "Texte provisoire : la couleur de la coiffe et la plaque de muselet restent à choisir. Cet écran décrira le bouchage : origine du liège, muselet, dessin de la capsule." },
+      { "title": "L’étiquette", "body": "Texte provisoire : l’étiquette portera l’appellation, le village, le dosage et la date de dégorgement. Papier et impression à confirmer." }
+    ],
+    "photosPrev": "Planches précédentes",
+    "photosNext": "Planches suivantes",
+    "navSelect": "Sélection",
+    "navSheet": "Fiche de la cuvée",
+    "navPlates": "Planches",
+    "photosTitle": "Planches",
+    "photos": [
+      { "caption": "Planche A — la parcelle, rangs de vigne au petit matin", "alt": "Image prévue : rangs de vigne sur un coteau de craie, lumière du petit matin, sans personnage." },
+      { "caption": "Planche B — la cave, bouteilles sur lattes", "alt": "Image prévue : bouteilles empilées sur lattes dans une cave de craie, lumière latérale basse." },
+      { "caption": "Planche C — le verre, bulle fine, lumière rasante", "alt": "Image prévue : un verre de la cuvée posé sur une surface sombre, bulle fine, lumière rasante." },
+      { "caption": "Planche D — le pressoir, premiers jus", "alt": "Image prévue : le pressoir traditionnel pendant la vendange, le jus qui coule, cadrage serré." },
+      { "caption": "Planche E — les mains, remuage sur pupitre", "alt": "Image prévue : une main tournant les bouteilles sur un pupitre de remuage, lumière basse." }
+    ],
     "details": "Voir le détail"
+  },
+  "loader": {
+    "label": "Chargement"
   },
   "notfound": {
     "code": "Erreur 404",

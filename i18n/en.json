@@ -35,12 +35,14 @@
   "cuvee": {
     "typeLabel": "Type",
     "blendLabel": "Blend",
+    "makingLabel": "Winemaking",
     "notesLabel": "Tasting notes",
     "priceLabel": "Price, 75 cl"
   },
   "cuvees": [
     {
       "name": "[CUVÉE 1]",
+      "tags": ["White fruit", "Fresh almond", "Chalk"],
       "meta": "Cuvée N° 01 · Type: TBD · [00] months on lees · dosage [0] g/L",
       "lead": "Placeholder: the house blend, drawn from [PARCEL A] and [PARCEL B] on chalk subsoil. Pressed within hours of picking, vinified in [VESSEL TBD].",
       "type": "TBD",
@@ -53,6 +55,7 @@
     },
     {
       "name": "[CUVÉE 2]",
+      "tags": ["Citrus zest", "White flowers", "Toasted bread"],
       "meta": "Cuvée N° 02 · Type: TBD · [00] months on lees · dosage [0] g/L",
       "lead": "Placeholder: a single-parcel wine from [PARCEL C], vines planted in [YEAR]. Each plot is fermented separately before blending.",
       "type": "TBD",
@@ -65,6 +68,7 @@
     },
     {
       "name": "[CUVÉE 3]",
+      "tags": ["Red berries", "Blood orange", "Fine tannin"],
       "meta": "Cuvée N° 03 · Type: TBD · [00] months on lees · dosage [0] g/L",
       "lead": "Placeholder: a cuvée built on Pinot Noir from [PARCEL D]. Maceration time and colour are to be confirmed with the producer.",
       "type": "TBD",
@@ -77,6 +81,7 @@
     },
     {
       "name": "[CUVÉE 4]",
+      "tags": ["Dried fruit", "Hazelnut", "Brioche"],
       "meta": "Cuvée N° 04 · Type: TBD · [00] months on lees · dosage [0] g/L",
       "lead": "Placeholder: the longest ageing in the cellar. Reserve wines from [YEARS TBD], kept in [VESSEL TBD] and bottled in small numbers.",
       "type": "TBD",
@@ -122,7 +127,29 @@
     "pick": "Choose a cuvée",
     "prev": "Previous cuvée",
     "next": "Next cuvée",
+    "kicker": "Champagne",
+    "bottle": "The bottle",
+    "closeups": [
+      { "title": "Foil and wire cage", "body": "Placeholder: the foil colour and the cage plate are still to be chosen. This screen will describe the closure: cork origin, cage, capsule design." },
+      { "title": "The label", "body": "Placeholder: the label will carry the appellation, the village, the dosage and the disgorgement date. Paper and printing are to be confirmed." }
+    ],
+    "photosPrev": "Previous plates",
+    "photosNext": "Next plates",
+    "navSelect": "Selection",
+    "navSheet": "Cuvée sheet",
+    "navPlates": "Plates",
+    "photosTitle": "Plates",
+    "photos": [
+      { "caption": "Plate A — the parcel, vine rows in early morning", "alt": "Intended image: rows of vines on a chalk slope, early morning light, no people." },
+      { "caption": "Plate B — the cellar, bottles on laths", "alt": "Intended image: bottles stacked on laths in a chalk cellar, low side light." },
+      { "caption": "Plate C — the glass, fine bead, raking light", "alt": "Intended image: a single glass of the cuvée on a dark surface, fine bubbles, raking light." },
+      { "caption": "Plate D — the press, first juice", "alt": "Intended image: the traditional press at harvest, juice running, close framing." },
+      { "caption": "Plate E — the hands, riddling at the rack", "alt": "Intended image: a hand turning bottles on a riddling rack, low light." }
+    ],
     "details": "See the details"
+  },
+  "loader": {
+    "label": "Loading"
   },
   "notfound": {
     "code": "Error 404",

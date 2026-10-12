@@ -17,8 +17,7 @@
  *   - the page is opened by double-click (browsers block reading models on file://)
  *
  * Scroll drives each model: it makes one turn as its section crosses the screen
- * and faces the front when the section is locked in place. If the model has
- * several parts, they move apart as the section scrolls away ("explode").
+ * and faces the front when the section is locked in place.
  * Hovering leans the model toward the pointer, like the placeholder images.
  */
 (function () {
@@ -28,16 +27,21 @@
   var MODELS = CONFIG.MODELS || {};
 
   var TURNS = 1;             // full turns while the section crosses the viewport
-  var EXPLODE = 0.3;         // how far parts travel, as a share of the model's size
   var FOLLOW = 6;            // how closely the model follows the scroll (per second; lower = lazier)
   var TILT_Y = 0.35;         // hover lean, radians, left-right
   var TILT_X = 0.12;         // hover lean, radians, up-down
   var GLASS_TINT = 0x2c3b30; // "verre de bouteille", used when a model sets glass: true
 
+  var BUBBLES_DEFAULT = typeof CONFIG.BUBBLES_PER_BOTTLE === "number" ? CONFIG.BUBBLES_PER_BOTTLE : 24;
+  var BUBBLES_MAX = 160;     // per bottle; the slider in the test panel stops here
+
   var libraries = null;
   var shared = null;
+  var bubbleTexture = null;
+  var bubbleSystems = [];
   var files = {};
   var instances = [];
+  var note = "";
 
   function log() {
     var args = Array.prototype.slice.call(arguments);
@@ -56,6 +60,20 @@
 
   function motionAllows() {
     return document.documentElement.getAttribute("data-motion") === "full";
+  }
+
+  // Why 3D cannot run right now, in plain words, or "" if nothing stands in the way.
+  function blocker() {
+    var mode = document.documentElement.getAttribute("data-motion");
+    if (mode !== "full") {
+      var asked = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      return "off: motion is \"" + mode + "\"" + (asked ? " (this device asks for reduced motion)" : "");
+    }
+    if (!hasWebGL()) return "off: WebGL is not available in this browser";
+    if (!(window.HTMLScriptElement && HTMLScriptElement.supports && HTMLScriptElement.supports("importmap"))) {
+      return "off: this browser is too old to load Three.js this way (no import maps, e.g. Safari before 16.4)";
+    }
+    return "";
   }
 
   // The bottles stand directly on the page: the scene is filled with the
@@ -112,6 +130,97 @@
     return files[src];
   }
 
+  /* ---- Bubbles inside a bottle --------------------------------------------- */
+  // Small rings rising through the lower two thirds of a bottle. How many is
+  // read from <html data-bubbles>, set by the test panel's slider; without it,
+  // config.js decides (BUBBLES_PER_BOTTLE).
+
+  function bubbleCount() {
+    var value = document.documentElement.getAttribute("data-bubbles");
+    var count = value === null ? BUBBLES_DEFAULT : Number(value);
+    return Math.max(0, Math.min(BUBBLES_MAX, isNaN(count) ? BUBBLES_DEFAULT : Math.round(count)));
+  }
+
+  // `parent` turns with the bottle. `zone` = { radius, bottom, top, height } in parent units.
+  function makeBubbles(THREE, parent, zone) {
+    if (!bubbleTexture) {
+      var art = document.createElement("canvas");
+      art.width = art.height = 64;
+      var pen = art.getContext("2d");
+      pen.strokeStyle = "#fff";
+      pen.lineWidth = 7;
+      pen.beginPath();
+      pen.arc(32, 32, 24, 0, Math.PI * 2);
+      pen.stroke();
+      bubbleTexture = new THREE.CanvasTexture(art);
+    }
+
+    var positions = new Float32Array(BUBBLES_MAX * 3);
+    var seeds = [];
+    function place(i, anywhere) {
+      var seed = seeds[i] || (seeds[i] = {});
+      seed.angle = Math.random() * Math.PI * 2;
+      seed.reach = Math.sqrt(Math.random()) * zone.radius;
+      seed.speed = zone.height * (0.05 + Math.random() * 0.09); // per second
+      seed.phase = Math.random() * Math.PI * 2;
+      positions[i * 3 + 1] = anywhere ? zone.bottom + Math.random() * (zone.top - zone.bottom) : zone.bottom;
+    }
+    for (var i = 0; i < BUBBLES_MAX; i++) place(i, true);
+
+    var geometry = new THREE.BufferGeometry();
+    geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+    var material = new THREE.PointsMaterial({
+      map: bubbleTexture, color: 0xf6efd9, size: zone.height * 0.028, sizeAttenuation: true,
+      transparent: true, opacity: 0.8, depthWrite: false
+    });
+    var points = new THREE.Points(geometry, material);
+    points.frustumCulled = false;
+    parent.add(points);
+
+    var system = {
+      count: 0,
+      sync: function () {
+        system.count = bubbleCount();
+        geometry.setDrawRange(0, system.count);
+        points.visible = system.count > 0;
+      },
+      update: function (dt, now) {
+        var sway = zone.radius * 0.08;
+        for (var i = 0; i < system.count; i++) {
+          var seed = seeds[i];
+          var y = positions[i * 3 + 1] + seed.speed * dt;
+          if (y > zone.top) { place(i, false); y = zone.bottom; }
+          var drift = Math.sin(now / 900 + seed.phase) * sway;
+          positions[i * 3] = Math.cos(seed.angle) * seed.reach + drift;
+          positions[i * 3 + 1] = y;
+          positions[i * 3 + 2] = Math.sin(seed.angle) * seed.reach;
+        }
+        geometry.attributes.position.needsUpdate = true;
+      }
+    };
+    system.sync();
+    bubbleSystems.push(system);
+    return system;
+  }
+
+  // Glass must not hide what is inside it, or the bubbles would never show.
+  // That also makes the wine visible, so a model can give it a colour
+  // (`wine` in config.js): the downloaded bottles are filled with red.
+  function seeThrough(object, model) {
+    object.traverse(function (node) {
+      if (!node.isMesh || !node.material || !(node.material.transmission > 0)) return;
+      if (model && model.wine && /wine/i.test(node.material.name)) {
+        node.material = node.material.clone(); // this bottle only
+        node.material.color.set(model.wine);
+      }
+      node.material.depthWrite = false;
+    });
+  }
+
+  document.addEventListener("bubbles:change", function () {
+    bubbleSystems.forEach(function (system) { system.sync(); });
+  });
+
   // Soft setup: one key light, one fill light, and a faint rim from behind so
   // dark glass keeps an edge against a dark page.
   function addLights(THREE, scene) {
@@ -131,9 +240,9 @@
     var section = stage.closest(".cuvee");
     var header = document.querySelector(".site-header");
     var id = stage.getAttribute("data-cuvee");
-    var state = { stage: stage, live: false, started: false, failed: false };
-    var THREE, scene, camera, pivot, canvas, context, parts = [];
-    var fit = { height: 1, radius: 1, exploding: false };
+    var state = { stage: stage, id: id, live: false, started: false, failed: false, status: "waiting: not scrolled into view yet" };
+    var THREE, scene, camera, pivot, canvas, context, bubbles;
+    var fit = { height: 1, radius: 1 };
     var progress = 0.5, raf = null, visible = false, dirty = true, last = 0;
     var tilt = { x: 0, y: 0, targetX: 0, targetY: 0 };
 
@@ -141,6 +250,7 @@
       if (state.failed) return;
       state.failed = true;
       console.warn("[3d] cuvée " + id + ": " + reason + " Showing the placeholder image.");
+      state.status = "failed: " + reason;
       stop();
       if (canvas && canvas.parentNode) canvas.remove();
       state.live = false;
@@ -180,11 +290,9 @@
 
       var meshes = [];
       var triangles = 0;
-      var skinned = false;
       object.traverse(function (node) {
         if (!node.isMesh) return;
         meshes.push(node);
-        if (node.isSkinnedMesh) skinned = true;
         var geometry = node.geometry;
         triangles += (geometry.index ? geometry.index.count : geometry.attributes.position.count) / 3;
         if (model.glass) {
@@ -197,25 +305,14 @@
 
       fit.height = size.y;
       fit.radius = Math.sqrt(size.x * size.x + size.z * size.z) / 2;
-      fit.exploding = meshes.length > 1 && !skinned;
 
-      // Explode: a part moves away from the model's centre, along the line from
-      // that centre to its own centre. A part that sits on the centre (the
-      // body of a bottle) stays where it is and the others leave it.
-      if (fit.exploding) {
-        var largest = Math.max(size.x, size.y, size.z);
-        meshes.forEach(function (mesh) {
-          var own = new THREE.Box3().setFromObject(mesh).getCenter(new THREE.Vector3());
-          if (own.length() < largest * 0.04) return;
-          var direction = own.clone().normalize().multiplyScalar(largest * EXPLODE);
-          // Express that world-space move in the space of the mesh's parent.
-          var inverse = new THREE.Matrix4().copy(mesh.parent.matrixWorld).invert();
-          var from = own.clone().applyMatrix4(inverse);
-          var to = own.clone().add(direction).applyMatrix4(inverse);
-          parts.push({ mesh: mesh, origin: mesh.position.clone(), travel: to.sub(from) });
-        });
-      }
-
+      seeThrough(object, model);
+      bubbles = makeBubbles(THREE, pivot, {
+        radius: Math.min(size.x, size.z) * 0.27,
+        bottom: -size.y / 2 + size.y * 0.07,
+        top: -size.y / 2 + size.y * 0.6,
+        height: size.y
+      });
       state.report = {
         object: model.node || "(whole file)",
         meshes: meshes.length,
@@ -223,7 +320,6 @@
         triangles: Math.round(triangles),
         size: [size.x, size.y, size.z].map(function (n) { return Number(n.toFixed(3)); }),
         originOffset: [center.x, center.y, center.z].map(function (n) { return Number(n.toFixed(3)); }),
-        explode: fit.exploding ? "on (" + parts.length + " of " + meshes.length + " parts move)" : (skinned ? "skipped: skinned model" : "skipped: single mesh"),
         glassOverride: !!model.glass
       };
     }
@@ -231,7 +327,8 @@
     function tick(now) {
       raf = requestAnimationFrame(tick);
       // Time-based easing, so the model moves at the same speed on any screen.
-      var ease = 1 - Math.exp(-Math.min((now - last) / 1000, 0.1) * FOLLOW);
+      var dt = Math.min((now - last) / 1000, 0.1);
+      var ease = 1 - Math.exp(-dt * FOLLOW);
       last = now;
       // Progress through the visible area below the sticky header: 0 as the
       // section enters at the bottom, 0.5 when it is locked in place, 1 as it leaves.
@@ -243,7 +340,9 @@
 
       var settled = Math.abs(target - progress) < 0.0002 &&
         Math.abs(tilt.targetX - tilt.x) < 0.0005 && Math.abs(tilt.targetY - tilt.y) < 0.0005;
-      if (settled && !dirty) return;
+      // Bubbles keep rising, so with any bubbles the picture is redrawn every frame.
+      if (settled && !dirty && !bubbles.count) return;
+      if (bubbles.count) bubbles.update(dt, now);
       progress += (target - progress) * ease;
       tilt.x += (tilt.targetX - tilt.x) * ease;
       tilt.y += (tilt.targetY - tilt.y) * ease;
@@ -253,13 +352,6 @@
       pivot.rotation.y = (progress - 0.5) * Math.PI * 2 * TURNS + (model.yaw || 0) + tilt.y;
       pivot.rotation.x = tilt.x;
 
-      if (parts.length) {
-        var amount = Math.min(1, Math.max(0, (progress - 0.5) * 2));
-        amount = amount * amount * (3 - 2 * amount); // smoothstep
-        for (var i = 0; i < parts.length; i++) {
-          parts[i].mesh.position.copy(parts[i].origin).addScaledVector(parts[i].travel, amount);
-        }
-      }
 
       // Draw with the shared renderer, then copy the picture into this stage.
       var width = stage.clientWidth, height = stage.clientHeight;
@@ -312,6 +404,7 @@
         if ("ResizeObserver" in window) new ResizeObserver(frameCamera).observe(stage);
         if (motionAllows()) frame.classList.add("has-3d");
 
+        state.status = motionAllows() ? "live" : blocker();
         state.report.readyMs = Math.round(performance.now() - began);
         log("cuvée " + id + " model ready", state.report);
         start();
@@ -320,13 +413,16 @@
 
     function begin() {
       if (state.started || state.failed) return;
-      if (!motionAllows() || !hasWebGL()) return; // keep the placeholder; try again if motion changes
+      var reason = blocker();
+      if (reason) { state.status = reason; return; } // keep the placeholder; try again if motion changes
       state.started = true;
+      state.status = "loading";
       // Check the file is there first, so a missing model costs one small
       // request instead of the whole Three.js download.
       fetch(model.src, { method: "HEAD" }).then(function (response) {
         if (!response.ok) {
           log("no model at " + model.src + " (HTTP " + response.status + "). Showing the placeholder image.");
+          state.status = "off: model file not found (HTTP " + response.status + ")";
           return;
         }
         return loadLibraries().then(build);
@@ -372,8 +468,10 @@
       if (!motionAllows()) {
         stop();
         frame.classList.remove("has-3d");
+        if (!state.failed) state.status = blocker();
       } else if (state.live) {
         frame.classList.add("has-3d");
+        state.status = "live";
         start();
       } else if (state.near) {
         begin();
@@ -387,6 +485,7 @@
     var wanted = Object.keys(MODELS).filter(function (id) { return MODELS[id] && MODELS[id].src; });
     if (wanted.length && location.protocol === "file:") {
       log("3D models need a local server (npx serve). Opened by double-click, the placeholder images are shown.");
+      note = "off: page opened by double-click; 3D needs a server (npx serve)";
       return;
     }
     wanted.forEach(function (id) {
@@ -404,6 +503,18 @@
     lights: addLights,
     pageColor: pageColor,
     hasWebGL: hasWebGL,
-    motionAllows: motionAllows
+    motionAllows: motionAllows,
+    blocker: blocker,
+    bubbles: makeBubbles,
+    bubbleCount: bubbleCount,
+    bubblesMax: BUBBLES_MAX,
+    seeThrough: seeThrough,
+    // One line per 3D element, for the test panel.
+    status: function () {
+      if (note) return [note];
+      var lines = instances.map(function (instance) { return "cuvée " + instance.id + ": " + instance.status; });
+      if (window.Bottle3D.ringStatus) lines.push("ring: " + window.Bottle3D.ringStatus);
+      return lines.length ? lines : ["no 3D element on this page"];
+    }
   };
 })();

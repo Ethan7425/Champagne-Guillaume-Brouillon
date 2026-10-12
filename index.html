@@ -87,6 +87,9 @@
       <section class="cuvee" data-settle>
         <div class="sunburst" data-reveal aria-hidden="true"></div>
 
+        <!-- On phones each of the two "screens" below fills the display and the scroll
+             locks onto it. On desktop they dissolve (display: contents) into one grid. -->
+        <div class="cuvee__screen cuvee__screen--bottle" data-settle>
         <header class="cuvee__head" data-reveal>
           <p class="cuvee__numeral" aria-hidden="true"></p>
           <p class="label cuvee__meta" data-i18n="cuvees.{i}.meta"></p>
@@ -101,7 +104,9 @@
           </div>
           <figcaption class="plate__caption" data-i18n="cuvees.{i}.caption"></figcaption>
         </figure>
+        </div>
 
+        <div class="cuvee__screen cuvee__screen--info" data-settle>
         <p class="cuvee__lead" data-reveal data-i18n="cuvees.{i}.lead"></p>
 
         <div class="cuvee__card" data-reveal>
@@ -124,6 +129,7 @@
             </div>
           </dl>
           <a class="btn btn--primary cuvee__buy" data-shop href="#" data-i18n="cuvees.{i}.buy"></a>
+        </div>
         </div>
       </section>
     </template>
@@ -176,6 +182,7 @@
   <script src="js/i18n.js"></script>
   <script src="js/motion.js"></script>
   <script src="js/age-gate.js"></script>
+  <script src="js/loader.js"></script>
   <script src="js/bottle-3d.js"></script>
   <script src="js/main.js"></script>
   <!-- TESTING ONLY — delete this line before launch -->

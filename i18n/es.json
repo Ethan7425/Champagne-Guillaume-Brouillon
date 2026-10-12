@@ -35,12 +35,14 @@
   "cuvee": {
     "typeLabel": "Tipo",
     "blendLabel": "Ensamblaje",
+    "makingLabel": "Vinificación",
     "notesLabel": "Notas de cata",
     "priceLabel": "Precio, 75 cl"
   },
   "cuvees": [
     {
       "name": "[CUVÉE 1]",
+      "tags": ["Fruta blanca", "Almendra fresca", "Creta"],
       "meta": "Cuvée N.º 01 · Tipo: TBD · [00] meses sobre lías · dosage [0] g/L",
       "lead": "Texto provisional: el ensamblaje de la casa, procedente de [PARCELA A] y [PARCELA B], sobre subsuelo de creta. Prensado pocas horas después de la vendimia, vinificación en [RECIPIENTE POR DEFINIR].",
       "type": "TBD",
@@ -53,6 +55,7 @@
     },
     {
       "name": "[CUVÉE 2]",
+      "tags": ["Piel de cítricos", "Flores blancas", "Pan tostado"],
       "meta": "Cuvée N.º 02 · Tipo: TBD · [00] meses sobre lías · dosage [0] g/L",
       "lead": "Texto provisional: un vino de parcela única, [PARCELA C], con viñas plantadas en [AÑO]. Cada lote se vinifica por separado antes del ensamblaje.",
       "type": "TBD",
@@ -65,6 +68,7 @@
     },
     {
       "name": "[CUVÉE 3]",
+      "tags": ["Frutos rojos", "Naranja sanguina", "Tanino fino"],
       "meta": "Cuvée N.º 03 · Tipo: TBD · [00] meses sobre lías · dosage [0] g/L",
       "lead": "Texto provisional: una cuvée construida sobre el pinot noir de [PARCELA D]. El tiempo de maceración y el color quedan por confirmar con el productor.",
       "type": "TBD",
@@ -77,6 +81,7 @@
     },
     {
       "name": "[CUVÉE 4]",
+      "tags": ["Frutos secos", "Avellana", "Brioche"],
       "meta": "Cuvée N.º 04 · Tipo: TBD · [00] meses sobre lías · dosage [0] g/L",
       "lead": "Texto provisional: la crianza más larga de la bodega. Vinos de reserva de [AÑOS POR DEFINIR], guardados en [RECIPIENTE POR DEFINIR] y embotellados en pequeña cantidad.",
       "type": "TBD",
@@ -122,7 +127,29 @@
     "pick": "Elegir una cuvée",
     "prev": "Cuvée anterior",
     "next": "Cuvée siguiente",
+    "kicker": "Champagne",
+    "bottle": "La botella",
+    "closeups": [
+      { "title": "Cápsula y bozal", "body": "Texto provisional: el color de la cápsula y la placa del bozal están por elegir. Esta pantalla describirá el cierre: origen del corcho, bozal, diseño de la chapa." },
+      { "title": "La etiqueta", "body": "Texto provisional: la etiqueta llevará la denominación, el pueblo, el dosage y la fecha de degüelle. Papel e impresión por confirmar." }
+    ],
+    "photosPrev": "Láminas anteriores",
+    "photosNext": "Láminas siguientes",
+    "navSelect": "Selección",
+    "navSheet": "Ficha de la cuvée",
+    "navPlates": "Láminas",
+    "photosTitle": "Láminas",
+    "photos": [
+      { "caption": "Lámina A — la parcela, hileras de viña al amanecer", "alt": "Imagen prevista: hileras de viña en una ladera de creta, luz del amanecer, sin personas." },
+      { "caption": "Lámina B — la cava, botellas en rima", "alt": "Imagen prevista: botellas apiladas en rima en una cava de creta, luz lateral baja." },
+      { "caption": "Lámina C — la copa, burbuja fina, luz rasante", "alt": "Imagen prevista: una copa de la cuvée sobre una superficie oscura, burbuja fina, luz rasante." },
+      { "caption": "Lámina D — la prensa, primeros mostos", "alt": "Imagen prevista: la prensa tradicional durante la vendimia, el mosto corriendo, encuadre cerrado." },
+      { "caption": "Lámina E — las manos, removido en pupitre", "alt": "Imagen prevista: una mano girando las botellas en un pupitre de removido, luz baja." }
+    ],
     "details": "Ver el detalle"
+  },
+  "loader": {
+    "label": "Cargando"
   },
   "notfound": {
     "code": "Error 404",

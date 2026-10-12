@@ -235,11 +235,18 @@ html:not([data-motion="full"]) .plate__img { transform: none; transition: none; 
 .hero {
   position: relative;
   display: grid;
-  gap: 2.5rem;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  grid-template-areas:
+    "label   label"
+    "title   title"
+    "lede    plate"
+    "actions actions";
+  align-content: center;
+  gap: 1.25rem var(--col-gap);
   max-width: var(--page-max);
   min-height: calc(100svh - 7rem);
   margin-inline: auto;
-  padding: clamp(2rem, 6vh, 4rem) var(--gutter) 3rem;
+  padding: 1.5rem var(--gutter) 2.5rem;
 }
 
 .hero__bubbles {
@@ -252,15 +259,18 @@ html:not([data-motion="full"]) .plate__img { transform: none; transition: none; 
   pointer-events: none;
 }
 
-.hero__copy { position: relative; align-self: end; }
-
-.hero__label { margin-bottom: 1.25rem; }
+/* Phones: the copy block dissolves so the bottle can sit beside the lede. */
+.hero__copy { display: contents; }
+.hero__label { grid-area: label; position: relative; }
+.hero__title { grid-area: title; position: relative; }
+.hero__lede { grid-area: lede; position: relative; align-self: center; }
+.hero__actions { grid-area: actions; position: relative; }
+.hero__plate { grid-area: plate; }
 
 .hero__title { font-size: calc(var(--fs-display) * var(--heading-scale)); }
 
 .hero__lede {
   max-width: 30ch;
-  margin-top: 1.5rem;
   font-size: var(--fs-lede);
   line-height: 1.5;
 }
@@ -269,14 +279,17 @@ html:not([data-motion="full"]) .plate__img { transform: none; transition: none; 
   display: flex;
   flex-wrap: wrap;
   gap: 0.75rem;
-  margin-top: 2rem;
 }
 
-.hero__plate {
-  position: relative;
-  width: min(62%, 16rem);
+.hero__plate { position: relative; }
+
+.hero__plate .plate__frame {
+  height: clamp(11rem, 32svh, 17rem);
+  max-width: 100%;
   margin-left: auto;
 }
+
+.hero__plate .plate__caption { display: none; }
 
 html[data-motion="full"] .hero__bottle {
   animation: bottle-float 3s ease-in-out infinite alternate;
@@ -285,19 +298,22 @@ html[data-motion="full"] .hero__bottle {
 @media (min-width: 60em) {
   .hero {
     grid-template-columns: repeat(12, minmax(0, 1fr));
+    grid-template-areas: none;
     column-gap: var(--col-gap);
+    row-gap: 0;
     align-items: end;
+    align-content: normal;
     min-height: calc(100svh - var(--header-h));
-    padding-bottom: clamp(2.5rem, 7vh, 5rem);
+    padding: clamp(2rem, 6vh, 4rem) var(--gutter) clamp(2.5rem, 7vh, 5rem);
   }
-  .hero__copy { grid-column: 1 / 9; padding-bottom: 1.5rem; }
-  .hero__plate { grid-column: 9 / 13; width: auto; }
-  .hero__plate .plate__frame {
-    height: min(68svh, 44rem);
-    max-width: 100%;
-    margin-left: auto;
-  }
-  .hero__plate .plate__caption { text-align: right; }
+  .hero__copy { display: block; position: relative; grid-column: 1 / 9; padding-bottom: 1.5rem; }
+  .hero__label, .hero__title, .hero__lede, .hero__actions { grid-area: auto; }
+  .hero__label { margin-bottom: 1.25rem; }
+  .hero__lede { margin-top: 1.5rem; }
+  .hero__actions { margin-top: 2rem; }
+  .hero__plate { grid-area: auto; grid-column: 9 / 13; }
+  .hero__plate .plate__frame { height: min(68svh, 44rem); }
+  .hero__plate .plate__caption { display: block; text-align: right; }
 }
 
 /* ---- Cuvée sections ---------------------------------------------------------- */
@@ -306,11 +322,21 @@ html[data-motion="full"] .hero__bottle {
 
 .cuvee {
   position: relative;
-  display: grid;
-  gap: 2rem;
-  padding: clamp(4rem, 10vh, 7rem) var(--gutter);
   border-top: 1px solid var(--rule);
 }
+
+/* Phones and tablets: a cuvée is two full screens, each one a scroll-lock stop.
+   1. the bottle, under its number and name   2. the text and the cellar card */
+.cuvee__screen {
+  display: grid;
+  align-content: center;
+  gap: 1.5rem;
+  min-height: 100svh;
+  padding: 2rem var(--gutter) calc(var(--buybar-h) + 2rem);
+  scroll-snap-align: start;
+}
+
+.cuvee__screen--bottle { --fs-numeral: 3.5rem; }
 
 .cuvee__numeral {
   margin-bottom: 1.5rem;
@@ -331,7 +357,14 @@ html[data-motion="full"] .hero__bottle {
   overflow-wrap: anywhere;
 }
 
-.cuvee__plate { width: min(70%, 17rem); margin-left: auto; }
+/* The frame takes whatever height the screen has left under the heading. */
+.cuvee__plate .plate__frame {
+  height: clamp(13rem, calc(100svh - 25rem), 34rem);
+  max-width: 100%;
+  margin-left: auto;
+}
+
+.cuvee__plate .plate__caption { text-align: right; }
 
 .cuvee__lead {
   max-width: 34ch;
@@ -385,6 +418,8 @@ html[data-motion="off"] .cuvee__card::before { transition: none; }
   .cuvee[data-layout="centre"] {
     --fs-name: clamp(2.25rem, 1rem + 2.6vw, 3.75rem);
     --fs-numeral: clamp(4rem, 1.5rem + 6vw, 7.5rem);
+    display: grid;
+    padding-inline: var(--gutter);
     grid-template-columns: repeat(12, minmax(0, 1fr));
     grid-template-rows: auto 1fr;
     column-gap: var(--col-gap);
@@ -395,13 +430,17 @@ html[data-motion="off"] .cuvee__card::before { transition: none; }
     padding-block: clamp(2rem, 5vh, 4rem);
   }
 
-  .cuvee__plate { width: auto; margin-left: 0; }
+  /* The two phone screens dissolve: their children join the section's grid. */
+  .cuvee__screen,
+  .cuvee__screen--bottle { display: contents; --fs-numeral: inherit; }
 
   .cuvee__plate .plate__frame {
     height: min(calc(100svh - var(--header-h) - 12rem), 40rem);
     max-width: 100%;
     margin-inline: auto;
   }
+
+  .cuvee__plate .plate__caption { text-align: left; }
 
   .cuvee__head { grid-column: 1 / 5; grid-row: 1; }
   .cuvee__lead { grid-column: 1 / 5; grid-row: 2; }
@@ -632,23 +671,22 @@ html[data-theme="art-deco-nuit"] .cuvee { border-top-color: transparent; }
 }
 
 /* ---- Bottle ring (TEST PAGE: selection.html) ---------------------------------- */
+/* The stage (the 3D bottles) is pinned to the screen. Four full-height screens
+   scroll over it: the ring, the cuvée sheet and two close-ups. A row of
+   photographs follows. Phones first; the desktop layout is at the end. */
 
-.ring {
-  display: grid;
-  gap: 1.5rem;
-  max-width: var(--page-max);
-  margin-inline: auto;
-  padding: 1rem var(--gutter) 3rem;
-}
+.voyage { position: relative; }
 
-.ring__stage {
-  position: relative;
-  order: -1;
-  height: min(52svh, 26rem);
+.voyage__stage {
+  position: sticky;
+  top: 0;
+  z-index: 0;
+  height: 100svh;
+  overflow: hidden;
   touch-action: pan-y; /* vertical swipes still scroll the page */
 }
 
-.ring__stage canvas {
+.voyage__stage canvas {
   display: none;
   position: absolute;
   inset: 0;
@@ -657,109 +695,245 @@ html[data-theme="art-deco-nuit"] .cuvee { border-top-color: transparent; }
   cursor: grab;
 }
 
+/* Without 3D: one placeholder bottle, kept to the upper part of the stage. */
 .ring__fallback {
   position: absolute;
-  inset: 0;
+  inset: 8% 0 auto;
   width: auto;
-  height: 92%;
-  margin: auto;
+  height: 42%;
+  margin-inline: auto;
 }
 
-.ring__stage.is-live canvas { display: block; }
-.ring__stage.is-live .ring__fallback { visibility: hidden; }
+.voyage__stage.is-live canvas { display: block; }
+.voyage__stage.is-live .ring__fallback { visibility: hidden; }
 
-.ring__copy {
+/* A screen lets clicks through to the bottles, except on its own content. */
+.voyage__screen {
+  position: relative;
+  z-index: 1;
   display: grid;
-  justify-items: start;
+  min-height: 100svh;
+  padding: 1.5rem var(--gutter) calc(var(--buybar-h) + 1.5rem);
+  pointer-events: none;
+  scroll-snap-align: start;
+}
+
+.voyage__screen > * { pointer-events: auto; }
+
+/* 01 · the ring. Laid over the stage; on phones it stops short of the header's height. */
+.voyage__screen--ring {
+  align-content: end;
+  justify-items: center;
   gap: 1rem;
+  min-height: calc(100svh - 7.1rem);
+  margin-top: -100svh;
+  scroll-snap-align: none;
 }
 
-.ring__numeral {
-  font-family: var(--font-heading);
-  font-size: var(--fs-numeral);
-  line-height: 0.85;
-  color: var(--cuvee-accent);
-}
+.ring__title { display: grid; justify-items: center; gap: 0.5rem; width: 100%; text-align: center; }
 
-.ring__meta {
+.ring__name-row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.75rem;
   width: 100%;
-  padding-top: 0.875rem;
-  border-top: 1px solid var(--rule-strong);
+  max-width: 60rem;
 }
 
-.ring__name,
-.ring-details__name {
-  font-size: calc(var(--fs-name) * var(--heading-scale));
+.ring__name {
+  font-size: calc(clamp(2.25rem, 1rem + 6.4vw, 6.5rem) * var(--heading-scale));
+  line-height: 1;
   overflow-wrap: anywhere;
 }
 
-.ring__hint { max-width: 38ch; color: var(--muted); }
-
-.ring__controls {
+.ring__tags {
   display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-block: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.25rem 1.5rem;
+  margin: 0.25rem 0 0;
+  padding: 0;
+  list-style: none;
 }
 
-.ring__picker { display: flex; }
-
-.ring__arrow,
-.ring__picker button {
+.ring__arrow {
   display: grid;
   place-items: center;
   width: 2.75rem;
   height: 2.75rem;
+  border: 1px solid var(--rule-strong);
+  transition: border-color 0.4s var(--ease);
 }
-
-.ring__arrow { border: 1px solid var(--rule-strong); transition: border-color 0.4s var(--ease); }
 .ring__arrow:hover { border-color: var(--fg); }
-.ring__arrow svg { width: 1.125rem; height: 1.125rem; fill: none; stroke: currentColor; stroke-width: 1.5; }
+.ring__arrow svg { width: 1.25rem; height: 1.25rem; fill: none; stroke: currentColor; stroke-width: 1.25; }
 
-.ring__picker button {
-  font-family: var(--font-heading);
-  font-size: 1.0625rem;
+/* I · II · III · IV. The one in front also shows its name. */
+.ring__switch { display: flex; gap: 0.25rem; }
+
+.ring__switch button {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  min-width: 2.75rem;
+  height: 2.75rem;
+  padding: 0 0.5rem;
   color: var(--muted);
   box-shadow: inset 0 -1px 0 transparent;
 }
-.ring__picker button:hover { color: var(--fg); }
-.ring__picker button[aria-pressed="true"] { color: var(--fg); box-shadow: inset 0 -1px 0 var(--accent); }
+.ring__switch button:hover { color: var(--fg); }
+.ring__switch button[aria-pressed="true"] { color: var(--fg); box-shadow: inset 0 -1px 0 var(--accent); }
 
-.ring-details {
-  display: grid;
-  gap: 2rem;
-  max-width: var(--page-max);
-  margin-inline: auto;
-  padding: clamp(4rem, 10vh, 7rem) var(--gutter);
-  border-top: 1px solid var(--rule);
+.ring__switch-n { min-width: 1.5rem; font-family: var(--font-heading); font-size: 1.0625rem; text-align: center; }
+
+.ring__switch-name {
+  display: none;
+  font-size: var(--fs-label);
+  font-weight: var(--weight-strong);
+  letter-spacing: var(--label-tracking, 0.14em);
+  text-transform: uppercase;
 }
 
-.ring-details__name { margin-top: 0.75rem; }
+/* 02 to 04 · text screens. On phones the bottle keeps the top of the screen
+   and the text sits on a solid band at the bottom. */
+.voyage__screen--text { align-content: end; padding-inline: 0; }
+
+.voyage__text {
+  display: grid;
+  justify-items: start;
+  gap: 0.875rem;
+  padding: 1.25rem var(--gutter) 0;
+  background: var(--bg);
+}
+
+.voyage__title {
+  font-size: calc(clamp(2rem, 1.2rem + 3vw, 3.5rem) * var(--heading-scale));
+  overflow-wrap: anywhere;
+}
+
+.voyage__body { max-width: 44ch; }
+
+/* Phones: the sheet's paragraph is cut to three lines so the bottle keeps its room. */
+.voyage__screen--text .voyage__body {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  overflow: hidden;
+}
+
+/* Label-style rows: "BLEND   [00]% CHARDONNAY · …" */
+.notes { width: 100%; max-width: 34rem; padding-top: 0.875rem; border-top: 1px solid var(--rule-strong); }
+.notes__row { display: grid; grid-template-columns: 6.5rem minmax(0, 1fr); gap: 1rem; padding: 0.25rem 0; }
+.notes__row dd { color: var(--fg); }
+
+.voyage__buy { display: none; }
+.voyage__price { font-family: var(--font-heading); font-size: 1.75rem; line-height: 1.2; }
+
+/* 05 · the photographs: a row of tall plates that scrolls sideways. */
+.ring-photos {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  align-content: center;
+  gap: 1.5rem;
+  min-height: 100svh;
+  padding: 2rem 0 calc(var(--buybar-h) + 2rem);
+  background: var(--bg);
+  border-top: 1px solid var(--rule);
+  scroll-snap-align: start;
+  --plate-h: clamp(15rem, 50svh, 30rem);
+}
+
+.ring-photos__head {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-inline: var(--gutter);
+}
+
+.ring-photos__arrows { display: flex; gap: 0.5rem; }
+
+.photo-strip {
+  display: flex;
+  gap: var(--col-gap);
+  padding-inline: var(--gutter);
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  scroll-padding-inline: var(--gutter);
+  scrollbar-width: none;
+}
+.photo-strip::-webkit-scrollbar { display: none; }
+
+.photo { flex: none; width: calc(var(--plate-h) * 2 / 3); scroll-snap-align: start; }
+
+.photo__frame {
+  height: var(--plate-h);
+  overflow: hidden;
+  background: var(--frame-bg);
+  border: 1px dashed var(--rule-strong);
+}
+
+.photo__frame img { width: 100%; height: 100%; object-fit: cover; }
+
+@media (min-width: 48em) {
+  .voyage__stage { top: var(--header-h); height: calc(100svh - var(--header-h)); }
+  .voyage__screen,
+  .ring-photos { min-height: calc(100svh - var(--header-h)); }
+  .voyage__screen--ring { margin-top: calc(var(--header-h) - 100svh); scroll-snap-align: start; }
+  .ring__fallback { inset: 6% 0 auto; height: 52%; }
+}
 
 @media (min-width: 60em) {
-  .ring {
-    --fs-name: clamp(2.25rem, 1rem + 2.6vw, 3.75rem);
-    --fs-numeral: clamp(4rem, 1.5rem + 6vw, 7.5rem);
-    grid-template-columns: repeat(12, minmax(0, 1fr));
-    column-gap: var(--col-gap);
-    align-items: center;
-    min-height: calc(100svh - var(--header-h));
-    padding-block: 2rem;
-  }
-  .ring__copy { grid-column: 1 / 5; }
-  .ring__stage { grid-column: 5 / 13; order: 0; height: min(calc(100svh - var(--header-h) - 4rem), 46rem); }
+  .voyage__screen { padding-block: 2.5rem; }
+  .ring-photos { padding-block: 2.5rem; }
 
-  .ring-details {
-    grid-template-columns: repeat(12, minmax(0, 1fr));
-    column-gap: var(--col-gap);
-    align-content: center;
-    align-items: start;
-    min-height: calc(100svh - var(--header-h));
+  /* The switcher moves to the left edge, as a short vertical list. */
+  .ring__switch {
+    position: absolute;
+    left: var(--gutter);
+    top: 50%;
+    flex-direction: column;
+    transform: translateY(-50%);
   }
-  .ring-details__head { grid-column: 1 / 7; grid-row: 1; }
-  .ring-details .cuvee__lead { grid-column: 1 / 6; grid-row: 2; }
-  .ring-details .cuvee__card { grid-column: 8 / 13; grid-row: 1 / span 2; align-self: center; }
+  .ring__switch button[aria-pressed="true"] .ring__switch-name { display: block; }
+  .ring__arrow { width: 3.5rem; height: 3.5rem; }
+  .ring__tags { gap: 0.25rem 3rem; }
+
+  /* Text on the left, the bottle (moved by the camera) on the right. */
+  .voyage__screen--text { align-content: center; padding-inline: var(--gutter); }
+  .voyage__text { width: min(34rem, 44%); margin-left: 7%; padding: 0; background: none; }
+  .voyage__screen--text .voyage__body { display: block; overflow: visible; }
+  .voyage__buy { display: flex; flex-wrap: wrap; align-items: center; gap: 1.5rem; margin-top: 0.5rem; }
+  .ring__fallback { inset: 0 12% 0 auto; height: 78%; margin-block: auto; }
 }
+
+/* ---- Loading screen (TEST, js/loader.js) ------------------------------------- */
+
+.loader {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-loader);
+  display: grid;
+  place-items: center;
+  background: var(--bg);
+  transition: opacity 0.6s var(--ease);
+}
+
+.loader.is-leaving { opacity: 0; pointer-events: none; }
+html[data-motion="off"] .loader { transition: none; }
+
+.loader__inner { display: grid; justify-items: center; gap: 1.5rem; }
+
+.loader__bottle { height: min(46svh, 22rem); width: auto; overflow: visible; }
+
+.loader__line { fill: none; stroke: var(--fg); stroke-width: 2; vector-effect: non-scaling-stroke; }
+
+/* The wine level: the accent colour, clipped to the bottle's outline. */
+.loader__level { fill: var(--accent); }
+
+.loader__text { font-variant-numeric: tabular-nums; }
 
 /* ---- 404 ----------------------------------------------------------------------- */
 

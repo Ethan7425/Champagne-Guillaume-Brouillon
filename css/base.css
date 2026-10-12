@@ -31,6 +31,7 @@
   --z-header: 100;
   --z-test: 900;
   --z-age-gate: 1000;
+  --z-loader: 1050;
   --z-badge: 1100;
 }
 
@@ -51,6 +52,13 @@ html {
 
 html[data-motion="reduced"], html[data-motion="off"] { scroll-behavior: auto; }
 
+/* Scroll lock on touch screens: the page comes to rest on the nearest "screen"
+   (elements with scroll-snap-align in components.css). With a mouse or trackpad
+   the same job is done by the scroll settle in motion.js. */
+@media (hover: none) and (pointer: coarse) {
+  html[data-motion="full"] { scroll-snap-type: y proximity; }
+}
+
 body, h1, h2, h3, p, figure, dl, dd, fieldset { margin: 0; }
 
 body {
@@ -67,7 +75,7 @@ body {
 
 /* Text arrives from the i18n files; nothing shows until it is in place. */
 html.i18n-pending body { visibility: hidden; }
-html.is-gated { overflow: hidden; }
+html.is-gated, html.is-loading { overflow: hidden; }
 
 img, svg, canvas { display: block; max-width: 100%; }
 img { height: auto; }
