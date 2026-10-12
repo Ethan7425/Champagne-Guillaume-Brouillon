@@ -1,0 +1,198 @@
+/*
+ * themes.css — the three design directions, as CSS variables.
+ *
+ * PLACEHOLDER — to be replaced after review.
+ * Every colour and font below is a review candidate, not a final brand value.
+ * Values marked "derived" are not in the review artifact: they were added so
+ * each theme has the same set of tokens. Confirm or replace them too.
+ *
+ * A theme is chosen with <html data-theme="…"> (config.js: DEFAULT_THEME).
+ * --theme-font-pair names the pair the theme uses by default (see fonts.css).
+ */
+
+/* ---- Direction A · "Craie & Cave" (default, recommended) ------------------ */
+/* PLACEHOLDER — to be replaced after review */
+html[data-theme="craie-cave"] {
+  color-scheme: dark;
+  --theme-font-pair: pair-a;
+
+  --bg: #16181A;        /* noir de cave */
+  --surface: #1C1F20;
+  --fg: #ECEBE6;        /* craie */
+  --muted: #8A8D86;     /* pierre */
+  --accent: #C2A06A;    /* or de capsule: buttons and details only */
+  --glass: #2C3B30;     /* verre de bouteille */
+
+  --on-accent: #16181A;
+  --rule: rgba(236, 235, 230, 0.16);         /* derived: hairlines */
+  --rule-strong: rgba(236, 235, 230, 0.42);  /* derived */
+  --btn-bg: var(--accent);
+  --btn-fg: var(--on-accent);
+  --cuvee-accent: var(--accent);
+  --frame-bg: var(--surface);
+  --focus: var(--accent);
+
+  /* Signature movement: the bottle floats, a few bubbles rise. */
+  --float-distance: 8px;
+  --bubbles-display: block;
+  --sunburst-display: none;
+}
+
+/* ---- Direction B · "Terre de vigneron" ------------------------------------ */
+/* PLACEHOLDER — to be replaced after review */
+html[data-theme="terre-vigneron"] {
+  color-scheme: light;
+  --theme-font-pair: pair-b;
+
+  --bg: #EFE7DB;        /* argile claire */
+  --fg: #2B2420;        /* sarment */
+  --accent: #4F5D3A;    /* feuille de vigne: buttons */
+  --rose: #C98B76;      /* rosé de saignée: rosé cuvées only */
+  --straw: #D8C08E;     /* paille: illustrations */
+
+  --surface: #E7DDCD;                       /* derived */
+  --muted: #655A50;                         /* derived: sarment, lightened */
+  --on-accent: #EFE7DB;
+  --rule: rgba(43, 36, 32, 0.2);            /* derived */
+  --rule-strong: rgba(43, 36, 32, 0.5);     /* derived */
+  --btn-bg: var(--accent);
+  --btn-fg: var(--on-accent);
+  --cuvee-accent: var(--accent);
+  --frame-bg: rgba(216, 192, 142, 0.34);    /* paille, thinned */
+  --focus: var(--fg);
+
+  /* Signature movement: slow fades. The bottle barely moves. */
+  --float-distance: 3px;
+  --bubbles-display: none;
+  --sunburst-display: none;
+}
+
+/* The rosé accent replaces the vine green on details of rosé cuvées only. */
+html[data-theme="terre-vigneron"] .cuvee[data-rose] {
+  --cuvee-accent: var(--rose);
+}
+
+/* ---- Direction C · "Art déco nuit" ----------------------------------------- */
+/* PLACEHOLDER — to be replaced after review */
+html[data-theme="art-deco-nuit"] {
+  color-scheme: dark;
+  --theme-font-pair: pair-c;
+
+  --bg: #141C2E;        /* bleu minuit */
+  --fg: #EAE4D6;        /* perle */
+  --accent: #D7B98A;    /* or pâle: lines and ornaments */
+  --button: #E5B9A6;    /* saumon rosé: main button */
+
+  --surface: #1A2439;                        /* derived */
+  --muted: #9CA2B1;                          /* derived */
+  --on-accent: #141C2E;
+  --rule: rgba(215, 185, 138, 0.32);         /* derived: or pâle hairlines */
+  --rule-strong: rgba(215, 185, 138, 0.7);   /* derived */
+  --btn-bg: var(--button);
+  --btn-fg: #141C2E;
+  --cuvee-accent: var(--accent);
+  --frame-bg: var(--surface);
+  --focus: var(--button);
+
+  /* Signature movement: the sunburst draws in on scroll. Nothing floats. */
+  --float-distance: 0px;
+  --bubbles-display: none;
+  --sunburst-display: flex;
+}
+
+
+/* ==========================================================================
+   TESTING ONLY — DELETE BEFORE LAUNCH
+   Styles for js/testing-panel.js. Deliberately off-brand (fixed greys,
+   system monospace) so the panel is never mistaken for part of the design.
+   ========================================================================== */
+
+.test-tab,
+.test-panel {
+  position: fixed;
+  right: 0.75rem;
+  z-index: var(--z-test);
+  font: 12px/1.4 ui-monospace, Menlo, Consolas, monospace;
+  letter-spacing: 0;
+  text-transform: none;
+  color: #F2F2F2;
+  background: #111;
+  border: 1px solid #5A5A5A;
+}
+
+.test-tab {
+  bottom: 0.75rem;
+  padding: 0.5rem 0.75rem;
+}
+
+.test-panel {
+  bottom: 3.25rem;
+  width: min(19rem, calc(100vw - 1.5rem));
+  max-height: calc(100vh - 5rem);
+  overflow: auto;
+  padding: 0.75rem;
+}
+
+html.has-buybar .test-tab { bottom: calc(var(--buybar-h) + 0.75rem); }
+html.has-buybar .test-panel { bottom: calc(var(--buybar-h) + 3.25rem); }
+
+@media (min-width: 48em) {
+  html.has-buybar .test-tab { bottom: 0.75rem; }
+  html.has-buybar .test-panel { bottom: 3.25rem; }
+}
+
+.test-panel__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.test-panel fieldset {
+  border: 0;
+  border-top: 1px solid #3A3A3A;
+  padding: 0.5rem 0 0.625rem;
+}
+
+.test-panel legend {
+  padding: 0 0.5rem 0 0;
+  color: #A8A8A8;
+  text-transform: uppercase;
+}
+
+.test-panel button {
+  font: inherit;
+  letter-spacing: 0;
+  text-transform: none;
+  color: #F2F2F2;
+  background: #111;
+  border: 1px solid #5A5A5A;
+  padding: 0.375rem 0.5rem;
+  margin: 0.25rem 0.25rem 0 0;
+  min-height: 0;
+}
+
+.test-panel fieldset > button { display: block; width: 100%; text-align: left; }
+
+.test-panel a {
+  display: block;
+  margin-top: 0.25rem;
+  padding: 0.375rem 0.5rem;
+  color: #F2F2F2;
+  border: 1px solid #5A5A5A;
+  text-decoration: none;
+}
+.test-panel a[aria-current] { background: #F2F2F2; color: #111; border-color: #F2F2F2; }
+.test-panel a:focus-visible { outline: 2px solid #FFD400; outline-offset: 2px; }
+
+.test-panel button[aria-pressed="true"] {
+  background: #F2F2F2;
+  color: #111;
+  border-color: #F2F2F2;
+}
+
+.test-tab:focus-visible,
+.test-panel button:focus-visible { outline: 2px solid #FFD400; outline-offset: 2px; }
+
+.test-panel p { margin-top: 0.625rem; color: #A8A8A8; }
+.test-panel__fonts { white-space: pre-line; }

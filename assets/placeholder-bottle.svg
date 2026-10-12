@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 1000" width="400" height="1000" role="img" aria-label="Bottle image placeholder">
+  <!-- PLACEHOLDER — replace with the final bottle photograph or render.
+       Grey only, so it reads the same in the three themes. -->
+  <g fill="#8C8C8C" fill-opacity="0.14" stroke="#8C8C8C" stroke-width="2" stroke-linejoin="round">
+    <rect x="166" y="96" width="68" height="24"/>
+    <path d="M172 120h56v190c0 70 72 100 72 190v390q0 20-20 20h-160q-20 0-20-20v-390c0-90 72-120 72-190z"/>
+  </g>
+  <g fill="none" stroke="#8C8C8C" stroke-width="2">
+    <path d="M172 300h56"/>
+    <rect x="128" y="590" width="144" height="180" stroke-dasharray="7 5"/>
+  </g>
+  <g font-family="ui-monospace, Menlo, Consolas, monospace" text-anchor="middle" fill="#808080" letter-spacing="2">
+    <text x="200" y="686" font-size="17">LABEL</text>
+    <text x="200" y="966" font-size="19">IMAGE PLACEHOLDER</text>
+  </g>
+</svg>

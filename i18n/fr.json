@@ -1,0 +1,133 @@
+{
+  "meta": {
+    "title": "[BRAND NAME] · Champagne (prototype)",
+    "titleRing": "Sélection des bouteilles · [BRAND NAME] (prototype)",
+    "title404": "Page introuvable · [BRAND NAME]",
+    "description": "Description provisoire : [BRAND NAME], champagne de vigneron à [VILLAGE]. Quatre cuvées, leurs assemblages, leur élevage et leurs notes de dégustation."
+  },
+  "proto": {
+    "badge": "PROTOTYPE — NOT FOR PUBLICATION"
+  },
+  "brand": {
+    "name": "[BRAND NAME]",
+    "logoAlt": "Logo provisoire de [BRAND NAME]",
+    "home": "[BRAND NAME], retour à l’accueil"
+  },
+  "a11y": {
+    "skip": "Aller au contenu",
+    "mainNav": "Navigation principale",
+    "langSwitcher": "Langue",
+    "legalNav": "Informations légales"
+  },
+  "nav": {
+    "cuvees": "Cuvées",
+    "house": "La maison"
+  },
+  "hero": {
+    "label": "Champagne · [VILLAGE] · Récoltant-manipulant",
+    "title": "Nés de la craie, élevés dans le silence de nos caves.",
+    "lede": "Quatre cuvées travaillées à deux mains, de la vigne à la bouteille.",
+    "ctaPrimary": "Découvrir les cuvées",
+    "ctaSecondary": "Notre histoire",
+    "caption": "Planche 00 — bouteille de la maison, lumière rasante, fond sombre",
+    "imgAlt": "Image prévue : une bouteille de champagne sans étiquette, vue de trois quarts face, lumière rasante venant de la gauche, fond sombre."
+  },
+  "cuvee": {
+    "typeLabel": "Type",
+    "blendLabel": "Assemblage",
+    "notesLabel": "Dégustation",
+    "priceLabel": "Prix, 75 cl"
+  },
+  "cuvees": [
+    {
+      "name": "[CUVÉE 1]",
+      "meta": "Cuvée N° 01 · Type : TBD · [00] mois sur lattes · dosage [0] g/L",
+      "lead": "Texte provisoire : l’assemblage de la maison, issu de [PARCELLE A] et de [PARCELLE B], sur sous-sol de craie. Pressurage dans les heures qui suivent la cueillette, vinification en [CONTENANT À PRÉCISER].",
+      "type": "TBD",
+      "blend": "[00] % chardonnay · [00] % pinot noir · [00] % meunier (provisoire)",
+      "notes": "Notes provisoires : fruits à chair blanche, amande fraîche, finale crayeuse et saline.",
+      "price": "00,00 €",
+      "buy": "Commander [CUVÉE 1]",
+      "caption": "Planche 01 — [CUVÉE 1], lumière rasante, fond sombre",
+      "alt": "Image prévue : bouteille de [CUVÉE 1], vue de trois quarts face, lumière rasante venant de la gauche, fond sombre."
+    },
+    {
+      "name": "[CUVÉE 2]",
+      "meta": "Cuvée N° 02 · Type : TBD · [00] mois sur lattes · dosage [0] g/L",
+      "lead": "Texte provisoire : un vin de parcelle unique, [PARCELLE C], vignes plantées en [ANNÉE]. Chaque lot est vinifié séparément avant l’assemblage.",
+      "type": "TBD",
+      "blend": "[00] % chardonnay · [00] % pinot noir (provisoire)",
+      "notes": "Notes provisoires : zeste d’agrumes, fleurs blanches, pain grillé, bouche tendue et sèche.",
+      "price": "00,00 €",
+      "buy": "Commander [CUVÉE 2]",
+      "caption": "Planche 02 — [CUVÉE 2], lumière rasante, fond sombre",
+      "alt": "Image prévue : bouteille de [CUVÉE 2], vue de trois quarts face, lumière rasante venant de la gauche, fond sombre."
+    },
+    {
+      "name": "[CUVÉE 3]",
+      "meta": "Cuvée N° 03 · Type : TBD · [00] mois sur lattes · dosage [0] g/L",
+      "lead": "Texte provisoire : une cuvée construite sur le pinot noir de [PARCELLE D]. La durée de macération et la couleur restent à confirmer avec le producteur.",
+      "type": "TBD",
+      "blend": "[00] % pinot noir · [00] % meunier (provisoire)",
+      "notes": "Notes provisoires : petits fruits rouges, orange sanguine, fine trame tannique.",
+      "price": "00,00 €",
+      "buy": "Commander [CUVÉE 3]",
+      "caption": "Planche 03 — [CUVÉE 3], lumière rasante, fond sombre",
+      "alt": "Image prévue : bouteille de [CUVÉE 3], vue de trois quarts face, lumière rasante venant de la gauche, fond sombre."
+    },
+    {
+      "name": "[CUVÉE 4]",
+      "meta": "Cuvée N° 04 · Type : TBD · [00] mois sur lattes · dosage [0] g/L",
+      "lead": "Texte provisoire : le plus long vieillissement de la cave. Vins de réserve de [ANNÉES À PRÉCISER], conservés en [CONTENANT À PRÉCISER] et tirés en petite quantité.",
+      "type": "TBD",
+      "blend": "[00] % chardonnay · [00] % pinot noir · [00] % vins de réserve (provisoire)",
+      "notes": "Notes provisoires : fruits secs, noisette, brioche, finale longue et vineuse.",
+      "price": "00,00 €",
+      "buy": "Commander [CUVÉE 4]",
+      "caption": "Planche 04 — [CUVÉE 4], lumière rasante, fond sombre",
+      "alt": "Image prévue : bouteille de [CUVÉE 4], vue de trois quarts face, lumière rasante venant de la gauche, fond sombre."
+    }
+  ],
+  "house": {
+    "title": "Deux générations, [00] parcelles, un pressoir.",
+    "body": "Texte provisoire : [PRÉNOM] et [PRÉNOM], père et fils, cultivent les vignes de la famille à [VILLAGE]. Ils vendangent à la main, pressent sur place et tirent eux-mêmes chaque cuvée. Ce paragraphe sera remplacé par le récit du producteur.",
+    "facts": [
+      { "term": "Vignoble", "value": "[0,0] ha à [VILLAGE], [SOUS-RÉGION À PRÉCISER]" },
+      { "term": "Parcelles", "value": "[00] parcelles sur craie, âge moyen des vignes : [00] ans" },
+      { "term": "Pressurage", "value": "Pressoir traditionnel de [0 000] kg, dans les [0] heures après la cueillette" },
+      { "term": "Vieillissement", "value": "[00] à [00] mois en cave de craie, à [00] °C" }
+    ]
+  },
+  "footer": {
+    "mentions": "Mentions légales",
+    "cgv": "Conditions générales de vente",
+    "privacy": "Politique de confidentialité",
+    "cookies": "Gestion des cookies",
+    "label": "Élaboré par [BRAND NAME], [VILLAGE], France · RM-000-000 · 750 ml · [00] % vol. · Contient des sulfites",
+    "health": "L’abus d’alcool est dangereux pour la santé, à consommer avec modération.",
+    "copyright": "© [ANNÉE] [BRAND NAME]"
+  },
+  "age": {
+    "question": "Êtes-vous âgé(e) de 18 ans ou plus ?",
+    "note": "Ce site présente des vins et s’adresse aux personnes ayant l’âge légal de consommer de l’alcool dans leur pays de résidence.",
+    "yes": "Oui",
+    "no": "Non",
+    "exitTitle": "Merci de votre franchise.",
+    "exitBody": "Ce site est réservé aux personnes majeures. Nous ne pouvons pas vous en montrer le contenu.",
+    "back": "Je me suis trompé(e)"
+  },
+  "ring": {
+    "label": "Page de test · choisir une cuvée",
+    "hint": "Faites tourner le cercle ou choisissez un chiffre. Faites ensuite défiler la page pour lire le détail de la cuvée placée devant.",
+    "pick": "Choisir une cuvée",
+    "prev": "Cuvée précédente",
+    "next": "Cuvée suivante",
+    "details": "Voir le détail"
+  },
+  "notfound": {
+    "code": "Erreur 404",
+    "title": "Cette bouteille n’est pas encore sortie de nos caves.",
+    "body": "La page que vous cherchez n’existe pas ou a été déplacée.",
+    "cta": "Retour à l’accueil"
+  }
+}

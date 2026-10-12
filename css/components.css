@@ -1,0 +1,782 @@
+/*
+ * components.css — every visible block, mobile first.
+ * Breakpoints: 48em (768px) tablet, 60em (960px) desktop grid, 75em (1200px) margin index.
+ * One shape rule for the whole site: square corners, hairline rules, no shadows.
+ */
+
+/* ---- Prototype badge (remove at launch, with its line in the HTML) -------- */
+
+.proto-badge {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  z-index: var(--z-badge);
+  padding: 0.375rem 0.625rem;
+  font: 600 11px/1.3 ui-monospace, Menlo, Consolas, monospace;
+  letter-spacing: 0.04em;
+  color: #111;
+  background: #FFD400;
+  pointer-events: none;
+}
+
+html.has-buybar .proto-badge { bottom: var(--buybar-h); }
+
+/* ---- Buttons --------------------------------------------------------------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 3.25rem;
+  padding: 0.5rem 1.75rem;
+  border: 1px solid var(--btn-bg);
+  font-size: 0.8125rem;
+  font-weight: var(--weight-strong);
+  letter-spacing: var(--label-tracking, 0.14em);
+  line-height: 1.3;
+  text-transform: uppercase;
+  text-decoration: none;
+  text-align: center;
+  transition: background-color 0.4s var(--ease), color 0.4s var(--ease), border-color 0.4s var(--ease);
+}
+
+.btn--primary { background: var(--btn-bg); color: var(--btn-fg); }
+.btn--primary:hover { background: transparent; color: var(--fg); }
+
+.btn--ghost { border-color: var(--rule-strong); color: var(--fg); }
+.btn--ghost:hover { border-color: var(--fg); }
+
+.btn:active { transform: translateY(1px); }
+
+html[data-motion="off"] .btn { transition: none; }
+
+/* Direction C: an inner keyline, as on a 1920s poster cartouche. */
+html[data-theme="art-deco-nuit"] .btn--primary {
+  box-shadow: inset 0 0 0 3px var(--btn-bg), inset 0 0 0 4px var(--btn-fg);
+}
+html[data-theme="art-deco-nuit"] .btn--primary:hover { box-shadow: none; }
+
+/* ---- Header ---------------------------------------------------------------- */
+
+.site-header {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem var(--gutter) 0;
+  background: var(--bg);
+  border-bottom: 1px solid var(--rule);
+}
+
+.brand {
+  grid-column: 1;
+  grid-row: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.875rem;
+  text-decoration: none;
+}
+
+.brand__logo { height: 2.25rem; width: auto; }
+
+.brand__name {
+  display: none;
+  font-family: var(--font-heading);
+  font-size: 1.125rem;
+  letter-spacing: var(--heading-tracking);
+  text-transform: var(--heading-transform);
+}
+
+.lang {
+  grid-column: 2;
+  grid-row: 1;
+  justify-self: end;
+  display: flex;
+}
+
+.lang__btn {
+  min-width: 2.5rem;
+  min-height: 2.75rem;
+  padding: 0 0.375rem;
+  font-size: 0.8125rem;
+  font-weight: var(--weight-strong);
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  box-shadow: inset 0 -1px 0 transparent;
+}
+
+.lang__btn:hover { color: var(--fg); }
+.lang__btn[aria-pressed="true"] { color: var(--fg); box-shadow: inset 0 -1px 0 var(--accent); }
+
+.site-nav {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  display: flex;
+  gap: 1.75rem;
+  border-top: 1px solid var(--rule);
+}
+
+.site-nav a {
+  padding: 0.875rem 0;
+  font-size: 0.8125rem;
+  font-weight: var(--weight-strong);
+  letter-spacing: var(--label-tracking, 0.14em);
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+.site-nav a:hover { text-decoration: underline; }
+
+.page-404 .site-header { padding-bottom: 0.625rem; }
+
+@media (min-width: 48em) {
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: var(--z-header);
+    grid-template-columns: 1fr auto 1fr;
+    gap: var(--col-gap);
+    min-height: var(--header-h);
+    padding-block: 0;
+  }
+  .brand { justify-self: start; }
+  .brand__logo { height: 2.5rem; }
+  .brand__name { display: block; }
+  .lang { grid-column: 3; }
+  .site-nav { grid-column: 2; grid-row: 1; gap: 2.5rem; border-top: 0; }
+  .page-404 .site-header { padding-bottom: 0; }
+}
+
+/* ---- Cuvée index (I · II · III · IV in the margin) -------------------------- */
+
+.cuvee-index { display: none; }
+
+@media (min-width: 75em) {
+  .cuvee-index {
+    position: fixed;
+    left: 1rem;
+    top: 50%;
+    z-index: var(--z-index-nav);
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    transform: translateY(-50%);
+  }
+  .cuvee-index__link {
+    display: grid;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
+    font-family: var(--font-heading);
+    font-size: 0.875rem;
+    color: var(--muted);
+    text-decoration: none;
+    box-shadow: inset 0 -1px 0 transparent;
+  }
+  .cuvee-index__link:hover { color: var(--fg); }
+  .cuvee-index__link[aria-current] { color: var(--fg); box-shadow: inset 0 -1px 0 var(--accent); }
+}
+
+/* ---- Plates (image placeholders) -------------------------------------------- */
+/* Same frame, ratio and bottle angle everywhere, so the set reads as one shoot. */
+
+.plate__frame {
+  position: relative;
+  aspect-ratio: 3 / 5;
+  background: var(--frame-bg);
+  border: 1px dashed var(--rule-strong);
+  overflow: hidden;
+}
+
+.plate__img {
+  position: absolute;
+  inset: 5% 10%;
+  width: 80%;
+  height: 90%;
+  object-fit: contain;
+  /* Hover tilt: motion.js feeds --tilt-x / --tilt-y from the pointer position. */
+  transform: perspective(60rem) translateY(var(--lift, 0px)) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+  transition: transform 0.9s var(--ease);
+}
+
+/* While the pointer is over the frame the bottle follows it closely;
+   on leaving it eases back upright with the slower transition above. */
+.plate__frame.is-tilting .plate__img {
+  --lift: -6px;
+  transition-duration: 0.2s;
+  transition-timing-function: linear;
+}
+
+html:not([data-motion="full"]) .plate__img { transform: none; transition: none; }
+
+/* Reserved for the 3D bottle: covers the frame. Empty unless config.js names
+   a model for this cuvée (js/bottle-3d.js), in which case it holds a canvas. */
+.bottle-stage { position: absolute; inset: 0; }
+
+.bottle-stage canvas { display: none; width: 100%; height: 100%; }
+
+/* 3D running: no panel, no dashed frame. The bottle stands on the page colour
+   (the scene is filled with it, see bottle-3d.js). Without .has-3d the
+   placeholder image and its frame show as before. */
+.plate__frame.has-3d { background: transparent; border-color: transparent; }
+.plate__frame.has-3d .bottle-stage { background: var(--bg); }
+.plate__frame.has-3d .bottle-stage canvas { display: block; }
+.plate__frame.has-3d .plate__img { visibility: hidden; }
+
+.plate__caption {
+  margin-top: 0.75rem;
+  font-size: var(--fs-small);
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+/* ---- Hero ------------------------------------------------------------------- */
+
+.hero {
+  position: relative;
+  display: grid;
+  gap: 2.5rem;
+  max-width: var(--page-max);
+  min-height: calc(100svh - 7rem);
+  margin-inline: auto;
+  padding: clamp(2rem, 6vh, 4rem) var(--gutter) 3rem;
+}
+
+.hero__bubbles {
+  display: var(--bubbles-display, none);
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  color: var(--fg);
+  pointer-events: none;
+}
+
+.hero__copy { position: relative; align-self: end; }
+
+.hero__label { margin-bottom: 1.25rem; }
+
+.hero__title { font-size: calc(var(--fs-display) * var(--heading-scale)); }
+
+.hero__lede {
+  max-width: 30ch;
+  margin-top: 1.5rem;
+  font-size: var(--fs-lede);
+  line-height: 1.5;
+}
+
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 2rem;
+}
+
+.hero__plate {
+  position: relative;
+  width: min(62%, 16rem);
+  margin-left: auto;
+}
+
+html[data-motion="full"] .hero__bottle {
+  animation: bottle-float 3s ease-in-out infinite alternate;
+}
+
+@media (min-width: 60em) {
+  .hero {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--col-gap);
+    align-items: end;
+    min-height: calc(100svh - var(--header-h));
+    padding-bottom: clamp(2.5rem, 7vh, 5rem);
+  }
+  .hero__copy { grid-column: 1 / 9; padding-bottom: 1.5rem; }
+  .hero__plate { grid-column: 9 / 13; width: auto; }
+  .hero__plate .plate__frame {
+    height: min(68svh, 44rem);
+    max-width: 100%;
+    margin-left: auto;
+  }
+  .hero__plate .plate__caption { text-align: right; }
+}
+
+/* ---- Cuvée sections ---------------------------------------------------------- */
+
+.cuvees { max-width: var(--page-max); margin-inline: auto; }
+
+.cuvee {
+  position: relative;
+  display: grid;
+  gap: 2rem;
+  padding: clamp(4rem, 10vh, 7rem) var(--gutter);
+  border-top: 1px solid var(--rule);
+}
+
+.cuvee__numeral {
+  margin-bottom: 1.5rem;
+  font-family: var(--font-heading);
+  font-size: var(--fs-numeral);
+  line-height: 0.85;
+  color: var(--cuvee-accent);
+}
+
+.cuvee__meta {
+  padding-top: 0.875rem;
+  border-top: 1px solid var(--rule-strong);
+}
+
+.cuvee__name {
+  margin-top: 0.75rem;
+  font-size: calc(var(--fs-name) * var(--heading-scale));
+  overflow-wrap: anywhere;
+}
+
+.cuvee__plate { width: min(70%, 17rem); margin-left: auto; }
+
+.cuvee__lead {
+  max-width: 34ch;
+  font-size: var(--fs-lede);
+  line-height: 1.5;
+}
+
+/* The cellar card: one ruled box, set like the back label of a bottle. */
+.cuvee__card {
+  position: relative;
+  padding: 1.75rem 1.5rem 1.5rem;
+  border: 1px solid var(--rule-strong);
+}
+
+.cuvee__card::before {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: 1.5rem;
+  width: 2.5rem;
+  height: 3px;
+  background: var(--cuvee-accent);
+  transition: width 0.7s var(--ease);
+}
+
+/* The accent rule runs the width of the card while it is hovered. */
+.cuvee__card:hover::before { width: calc(100% - 3rem); }
+html[data-motion="off"] .cuvee__card::before { transition: none; }
+
+.spec__row {
+  display: grid;
+  gap: 0.25rem;
+  padding: 0.875rem 0;
+  border-top: 1px solid var(--rule);
+}
+
+.spec__row:first-child { padding-top: 0; border-top: 0; }
+
+.spec__row--price dd {
+  font-family: var(--font-heading);
+  font-size: 1.75rem;
+  line-height: 1.2;
+}
+
+.cuvee__buy { width: 100%; margin-top: 0.75rem; }
+
+@media (min-width: 60em) {
+  /* One screen per cuvée: name, text, cellar card and bottle are all visible
+     at once when the section is locked in place (see "scroll settle", motion.js). */
+  .cuvee,
+  .cuvee[data-layout="centre"] {
+    --fs-name: clamp(2.25rem, 1rem + 2.6vw, 3.75rem);
+    --fs-numeral: clamp(4rem, 1.5rem + 6vw, 7.5rem);
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    grid-template-rows: auto 1fr;
+    column-gap: var(--col-gap);
+    row-gap: 2rem;
+    align-items: start;
+    align-content: center;
+    min-height: calc(100svh - var(--header-h));
+    padding-block: clamp(2rem, 5vh, 4rem);
+  }
+
+  .cuvee__plate { width: auto; margin-left: 0; }
+
+  .cuvee__plate .plate__frame {
+    height: min(calc(100svh - var(--header-h) - 12rem), 40rem);
+    max-width: 100%;
+    margin-inline: auto;
+  }
+
+  .cuvee__head { grid-column: 1 / 5; grid-row: 1; }
+  .cuvee__lead { grid-column: 1 / 5; grid-row: 2; }
+  .cuvee__plate,
+  .cuvee__card { grid-row: 1 / span 2; align-self: center; }
+
+  /* Layout "right": text, cellar card, then the bottle on the right. */
+  .cuvee[data-layout="right"] .cuvee__card { grid-column: 5 / 9; margin-left: 12%; }
+  .cuvee[data-layout="right"] .cuvee__plate { grid-column: 9 / 13; }
+  .cuvee[data-layout="right"] .cuvee__plate .plate__frame { margin-right: 0; }
+  .cuvee[data-layout="right"] .plate__caption { text-align: right; }
+
+  /* Layout "centre": text, the bottle in the middle, cellar card on the right. */
+  .cuvee[data-layout="centre"] .cuvee__plate { grid-column: 5 / 9; }
+  .cuvee[data-layout="centre"] .cuvee__card { grid-column: 9 / 13; }
+}
+
+/* ---- Sunburst divider (Direction C only) ------------------------------------- */
+
+.sunburst {
+  display: var(--sunburst-display, none);
+  position: absolute;
+  top: 0;
+  left: var(--gutter);
+  right: var(--gutter);
+  height: 3rem;
+  margin-top: calc(-3rem + 1px);
+  align-items: flex-end;
+  gap: 1.25rem;
+}
+
+.sunburst::before,
+.sunburst::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--rule);
+}
+
+.sunburst svg {
+  width: 6rem;
+  height: 3rem;
+  overflow: visible;
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 2;
+}
+
+.sunburst line { stroke-dasharray: 1; stroke-dashoffset: 0; }
+
+html.js[data-motion="full"] .sunburst line {
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset 1.2s var(--ease);
+  transition-delay: calc(var(--ray) * 70ms + 200ms);
+}
+
+html.js[data-motion="full"] .sunburst.is-in line { stroke-dashoffset: 0; }
+
+/* The fan replaces the plain hairline between sections. */
+html[data-theme="art-deco-nuit"] .cuvee { border-top-color: transparent; }
+
+/* ---- The house ---------------------------------------------------------------- */
+
+.house {
+  display: grid;
+  gap: 2.5rem;
+  max-width: var(--page-max);
+  margin-inline: auto;
+  padding: clamp(5rem, 14vh, 10rem) var(--gutter);
+  border-top: 1px solid var(--rule);
+}
+
+.house__title { font-size: calc(var(--fs-title) * var(--heading-scale)); }
+
+.house__body { max-width: 46ch; }
+
+.ledger__row {
+  display: grid;
+  gap: 0.25rem;
+  padding: 1rem 0;
+  border-top: 1px solid var(--rule);
+}
+
+@media (min-width: 60em) {
+  .house {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--col-gap);
+    row-gap: 3.5rem;
+  }
+  .house__title { grid-column: 1 / 10; }
+  .house__body { grid-column: 1 / 6; }
+  .ledger { grid-column: 7 / 13; }
+  .ledger__row { grid-template-columns: 9rem 1fr; gap: 1.5rem; align-items: baseline; }
+}
+
+/* ---- Footer ------------------------------------------------------------------- */
+
+.site-footer {
+  display: grid;
+  gap: 1.5rem;
+  max-width: var(--page-max);
+  margin-inline: auto;
+  padding: 3rem var(--gutter) calc(4.5rem + var(--buybar-h));
+  border-top: 1px solid var(--rule-strong);
+}
+
+.site-footer__brand {
+  font-family: var(--font-heading);
+  font-size: calc(clamp(1.75rem, 1.2rem + 2.4vw, 3rem) * var(--heading-scale));
+  line-height: var(--heading-leading);
+  letter-spacing: var(--heading-tracking);
+  text-transform: var(--heading-transform);
+}
+
+.site-footer__legal {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.5rem;
+  font-size: var(--fs-small);
+}
+
+.site-footer__legal a { padding: 0.5rem 0; }
+
+.site-footer__health {
+  padding: 1rem 0;
+  border-block: 1px solid var(--rule);
+}
+
+@media (min-width: 48em) {
+  .site-footer {
+    grid-template-columns: 1fr auto;
+    align-items: end;
+    padding-bottom: 4.5rem;
+  }
+  .site-footer__label,
+  .site-footer__health,
+  .site-footer__copyright { grid-column: 1 / -1; }
+}
+
+/* ---- Mobile buy bar ------------------------------------------------------------ */
+
+.buybar {
+  position: fixed;
+  inset: auto 0 0 0;
+  z-index: var(--z-buybar);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  height: var(--buybar-h);
+  padding: 0 var(--gutter);
+  background: var(--btn-bg);
+  color: var(--btn-fg);
+  text-decoration: none;
+}
+
+.buybar__label {
+  font-size: 0.8125rem;
+  font-weight: var(--weight-strong);
+  letter-spacing: var(--label-tracking, 0.14em);
+  text-transform: uppercase;
+}
+
+.buybar__price { font-family: var(--font-heading); font-size: 1.125rem; white-space: nowrap; }
+
+@media (min-width: 48em) {
+  .buybar { display: none; }
+  html.has-buybar .proto-badge { bottom: 0; }
+}
+
+/* ---- Age gate ------------------------------------------------------------------ */
+
+.age-gate {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-age-gate);
+  display: grid;
+  place-items: center;
+  padding: 2.5rem 1.5rem;
+  background: var(--bg);
+  overflow: auto;
+}
+
+/* A single keyline inside the edge, like the border of a label. */
+.age-gate::before {
+  content: "";
+  position: absolute;
+  inset: 0.75rem;
+  border: 1px solid var(--rule);
+  pointer-events: none;
+}
+
+.age-gate__inner {
+  display: grid;
+  justify-items: center;
+  gap: 1.75rem;
+  max-width: 32rem;
+  text-align: center;
+}
+
+.age-gate__logo { height: 3rem; width: auto; }
+
+/* Undo the header placement of .lang: here it is just another row. */
+.age-gate__lang { grid-column: auto; grid-row: auto; justify-self: center; }
+
+.age-gate__title {
+  font-size: calc(clamp(1.75rem, 1.2rem + 2.4vw, 2.75rem) * var(--heading-scale));
+  outline: none;
+}
+
+.age-gate__note { max-width: 40ch; margin: 1rem auto 0; color: var(--muted); }
+
+.age-gate__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: 2rem;
+}
+
+.age-gate__actions .btn { min-width: 7.5rem; }
+
+.age-gate__health {
+  padding-top: 1rem;
+  border-top: 1px solid var(--rule);
+  font-size: var(--fs-small);
+  color: var(--muted);
+}
+
+/* ---- Bottle ring (TEST PAGE: selection.html) ---------------------------------- */
+
+.ring {
+  display: grid;
+  gap: 1.5rem;
+  max-width: var(--page-max);
+  margin-inline: auto;
+  padding: 1rem var(--gutter) 3rem;
+}
+
+.ring__stage {
+  position: relative;
+  order: -1;
+  height: min(52svh, 26rem);
+  touch-action: pan-y; /* vertical swipes still scroll the page */
+}
+
+.ring__stage canvas {
+  display: none;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  cursor: grab;
+}
+
+.ring__fallback {
+  position: absolute;
+  inset: 0;
+  width: auto;
+  height: 92%;
+  margin: auto;
+}
+
+.ring__stage.is-live canvas { display: block; }
+.ring__stage.is-live .ring__fallback { visibility: hidden; }
+
+.ring__copy {
+  display: grid;
+  justify-items: start;
+  gap: 1rem;
+}
+
+.ring__numeral {
+  font-family: var(--font-heading);
+  font-size: var(--fs-numeral);
+  line-height: 0.85;
+  color: var(--cuvee-accent);
+}
+
+.ring__meta {
+  width: 100%;
+  padding-top: 0.875rem;
+  border-top: 1px solid var(--rule-strong);
+}
+
+.ring__name,
+.ring-details__name {
+  font-size: calc(var(--fs-name) * var(--heading-scale));
+  overflow-wrap: anywhere;
+}
+
+.ring__hint { max-width: 38ch; color: var(--muted); }
+
+.ring__controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-block: 0.5rem;
+}
+
+.ring__picker { display: flex; }
+
+.ring__arrow,
+.ring__picker button {
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+}
+
+.ring__arrow { border: 1px solid var(--rule-strong); transition: border-color 0.4s var(--ease); }
+.ring__arrow:hover { border-color: var(--fg); }
+.ring__arrow svg { width: 1.125rem; height: 1.125rem; fill: none; stroke: currentColor; stroke-width: 1.5; }
+
+.ring__picker button {
+  font-family: var(--font-heading);
+  font-size: 1.0625rem;
+  color: var(--muted);
+  box-shadow: inset 0 -1px 0 transparent;
+}
+.ring__picker button:hover { color: var(--fg); }
+.ring__picker button[aria-pressed="true"] { color: var(--fg); box-shadow: inset 0 -1px 0 var(--accent); }
+
+.ring-details {
+  display: grid;
+  gap: 2rem;
+  max-width: var(--page-max);
+  margin-inline: auto;
+  padding: clamp(4rem, 10vh, 7rem) var(--gutter);
+  border-top: 1px solid var(--rule);
+}
+
+.ring-details__name { margin-top: 0.75rem; }
+
+@media (min-width: 60em) {
+  .ring {
+    --fs-name: clamp(2.25rem, 1rem + 2.6vw, 3.75rem);
+    --fs-numeral: clamp(4rem, 1.5rem + 6vw, 7.5rem);
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--col-gap);
+    align-items: center;
+    min-height: calc(100svh - var(--header-h));
+    padding-block: 2rem;
+  }
+  .ring__copy { grid-column: 1 / 5; }
+  .ring__stage { grid-column: 5 / 13; order: 0; height: min(calc(100svh - var(--header-h) - 4rem), 46rem); }
+
+  .ring-details {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--col-gap);
+    align-content: center;
+    align-items: start;
+    min-height: calc(100svh - var(--header-h));
+  }
+  .ring-details__head { grid-column: 1 / 7; grid-row: 1; }
+  .ring-details .cuvee__lead { grid-column: 1 / 6; grid-row: 2; }
+  .ring-details .cuvee__card { grid-column: 8 / 13; grid-row: 1 / span 2; align-self: center; }
+}
+
+/* ---- 404 ----------------------------------------------------------------------- */
+
+.notfound {
+  display: grid;
+  align-content: center;
+  justify-items: start;
+  gap: 1.5rem;
+  max-width: var(--page-max);
+  min-height: calc(100svh - 14rem);
+  margin-inline: auto;
+  padding: 4rem var(--gutter);
+}
+
+.notfound__title {
+  max-width: 18ch;
+  font-size: calc(var(--fs-display) * var(--heading-scale));
+}
+
+.notfound__body { max-width: 40ch; margin-bottom: 0.5rem; }

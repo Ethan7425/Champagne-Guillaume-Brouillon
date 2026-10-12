@@ -1,0 +1,133 @@
+{
+  "meta": {
+    "title": "[BRAND NAME] · Champagne (prototype)",
+    "titleRing": "Bottle selection · [BRAND NAME] (prototype)",
+    "title404": "Page not found · [BRAND NAME]",
+    "description": "Placeholder description: [BRAND NAME], grower champagne from [VILLAGE]. Four cuvées, their blends, ageing and tasting notes."
+  },
+  "proto": {
+    "badge": "PROTOTYPE — NOT FOR PUBLICATION"
+  },
+  "brand": {
+    "name": "[BRAND NAME]",
+    "logoAlt": "Placeholder logo for [BRAND NAME]",
+    "home": "[BRAND NAME], back to the home page"
+  },
+  "a11y": {
+    "skip": "Skip to content",
+    "mainNav": "Main navigation",
+    "langSwitcher": "Language",
+    "legalNav": "Legal information"
+  },
+  "nav": {
+    "cuvees": "Cuvées",
+    "house": "The house"
+  },
+  "hero": {
+    "label": "Champagne · [VILLAGE] · Grower-producer",
+    "title": "Born of chalk, raised in the silence of our cellars.",
+    "lede": "Four cuvées worked by two hands, from the vine to the bottle.",
+    "ctaPrimary": "Discover the cuvées",
+    "ctaSecondary": "Our story",
+    "caption": "Plate 00 — house bottle, raking light, dark background",
+    "imgAlt": "Intended image: a single unlabelled champagne bottle, three-quarter front view, raking light from the left, dark background."
+  },
+  "cuvee": {
+    "typeLabel": "Type",
+    "blendLabel": "Blend",
+    "notesLabel": "Tasting notes",
+    "priceLabel": "Price, 75 cl"
+  },
+  "cuvees": [
+    {
+      "name": "[CUVÉE 1]",
+      "meta": "Cuvée N° 01 · Type: TBD · [00] months on lees · dosage [0] g/L",
+      "lead": "Placeholder: the house blend, drawn from [PARCEL A] and [PARCEL B] on chalk subsoil. Pressed within hours of picking, vinified in [VESSEL TBD].",
+      "type": "TBD",
+      "blend": "[00]% Chardonnay · [00]% Pinot Noir · [00]% Meunier (placeholder)",
+      "notes": "Placeholder notes: white-fleshed fruit, fresh almond, a chalky, saline finish.",
+      "price": "€00.00",
+      "buy": "Order [CUVÉE 1]",
+      "caption": "Plate 01 — [CUVÉE 1], raking light, dark background",
+      "alt": "Intended image: bottle of [CUVÉE 1], three-quarter front view, raking light from the left, dark background."
+    },
+    {
+      "name": "[CUVÉE 2]",
+      "meta": "Cuvée N° 02 · Type: TBD · [00] months on lees · dosage [0] g/L",
+      "lead": "Placeholder: a single-parcel wine from [PARCEL C], vines planted in [YEAR]. Each plot is fermented separately before blending.",
+      "type": "TBD",
+      "blend": "[00]% Chardonnay · [00]% Pinot Noir (placeholder)",
+      "notes": "Placeholder notes: citrus zest, white flowers, toasted bread, a taut and dry palate.",
+      "price": "€00.00",
+      "buy": "Order [CUVÉE 2]",
+      "caption": "Plate 02 — [CUVÉE 2], raking light, dark background",
+      "alt": "Intended image: bottle of [CUVÉE 2], three-quarter front view, raking light from the left, dark background."
+    },
+    {
+      "name": "[CUVÉE 3]",
+      "meta": "Cuvée N° 03 · Type: TBD · [00] months on lees · dosage [0] g/L",
+      "lead": "Placeholder: a cuvée built on Pinot Noir from [PARCEL D]. Maceration time and colour are to be confirmed with the producer.",
+      "type": "TBD",
+      "blend": "[00]% Pinot Noir · [00]% Meunier (placeholder)",
+      "notes": "Placeholder notes: small red berries, blood orange, a fine tannic grip.",
+      "price": "€00.00",
+      "buy": "Order [CUVÉE 3]",
+      "caption": "Plate 03 — [CUVÉE 3], raking light, dark background",
+      "alt": "Intended image: bottle of [CUVÉE 3], three-quarter front view, raking light from the left, dark background."
+    },
+    {
+      "name": "[CUVÉE 4]",
+      "meta": "Cuvée N° 04 · Type: TBD · [00] months on lees · dosage [0] g/L",
+      "lead": "Placeholder: the longest ageing in the cellar. Reserve wines from [YEARS TBD], kept in [VESSEL TBD] and bottled in small numbers.",
+      "type": "TBD",
+      "blend": "[00]% Chardonnay · [00]% Pinot Noir · [00]% reserve wines (placeholder)",
+      "notes": "Placeholder notes: dried fruit, hazelnut, brioche, a long and vinous finish.",
+      "price": "€00.00",
+      "buy": "Order [CUVÉE 4]",
+      "caption": "Plate 04 — [CUVÉE 4], raking light, dark background",
+      "alt": "Intended image: bottle of [CUVÉE 4], three-quarter front view, raking light from the left, dark background."
+    }
+  ],
+  "house": {
+    "title": "Two generations, [00] parcels, one press.",
+    "body": "Placeholder text: [FIRST NAME] and [FIRST NAME], father and son, farm the family vines in [VILLAGE]. They pick by hand, press on site and bottle every cuvée themselves. This paragraph will be replaced by the producer's own account.",
+    "facts": [
+      { "term": "Vineyard", "value": "[0.0] ha in [VILLAGE], [SUB-REGION TBD]" },
+      { "term": "Parcels", "value": "[00] parcels on chalk, average vine age [00] years" },
+      { "term": "Pressing", "value": "Traditional [0,000] kg press, within [0] hours of picking" },
+      { "term": "Ageing", "value": "[00] to [00] months in chalk cellars at [00] °C" }
+    ]
+  },
+  "footer": {
+    "mentions": "Legal notice",
+    "cgv": "Terms of sale",
+    "privacy": "Privacy policy",
+    "cookies": "Cookie notice",
+    "label": "Produced by [BRAND NAME], [VILLAGE], France · RM-000-000 · 750 ml · [00]% vol. · Contains sulphites",
+    "health": "Alcohol abuse is dangerous for your health. Drink in moderation.",
+    "copyright": "© [YEAR] [BRAND NAME]"
+  },
+  "age": {
+    "question": "Are you aged 18 or over?",
+    "note": "This site presents wines and is intended for adults of legal drinking age in their country of residence.",
+    "yes": "Yes",
+    "no": "No",
+    "exitTitle": "Thank you for your honesty.",
+    "exitBody": "This site is reserved for adults. We cannot show you its content.",
+    "back": "I made a mistake"
+  },
+  "ring": {
+    "label": "Test page · choose a cuvée",
+    "hint": "Turn the ring, or pick a numeral. Then scroll down for the details of the cuvée in front.",
+    "pick": "Choose a cuvée",
+    "prev": "Previous cuvée",
+    "next": "Next cuvée",
+    "details": "See the details"
+  },
+  "notfound": {
+    "code": "Error 404",
+    "title": "This bottle has not yet left our cellars.",
+    "body": "The page you are looking for does not exist or has been moved.",
+    "cta": "Back to the home page"
+  }
+}
