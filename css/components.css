@@ -50,6 +50,18 @@ html.has-buybar .proto-badge { bottom: var(--buybar-h); }
 
 html[data-motion="off"] .btn { transition: none; }
 
+/* An unreleased cuvée: the order button turns into a notice (no link). */
+.btn.is-soon,
+.cuvee[data-soon] .cuvee__buy {
+  background: transparent;
+  color: var(--muted);
+  border: 1px dashed var(--rule-strong);
+  box-shadow: none;
+  cursor: default;
+}
+.btn.is-soon:hover,
+.cuvee[data-soon] .cuvee__buy:hover { color: var(--muted); }
+
 /* Direction C: an inner keyline, as on a 1920s poster cartouche. */
 html[data-theme="art-deco-nuit"] .btn--primary {
   box-shadow: inset 0 0 0 3px var(--btn-bg), inset 0 0 0 4px var(--btn-fg);
@@ -606,6 +618,8 @@ html[data-theme="art-deco-nuit"] .cuvee { border-top-color: transparent; }
 
 .buybar__price { font-family: var(--font-heading); font-size: 1.125rem; white-space: nowrap; }
 
+.buybar.is-soon { background: var(--surface); color: var(--muted); border-top: 1px dashed var(--rule-strong); }
+
 @media (min-width: 48em) {
   .buybar { display: none; }
   html.has-buybar .proto-badge { bottom: 0; }
@@ -704,7 +718,13 @@ html[data-theme="art-deco-nuit"] .cuvee { border-top-color: transparent; }
   margin-inline: auto;
 }
 
-.voyage__stage.is-live canvas { display: block; }
+.voyage__stage.is-live canvas {
+  display: block;
+  /* The top of the picture fades into the page, so the coloured haze does not
+     end in a hard line under the header. */
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 10%);
+  mask-image: linear-gradient(to bottom, transparent, #000 10%);
+}
 .voyage__stage.is-live .ring__fallback { visibility: hidden; }
 
 /* A screen lets clicks through to the bottles, except on its own content. */
@@ -906,8 +926,261 @@ html[data-theme="art-deco-nuit"] .cuvee { border-top-color: transparent; }
   .voyage__text { width: min(34rem, 44%); margin-left: 7%; padding: 0; background: none; }
   .voyage__screen--text .voyage__body { display: block; overflow: visible; }
   .voyage__buy { display: flex; flex-wrap: wrap; align-items: center; gap: 1.5rem; margin-top: 0.5rem; }
-  .ring__fallback { inset: 0 12% 0 auto; height: 78%; margin-block: auto; }
+  .ring__fallback { inset: 6% auto auto 62%; height: 58%; margin: 0; }
 }
+
+/* ---- Cellar gauge (feature "gauge", js/extras.js) ----------------------------- */
+/* Scroll progress as a descent: a hairline that fills from the surface down,
+   with the depth reached and the temperature there. Small marks on the line
+   are checkpoints: one per section, click to go there. Phones: a line along
+   the top edge. Wider screens: a vertical line on the right edge. */
+
+.gauge {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: var(--z-gauge);
+  display: none;
+  pointer-events: none; /* only the checkpoints take clicks */
+  font-size: 0.6875rem;
+  font-weight: var(--weight-strong);
+  letter-spacing: 0.1em;
+  font-variant-numeric: tabular-nums;
+  color: var(--muted);
+}
+
+html[data-fx-gauge="on"] .gauge { display: block; }
+html.is-gated .gauge, html.is-loading .gauge { display: none; }
+
+.gauge__track { position: relative; display: block; height: 2px; background: var(--rule); }
+
+.gauge__fill {
+  display: block;
+  height: 100%;
+  background: var(--cuvee-accent);
+  transform: scaleX(var(--progress, 0));
+  transform-origin: left;
+}
+
+.gauge__label { display: none; }
+
+.gauge__read {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.5rem;
+  display: flex;
+  gap: 0.625rem;
+  padding: 0.125rem 0.375rem;
+  background: var(--bg);
+  opacity: 0;
+  transition: opacity 0.4s var(--ease);
+}
+.gauge.is-started .gauge__read { opacity: 1; }
+.gauge__depth { color: var(--fg); }
+
+/* A checkpoint: a generous invisible hit area around a small visible tick. */
+.gauge__mark {
+  position: absolute;
+  top: 0;
+  left: calc(var(--at, 0) * 100%);
+  width: 1.5rem;
+  height: 1.5rem;
+  margin-left: -0.75rem;
+  pointer-events: auto;
+}
+
+.gauge__mark::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 1px;
+  height: 7px;
+  background: var(--muted);
+  transition: background-color 0.3s var(--ease), height 0.3s var(--ease);
+}
+
+.gauge__mark:hover::before,
+.gauge__mark:focus-visible::before,
+.gauge__mark[aria-current]::before { background: var(--fg); height: 10px; }
+
+/* The section's name: read by screen readers always, shown beside the mark on wide screens. */
+.gauge__name {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (min-width: 48em) {
+  .gauge {
+    inset: 50% 0.75rem auto auto;
+    display: none;
+    width: 2.75rem; /* stays inside the page margin, clear of the content */
+    transform: translateY(-50%);
+    text-align: right;
+  }
+  html[data-fx-gauge="on"] .gauge { display: grid; justify-items: end; gap: 0.625rem; }
+
+  .gauge__track { width: 1px; height: 38vh; }
+  .gauge__fill { transform: scaleY(var(--progress, 0)); transform-origin: top; }
+  .gauge__read { position: static; display: grid; gap: 0.125rem; padding: 0; background: none; opacity: 1; }
+
+  .gauge__mark {
+    top: calc(var(--at, 0) * 100%);
+    left: 50%;
+    margin: -0.75rem 0 0 -0.75rem;
+  }
+  .gauge__mark::before { top: 50%; left: auto; right: 50%; width: 7px; height: 1px; margin-right: -0.5px; }
+  .gauge__mark:hover::before,
+  .gauge__mark:focus-visible::before,
+  .gauge__mark[aria-current]::before { width: 11px; height: 1px; }
+
+  .gauge__mark:hover .gauge__name,
+  .gauge__mark:focus-visible .gauge__name {
+    top: 50%;
+    right: calc(100% + 0.25rem);
+    width: auto;
+    height: auto;
+    padding: 0.25rem 0.5rem;
+    overflow: visible;
+    clip-path: none;
+    transform: translateY(-50%);
+    text-transform: uppercase;
+    color: var(--fg);
+    background: var(--bg);
+    border: 1px solid var(--rule);
+  }
+}
+
+/* Very wide screens have the margin for the gauge's name as well. */
+@media (min-width: 100em) {
+  .gauge { width: 4.5rem; }
+  .gauge__label { display: block; text-transform: uppercase; line-height: 1.4; }
+}
+
+/* ---- "In the glass" (feature "glass", selection.html) -------------------------- */
+
+.glass {
+  position: relative;
+  z-index: 1;
+  display: none;
+  align-content: center;
+  gap: 1.25rem;
+  min-height: 100svh;
+  padding: 2rem var(--gutter) calc(var(--buybar-h) + 2rem);
+  background: var(--bg);
+  border-top: 1px solid var(--rule);
+  scroll-snap-align: start;
+}
+
+html[data-fx-glass="on"] .glass { display: grid; }
+
+/* The flute and, beside it, the aroma chart. */
+.glass__figures {
+  display: grid;
+  grid-template-columns: minmax(0, 0.7fr) minmax(0, 1.3fr);
+  align-items: center;
+  gap: var(--col-gap);
+}
+html:not([data-fx-chart="on"]) .glass__figures { grid-template-columns: minmax(0, 1fr); }
+html:not([data-fx-chart="on"]) .aroma { display: none; }
+
+.glass__canvas { width: 100%; height: clamp(11rem, 30svh, 20rem); color: var(--fg); }
+
+.aroma { margin: 0; }
+.aroma__chart { display: block; width: 100%; height: auto; overflow: visible; color: var(--fg); }
+.aroma__ring { fill: none; stroke: var(--rule); stroke-width: 1; vector-effect: non-scaling-stroke; }
+.aroma__shape {
+  fill: var(--cuvee-accent);
+  fill-opacity: 0.16;
+  stroke: var(--cuvee-accent);
+  stroke-width: 1.5;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+.aroma__label {
+  fill: var(--muted);
+  font-size: 8.5px;
+  font-weight: var(--weight-strong);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.aroma .plate__caption { text-align: center; }
+
+.glass__text { display: grid; justify-items: start; gap: 0.875rem; }
+
+/* The three tasting words, set large: the one typographic moment of the section. */
+.glass__tags {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-family: var(--font-heading);
+  font-size: calc(clamp(1.5rem, 1rem + 2vw, 2.5rem) * var(--heading-scale));
+  line-height: 1.2;
+  letter-spacing: var(--heading-tracking);
+  text-transform: var(--heading-transform);
+  color: var(--muted);
+}
+
+@media (min-width: 48em) {
+  .glass { min-height: calc(100svh - var(--header-h)); }
+}
+
+@media (min-width: 60em) {
+  .glass {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--col-gap);
+    align-items: center;
+    padding-block: 2.5rem;
+  }
+  .glass__figures { grid-column: 1 / 7; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); }
+  .glass__canvas { height: min(calc(100svh - var(--header-h) - 8rem), 36rem); }
+  .glass__text { grid-column: 8 / 13; }
+}
+
+/* ---- Custom cursor (feature "cursor", js/extras.js) ---------------------------- */
+/* A dot at the pointer and a hairline ring that trails it. Mouse only. The
+   system cursor is hidden only once the custom one has appeared (.has-cursor),
+   so a pointer is always visible. */
+
+.cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: calc(var(--z-badge) + 1);
+  display: none;
+  border-radius: 50%; /* the one round shape on the site: it is a pointer, not a surface */
+  pointer-events: none;
+}
+
+html[data-fx-cursor="on"].has-cursor .cursor { display: block; }
+
+.cursor--dot { width: 6px; height: 6px; margin: -3px 0 0 -3px; background: var(--fg); }
+
+.cursor--ring {
+  width: 30px;
+  height: 30px;
+  margin: -15px 0 0 -15px;
+  border: 1px solid var(--cuvee-accent);
+  transition: width 0.3s var(--ease), height 0.3s var(--ease), margin 0.3s var(--ease), opacity 0.3s var(--ease);
+}
+
+/* Over something clickable, or a bottle: the ring opens and the dot steps back. */
+html.cursor-active .cursor--ring { width: 54px; height: 54px; margin: -27px 0 0 -27px; }
+html.cursor-active .cursor--dot { opacity: 0.45; }
+html.cursor-down .cursor--ring { width: 22px; height: 22px; margin: -11px 0 0 -11px; }
+
+@media (hover: hover) and (pointer: fine) {
+  html[data-fx-cursor="on"].has-cursor,
+  html[data-fx-cursor="on"].has-cursor * { cursor: none !important; }
+}
+
+/* The test panel keeps the ordinary cursor: it is a tool, not part of the site. */
+html[data-fx-cursor="on"].has-cursor .test-panel,
+html[data-fx-cursor="on"].has-cursor .test-panel *,
+html[data-fx-cursor="on"].has-cursor .test-tab { cursor: auto !important; }
 
 /* ---- Loading screen (TEST, js/loader.js) ------------------------------------- */
 
@@ -922,11 +1195,22 @@ html[data-theme="art-deco-nuit"] .cuvee { border-top-color: transparent; }
 }
 
 .loader.is-leaving { opacity: 0; pointer-events: none; }
+
+/* Landing (feature "intro"): the background clears and the bottle travels to
+   the hero bottle; the wine level and the text fade on the way. */
+.loader.is-landing {
+  background: transparent;
+  pointer-events: none;
+  transition: background-color 1s var(--ease), opacity 0.45s var(--ease);
+}
+.loader.is-landing .loader__bottle { transition: transform 1s var(--ease); }
+.loader.is-landing .loader__level,
+.loader.is-landing .loader__text { opacity: 0; transition: opacity 0.5s var(--ease); }
 html[data-motion="off"] .loader { transition: none; }
 
 .loader__inner { display: grid; justify-items: center; gap: 1.5rem; }
 
-.loader__bottle { height: min(46svh, 22rem); width: auto; overflow: visible; }
+.loader__bottle { height: min(46svh, 22rem); width: auto; overflow: visible; transform-origin: 0 0; }
 
 .loader__line { fill: none; stroke: var(--fg); stroke-width: 2; vector-effect: non-scaling-stroke; }
 

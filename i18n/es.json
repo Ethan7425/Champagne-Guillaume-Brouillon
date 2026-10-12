@@ -20,6 +20,7 @@
     "legalNav": "Información legal"
   },
   "nav": {
+    "top": "Inicio de la página",
     "cuvees": "Cuvées",
     "house": "La casa"
   },
@@ -91,6 +92,19 @@
       "buy": "Pedir [CUVÉE 4]",
       "caption": "Lámina 04 — [CUVÉE 4], luz rasante, fondo oscuro",
       "alt": "Imagen prevista: botella de [CUVÉE 4], vista de tres cuartos, luz rasante desde la izquierda, fondo oscuro."
+    },
+    {
+      "name": "???",
+      "tags": ["En la cava", "Próximamente", "[AÑO]"],
+      "meta": "Cuvée N.º 05 · Próximamente",
+      "lead": "Una quinta cuvée reposa todavía en la cava. Su ensamblaje, su crianza y su fecha de salida se indicarán aquí cuando el productor los haya fijado.",
+      "type": "TBD",
+      "blend": "Por anunciar",
+      "notes": "Por anunciar",
+      "price": "—",
+      "buy": "Próximamente",
+      "caption": "Lámina 05 — botella aún no revelada, luz rasante, fondo oscuro",
+      "alt": "Imagen prevista: la silueta de una botella sin etiqueta, iluminada a contraluz, fondo oscuro."
     }
   ],
   "house": {
@@ -147,6 +161,20 @@
       { "caption": "Lámina E — las manos, removido en pupitre", "alt": "Imagen prevista: una mano girando las botellas en un pupitre de removido, luz baja." }
     ],
     "details": "Ver el detalle"
+  },
+  "gauge": {
+    "label": "Profundidad de la cava"
+  },
+  "glass": {
+    "axes": ["Fruta", "Floral", "Tostado", "Mineral", "Frescura", "Persistencia"],
+    "chartNote": "Perfil provisional, escala de 0 a 5",
+    "title": "En la copa",
+    "serviceLabel": "Servicio",
+    "service": "De [0] a [0] °C (provisional)",
+    "glassLabel": "Copa",
+    "glass": "Copa tulipa (provisional)",
+    "pairLabel": "Maridaje",
+    "pair": "[MARIDAJE POR CONFIRMAR]"
   },
   "loader": {
     "label": "Cargando"

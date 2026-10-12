@@ -28,6 +28,7 @@ js/
   bottle-3d.js          PROTOTYPE TEST: 3D model in a bottle stage (loads Three.js on demand)
   bottle-ring.js        TEST PAGE only: the bottle ring of selection.html
   loader.js             TEST: loading screen, played from the test panel
+  extras.js             optional effects: cellar gauge, page tint, the glass
   age-gate.js           18+ overlay
   testing-panel.js      TESTING ONLY review panel
 i18n/
@@ -60,7 +61,7 @@ Browsers refuse to read JSON files from a page opened by double-click. For that 
 | `DEFAULT_FONT_PAIR` | `pair-a` |
 | `DEFAULT_MOTION` | `full` |
 
-Each "Order" button and the mobile buy bar link to `SHOPIFY_BASE_URL + slug`, in the same tab. Adding or removing an entry in `CUVEES` adds or removes a section (the i18n `cuvees` array needs a matching entry).
+Each "Order" button and the mobile buy bar link to `SHOPIFY_BASE_URL + slug`, in the same tab. A cuvée marked `soon: true` (the fifth, "???") is unreleased: no price, no shop link, a "Coming soon" notice instead of the button, and a blacked-out 3D bottle (`mystery: true` in `MODELS`). To release it, give it a slug, remove `soon` and `mystery`, and fill in its text in the i18n files. Adding or removing an entry in `CUVEES` adds or removes a section (the i18n `cuvees` array needs a matching entry).
 
 ## Placeholders to replace
 
@@ -93,6 +94,22 @@ Japanese text always falls back to Noto Serif JP (headings) and Noto Sans JP (bo
 
 The six Latin fonts are bundled in `assets/fonts/` and declared in `css/fonts.css`, so the font switcher works offline and no visitor data goes to Google for them. Only Noto JP is still linked from Google Fonts (it is too large to bundle and is only downloaded when Japanese text is shown); self-host or drop it before launch if Google Fonts must be avoided entirely. The test panel shows, under "Font pair", which fonts are really loaded.
 
+## Optional effects
+
+Five effects are listed under `FEATURES` in `config.js` and each has a switch in the test panel ("Effects"). `<html data-fx-NAME="on|off">` carries the state.
+
+| Feature | What it does | Where |
+| --- | --- | --- |
+| `light` | A small warm lamp hangs in front of the bottle at the pointer, so the lit side moves with it (mouse only) | `js/bottle-3d.js` |
+| `hover` | In the ring, the bottle under the pointer turns to face it and leans slightly the same way | `js/bottle-ring.js` |
+| `gauge` | Scroll progress as a descent into the cellar: a hairline that fills, with depth and temperature (`CELLAR` in `config.js`, placeholder values). Small marks on the line are checkpoints, one per section: click one to go there. A section becomes a checkpoint with `data-checkpoint="i18n.key.of.its.name"` | `js/extras.js` |
+| `tint` | Each cuvée lights its bottle with its own ambient colour: an even haze of that colour behind the bottle, a coloured wash on the bottle and a tinted rim light. The page keeps its colour; only small details near the bottle take the hue (`tint` per cuvée in `config.js`, placeholders; strength is `HUE_GLOW` / `HUE_AMBIENT` / `HUE_RIM` in `bottle-3d.js`) | `js/bottle-3d.js`, `js/bottle-ring.js` |
+| `glass` | "In the glass" section on the ring page: a flute in line drawing with rising bubbles, the three tasting words and serving notes | `js/extras.js`, `selection.html` |
+| `chart` | Aroma chart beside the flute: six axes, values from `aromas` per cuvée in `config.js` (placeholders) | `js/extras.js` |
+| `intro` | The loading screen plays on arrival at the home page and its bottle lands on the hero bottle | `js/loader.js`, `js/main.js` |
+| `cursor` | Custom cursor: a dot at the pointer and a ring that trails it and widens over links, buttons and bottles. Mouse only; the system cursor is hidden while it is on | `js/extras.js` |
+| `ringHome` | The ring page replaces the home page; the scroll page stays at `index.html?all=1` | `js/main.js` |
+
 ## Motion
 
 Set by `<html data-motion>`: `full`, `reduced` or `off` (`js/motion.js`).
@@ -100,6 +117,7 @@ Set by `<html data-motion>`: `full`, `reduced` or `off` (`js/motion.js`).
 - Scroll reveal: fade and slight rise as blocks enter the screen.
 - Bottle tilt: on hover, a bottle leans a few degrees toward the pointer (`TILT_X` / `TILT_Y` in `motion.js`). Mouse only.
 - Scroll settle: when scrolling stops within 35% of a screen from the top of a cuvée section, the page glides the rest of the way, so the bottle and its information are fully on screen (`SETTLE_RANGE` in `motion.js`; glide time is `SETTLE_MIN_MS` to `SETTLE_MAX_MS`). On desktop each cuvée section is exactly one screen tall for this reason.
+- Gliding scroll: every scripted move of the page (the settle, the gauge's checkpoints, links such as "Discover the cuvées") uses one eased glide in `motion.js`. It lasts about 1 second for one screen and up to 2.6 seconds for the whole page (`GLIDE_MIN_MS` / `GLIDE_MAX_MS`), and stops as soon as the visitor scrolls.
 - Tilt, settle, floating bottle and bubbles run in `full` only.
 - Phones and tablets: the hero is one screen, and each cuvée is two screens (the bottle, then the text and cellar card). On touch screens the lock uses native CSS scroll snapping (`base.css`); the scripted settle is for mouse and trackpad only.
 - Loading screen (test): `js/loader.js` draws a bottle that fills up. Nothing shows it automatically; play it from the test panel or with `?loader=1`.
@@ -150,7 +168,7 @@ Future: 3D bottle scroll animation (Three.js or similar) goes into the `.bottle-
 
 **Bottle ring test page (`selection.html`).** A second way to present the cuvées, kept apart from the home page for comparison. Its structure is modelled on moon-shine.fr, converted to wine. The 3D stage is pinned to the screen and four full-height screens scroll over it; scrolling moves the camera, not the bottle off the page:
 
-1. the ring: the four bottles, the name of the one in front set large underneath with three tasting words, arrows either side, and a I–IV switcher (left edge on desktop). Change the selection with the arrows, the switcher, the left/right keys, by dragging the ring or by clicking a bottle;
+1. the ring: the four bottles, the name of the one in front set large underneath with three tasting words, arrows either side, and a I–IV switcher (left edge on desktop). Change the selection with the arrows, the switcher, the left/right keys, by dragging the ring or by clicking a bottle. The cuvée can only be changed here, at the top of the page: once the visitor has scrolled into the sheet, the close-ups or the photographs, that cuvée stays until they go back up;
 2. the cuvée sheet: the other bottles step back, the chosen one slides to the right, label-style rows and the order button come in on the left;
 3. and 4. two close-ups of the bottle (top, then label) with a short text;
 5. a row of five tall photograph placeholders that scrolls sideways (`ring.photos` in the i18n files, `assets/placeholder-photo.svg`; shared by the four cuvées for now).

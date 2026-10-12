@@ -26,6 +26,7 @@ Source and licence: to be confirmed by whoever downloaded it (the file names mat
 - `src` — path to the `.gltf` or `.glb`
 - `node` — name of one object inside the file; leave out to show the whole file
 - `wine` — colour of the liquid inside, e.g. `"#E6D596"` (the downloaded bottles hold red wine)
+- `mystery` — `true` blacks the bottle out and removes its label: the "???" bottle of an unreleased cuvée
 - `glass` — `true` replaces the model's materials with green-tinted glass
 - `yaw` — optional, radians: turns the model if its front does not face the camera
 

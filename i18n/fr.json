@@ -20,6 +20,7 @@
     "legalNav": "Informations légales"
   },
   "nav": {
+    "top": "Haut de la page",
     "cuvees": "Cuvées",
     "house": "La maison"
   },
@@ -91,6 +92,19 @@
       "buy": "Commander [CUVÉE 4]",
       "caption": "Planche 04 — [CUVÉE 4], lumière rasante, fond sombre",
       "alt": "Image prévue : bouteille de [CUVÉE 4], vue de trois quarts face, lumière rasante venant de la gauche, fond sombre."
+    },
+    {
+      "name": "???",
+      "tags": ["En cave", "À paraître", "[ANNÉE]"],
+      "meta": "Cuvée N° 05 · À paraître",
+      "lead": "Une cinquième cuvée repose encore en cave. Son assemblage, son élevage et sa date de sortie seront indiqués ici dès que le producteur les aura arrêtés.",
+      "type": "TBD",
+      "blend": "À annoncer",
+      "notes": "À annoncer",
+      "price": "—",
+      "buy": "Bientôt disponible",
+      "caption": "Planche 05 — bouteille non dévoilée, lumière rasante, fond sombre",
+      "alt": "Image prévue : la silhouette d’une bouteille sans étiquette, éclairée à contre-jour, fond sombre."
     }
   ],
   "house": {
@@ -147,6 +161,20 @@
       { "caption": "Planche E — les mains, remuage sur pupitre", "alt": "Image prévue : une main tournant les bouteilles sur un pupitre de remuage, lumière basse." }
     ],
     "details": "Voir le détail"
+  },
+  "gauge": {
+    "label": "Profondeur de cave"
+  },
+  "glass": {
+    "axes": ["Fruit", "Floral", "Grillé", "Minéral", "Fraîcheur", "Longueur"],
+    "chartNote": "Profil provisoire, échelle de 0 à 5",
+    "title": "Dans le verre",
+    "serviceLabel": "Service",
+    "service": "[0] à [0] °C (provisoire)",
+    "glassLabel": "Verre",
+    "glass": "Verre tulipe (provisoire)",
+    "pairLabel": "Accord",
+    "pair": "[ACCORD À CONFIRMER]"
   },
   "loader": {
     "label": "Chargement"

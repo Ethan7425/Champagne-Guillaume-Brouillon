@@ -188,16 +188,53 @@
     var pagesLegend = document.createElement("legend");
     pagesLegend.textContent = "Pages";
     pages.appendChild(pagesLegend);
-    [["index.html", "Home (scroll through the cuvées)"], ["selection.html", "Bottle ring (test)"]].forEach(function (page) {
+    [["index.html?all=1", "Scroll page (index.html)"], ["selection.html", "Bottle ring (selection.html)"]].forEach(function (page) {
       var link = document.createElement("a");
       link.href = page[0];
       link.textContent = page[1];
-      if (location.pathname.split("/").pop() === page[0] || (page[0] === "index.html" && /\/$/.test(location.pathname))) {
+      var file = page[0].split("?")[0];
+      if (location.pathname.split("/").pop() === file || (file === "index.html" && /\/$/.test(location.pathname))) {
         link.setAttribute("aria-current", "page");
       }
       pages.appendChild(link);
     });
     panel.appendChild(pages);
+
+    // Optional effects (config.js: FEATURES), each with its own switch.
+    var FEATURES = [
+      ["light", "Light follows the pointer"],
+      ["hover", "Ring bottles tilt toward the pointer"],
+      ["gauge", "Cellar gauge (scroll progress)"],
+      ["tint", "Coloured light per cuvée"],
+      ["glass", "\"In the glass\" section (ring page)"],
+      ["chart", "Aroma chart (in the glass section)"],
+      ["intro", "Loading screen lands on the hero"],
+      ["ringHome", "Ring page is the home page"],
+      ["cursor", "Custom cursor"]
+    ];
+    var effects = document.createElement("fieldset");
+    var effectsLegend = document.createElement("legend");
+    effectsLegend.textContent = "Effects";
+    effects.appendChild(effectsLegend);
+    FEATURES.forEach(function (feature) {
+      var name = feature[0];
+      var saved = stored("fx." + name);
+      if (saved === "on" || saved === "off") root.setAttribute("data-fx-" + name, saved);
+      var button = document.createElement("button");
+      button.type = "button";
+      button.textContent = feature[1];
+      button.setAttribute("aria-pressed", String(root.getAttribute("data-fx-" + name) === "on"));
+      button.addEventListener("click", function () {
+        var next = root.getAttribute("data-fx-" + name) === "on" ? "off" : "on";
+        root.setAttribute("data-fx-" + name, next);
+        store("fx." + name, next);
+        button.setAttribute("aria-pressed", String(next === "on"));
+        document.dispatchEvent(new CustomEvent("fx:change", { detail: { name: name, on: next === "on" } }));
+      });
+      effects.appendChild(button);
+    });
+    panel.appendChild(effects);
+    document.dispatchEvent(new CustomEvent("fx:change", { detail: {} }));
 
     // Bubbles: how many rise inside each 3D bottle (the hero bubbles scale with it).
     if (window.Bottle3D) {
@@ -245,7 +282,12 @@
     var loader = document.createElement("button");
     loader.type = "button";
     loader.textContent = "Play loading screen";
-    loader.addEventListener("click", function () { window.Loader.play(); });
+    loader.addEventListener("click", function () {
+      toggle(false);
+      window.scrollTo({ top: 0, behavior: "instant" });
+      var hero = document.querySelector(".hero__bottle");
+      window.Loader.play(1900, hero && root.getAttribute("data-fx-intro") === "on" ? { into: hero } : null);
+    });
     panel.appendChild(loader);
 
     var reset = document.createElement("button");

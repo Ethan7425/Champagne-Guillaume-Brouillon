@@ -27,6 +27,7 @@
 
   /* Layers, lowest to highest */
   --z-index-nav: 50;
+  --z-gauge: 80;
   --z-buybar: 90;
   --z-header: 100;
   --z-test: 900;
@@ -57,6 +58,8 @@ html[data-motion="reduced"], html[data-motion="off"] { scroll-behavior: auto; }
    the same job is done by the scroll settle in motion.js. */
 @media (hover: none) and (pointer: coarse) {
   html[data-motion="full"] { scroll-snap-type: y proximity; }
+  /* …but not while the page is gliding somewhere by itself (motion.js). */
+  html[data-motion="full"].is-gliding { scroll-snap-type: none; }
 }
 
 body, h1, h2, h3, p, figure, dl, dd, fieldset { margin: 0; }
@@ -92,6 +95,13 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 }
 
 ::selection { background: var(--accent); color: var(--on-accent); }
+
+/* Cuvée hue (feature "tint", set by extras.js): the page itself keeps its
+   colour. The hue lives in the 3D lighting around the bottle (bottle-3d.js),
+   and the small details near it (numerals, rules, the gauge) take it too. */
+html[data-tint][data-theme] {
+  --cuvee-accent: color-mix(in srgb, var(--page-tint) var(--tint-strength, 100%), var(--fg));
+}
 
 /* ---- Typography ---------------------------------------------------------- */
 

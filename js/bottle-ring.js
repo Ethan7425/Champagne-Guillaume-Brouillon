@@ -33,6 +33,7 @@
 
   var SPACING = 2.5;        // ring radius, in bottle widths
   var FRONT_SCALE = 1.16;   // the selected bottle stands a little larger
+  var RING_ZONE = 0.35;     // how far toward the next screen the ring still counts as "on the ring" (0–1)
   var FOLLOW = 5.5;         // how briskly things reach their place (per second; lower = slower)
 
   /*
@@ -88,7 +89,10 @@
     }
     nodes = document.querySelectorAll("[data-ring-shop]");
     for (i = 0; i < nodes.length; i++) {
-      nodes[i].href = (CONFIG.SHOPIFY_BASE_URL || "#") + CUVEES[selected].slug;
+      // An unreleased cuvée has no shop link: the button becomes a notice.
+      if (CUVEES[selected].soon) nodes[i].removeAttribute("href");
+      else nodes[i].href = (CONFIG.SHOPIFY_BASE_URL || "#") + CUVEES[selected].slug;
+      nodes[i].classList.toggle("is-soon", !!CUVEES[selected].soon);
     }
     nodes = picker.querySelectorAll("button");
     for (i = 0; i < nodes.length; i++) {
@@ -97,6 +101,20 @@
 
     if (window.I18n && window.I18n.lang) window.I18n.apply(document);
     if (onSelect) onSelect(selected);
+    // Other scripts (page tint, the glass) follow the chosen cuvée.
+    document.documentElement.setAttribute("data-cuvee", selected);
+    document.dispatchEvent(new CustomEvent("cuvee:current", { detail: { index: selected } }));
+  }
+
+  // The cuvée can only be changed on the ring itself, at the top of the page.
+  // Once the visitor has scrolled into a cuvée's sheet, close-ups or photos,
+  // that cuvée stays: to pick another one, they go back up to the ring.
+  function onRingScreen() {
+    return scrollProgress() < RING_ZONE;
+  }
+
+  function choose(index) {
+    if (onRingScreen()) select(index);
   }
 
   CUVEES.forEach(function (cuvee, index) {
@@ -110,19 +128,21 @@
     name.setAttribute("data-i18n", "cuvees." + index + ".name");
     button.appendChild(number);
     button.appendChild(name);
-    button.addEventListener("click", function () { select(index); });
+    button.addEventListener("click", function () { choose(index); });
     picker.appendChild(button);
   });
 
-  root.querySelector("[data-ring-prev]").addEventListener("click", function () { select(selected - 1); });
-  root.querySelector("[data-ring-next]").addEventListener("click", function () { select(selected + 1); });
+  root.querySelector("[data-ring-prev]").addEventListener("click", function () { choose(selected - 1); });
+  root.querySelector("[data-ring-next]").addEventListener("click", function () { choose(selected + 1); });
 
   document.addEventListener("keydown", function (event) {
     if (event.metaKey || event.ctrlKey || event.altKey) return;
     if (document.documentElement.classList.contains("is-gated")) return;
     if (event.target && /^(INPUT|TEXTAREA|SELECT)$/.test(event.target.tagName)) return;
-    if (event.key === "ArrowLeft") select(selected - 1);
-    else if (event.key === "ArrowRight") select(selected + 1);
+    // In the photo strip the arrow keys move the strip, as they would in any scrolling row.
+    if (event.target && event.target.closest && event.target.closest("[data-photo-strip]")) return;
+    if (event.key === "ArrowLeft") choose(selected - 1);
+    else if (event.key === "ArrowRight") choose(selected + 1);
   });
 
   // Runs before i18n starts, so the first paint already has the right keys.
@@ -192,11 +212,22 @@
     scene.environment = pmrem.fromScene(new lib.RoomEnvironment(), 0.04).texture;
     scene.environmentIntensity = 0.6;
     pmrem.dispose();
-    Bottle3D.lights(THREE, scene);
+    var key = Bottle3D.lights(THREE, scene);
+    var hovered = -1; // bottle under the pointer (feature "hover")
+    var aim = new THREE.Vector2(); // where the pointer is on the canvas, -1 to 1
+    var HOVER_TURN = 0.42;  // radians: how far a bottle turns to face the pointer
+    var HOVER_ROLL = 0.07;  // radians: how far it leans sideways toward it
+    var HOVER_PITCH = 0.045; // radians: and forward or back
 
     var camera = new THREE.PerspectiveCamera(28, 1, 0.01, 50);
+    var UP = new THREE.Vector3(0, 1, 0);
     var ring = new THREE.Group();
     scene.add(ring);
+    // Coloured light for the chosen cuvée (feature "tint").
+    var hue = Bottle3D.hue(THREE, scene, camera, key);
+    var hueColors = CUVEES.map(function (cuvee) { return cuvee.tint ? Bottle3D.toRgb(cuvee.tint) : null; });
+    // The lamp that follows the pointer (feature "light").
+    var lamp = Bottle3D.lamp(THREE, scene);
 
     // One holder per cuvée, standing on the ring and facing outwards.
     var holders = [];
@@ -225,6 +256,7 @@
       tallest = Math.max(tallest, size.y);
       widest = Math.max(widest, size.x, size.z);
 
+      if (model.mystery) { Bottle3D.disguise(THREE, object); return; }
       Bottle3D.seeThrough(object, model);
       fizz.push(Bottle3D.bubbles(THREE, holder, {
         radius: Math.min(size.x, size.z) * 0.27,
@@ -259,10 +291,14 @@
 
     // Turning: `goal` is the ring angle that puts the selected bottle in front.
     var angle = 0, goal = 0, drag = 0, dirty = true, raf = null, visible = true, last = 0;
+    var lookAt = new THREE.Vector3(); // what the camera is looking at, for the lamp
     var now = null; // the pose currently shown, eased toward the pose the scroll asks for
     var progress = 0;
 
+    var lastChosen = selected;
+
     onSelect = function (index) {
+      lastChosen = index;
       var wanted = -index * STEP;
       var delta = wanted - goal;
       delta -= Math.round(delta / (Math.PI * 2)) * Math.PI * 2; // shortest way round
@@ -286,7 +322,13 @@
       );
       camera.position.set(target.x, target.y + Math.sin(pose.pitch) * distance, target.z + Math.cos(pose.pitch) * distance);
       camera.lookAt(target);
+      lookAt.copy(target);
+      // The colour pool sits behind the subject, wherever the pose puts it on screen.
+      var pool = Math.min(viewWidth, viewHeight) * 1.35;
+      hue.place(pose.right * viewWidth * 3, pose.up * viewHeight * 3, pool * 3, pool * 3, distance * 3);
 
+      camera.updateMatrixWorld();
+      ring.updateMatrixWorld(true);
       for (var i = 0; i < holders.length; i++) {
         var chosen = i === selected;
         var wanted = chosen ? FRONT_SCALE : 1 - pose.solo;
@@ -294,14 +336,43 @@
         holder.userData.scale = holder.userData.scale === undefined ? wanted : holder.userData.scale + (wanted - holder.userData.scale) * pose.ease;
         holder.scale.setScalar(Math.max(holder.userData.scale, 0.0001));
         holder.visible = holder.userData.scale > 0.02;
-        holder.rotation.y = i * STEP + (chosen ? pose.turn : 0);
+
+        // Hover: the bottle under the pointer leans toward it, pivoting on its base.
+        // The lean is worked out on screen: where the pointer is, measured from the
+        // bottle's own middle (-1 to 1 across its width and its height).
+        var roll = 0, pitch = 0, yaw = 0;
+        if (i === hovered && holder.visible) {
+          var middle = holder.getWorldPosition(new THREE.Vector3());
+          middle.y += tallest * 0.5 * holder.scale.y;
+          var edge = middle.clone();
+          edge.y += tallest * 0.5 * holder.scale.y;
+          middle.project(camera);
+          edge.project(camera);
+          var half = Math.max(edge.y - middle.y, 0.01); // half the bottle's height on screen
+          var across = Math.max(-1, Math.min(1, (aim.x - middle.x) / (half * 0.45)));
+          var along = Math.max(-1, Math.min(1, (aim.y - middle.y) / half));
+          // Mostly a turn of the head toward the pointer, with a slight lean the same way.
+          yaw = across * HOVER_TURN;
+          roll = across * -HOVER_ROLL;
+          pitch = along * HOVER_PITCH;
+        }
+        holder.userData.yaw = (holder.userData.yaw || 0) + (yaw - (holder.userData.yaw || 0)) * pose.ease;
+        holder.userData.roll = (holder.userData.roll || 0) + (roll - (holder.userData.roll || 0)) * pose.ease;
+        holder.userData.pitch = (holder.userData.pitch || 0) + (pitch - (holder.userData.pitch || 0)) * pose.ease;
+        // Facing outward on the ring, then leaned as seen from the camera
+        // (the lean is undone and redone around the ring's own turn).
+        var facing = new THREE.Quaternion().setFromAxisAngle(UP, i * STEP + (chosen ? pose.turn : 0) + holder.userData.yaw);
+        var turned = new THREE.Quaternion().setFromAxisAngle(UP, ring.rotation.y);
+        var lean = new THREE.Quaternion().setFromEuler(new THREE.Euler(holder.userData.pitch, 0, holder.userData.roll));
+        holder.quaternion.copy(turned).invert().multiply(lean).multiply(turned).multiply(facing);
       }
     }
 
     function tick(time) {
       raf = requestAnimationFrame(tick);
       // Time-based easing, so everything moves at the same speed on any screen.
-      var dt = Math.min((time - last) / 1000, 0.1);
+      // Never negative: the first frame can carry a timestamp older than `last`.
+      var dt = Math.max(0, Math.min((time - last) / 1000, 0.1));
       var ease = 1 - Math.exp(-dt * FOLLOW);
       last = time;
 
@@ -313,6 +384,12 @@
         if (Math.abs(wanted[key] - now[key]) > 0.0005) moving = true;
         now[key] += (wanted[key] - now[key]) * ease;
       });
+      for (var h = 0; h < holders.length; h++) {
+        var leaning = Math.abs(holders[h].userData.roll || 0) + Math.abs(holders[h].userData.pitch || 0) + Math.abs(holders[h].userData.yaw || 0);
+        if (h === hovered || leaning > 0.001) moving = true;
+      }
+      if (Bottle3D.aimLamp(THREE, lamp, camera, canvas.getBoundingClientRect(), camera.position.distanceTo(lookAt), tallest, ease)) moving = true;
+      if (hue.step(Bottle3D.fx("tint") ? hueColors[selected] : null, ease)) moving = true;
       var bubbling = fizz.length && fizz[0].count > 0;
       if (!moving && !dirty && !bubbling) return;
 
@@ -344,7 +421,7 @@
     var raycaster = new THREE.Raycaster();
 
     function onRing() {
-      return progress < 0.35;
+      return progress < RING_ZONE;
     }
 
     function bottleAt(event) {
@@ -374,7 +451,11 @@
     canvas.addEventListener("pointermove", function (event) {
       if (pointer.id !== event.pointerId) {
         if (event.pointerType === "mouse") {
-          canvas.style.cursor = !onRing() ? "default" : (bottleAt(event) === -1 ? "grab" : "pointer");
+          var under = onRing() ? bottleAt(event) : -1;
+          canvas.style.cursor = !onRing() ? "default" : (under === -1 ? "grab" : "pointer");
+          hovered = Bottle3D.fx("hover") ? under : -1;
+          var area = canvas.getBoundingClientRect();
+          aim.set(((event.clientX - area.left) / area.width) * 2 - 1, -(((event.clientY - area.top) / area.height) * 2 - 1));
         }
         return;
       }
@@ -399,11 +480,11 @@
         angle += drag;
         drag = 0;
         goal = angle;
-        select(Math.round(-angle / STEP));
+        select(Math.round(-angle / STEP)); // a drag can only start on the ring (see pointerdown)
       } else if (event.type === "pointerup") {
         var index = bottleAt(event);
         if (index === selected) {
-          document.getElementById("details").scrollIntoView();
+          window.Motion.glideTo(document.getElementById("details"));
         } else if (index !== -1) {
           select(index);
         }
@@ -412,6 +493,8 @@
     }
     canvas.addEventListener("pointerup", release);
     canvas.addEventListener("pointercancel", release);
+    canvas.addEventListener("pointerleave", function () { hovered = -1; });
+    document.addEventListener("fx:change", function () { dirty = true; });
 
     stage.appendChild(canvas);
     stage.classList.add("is-live");
@@ -428,6 +511,7 @@
     }
     document.addEventListener("theme:change", function () {
       scene.background.set(Bottle3D.pageColor());
+      hue.repage();
       dirty = true;
     });
     document.addEventListener("bubbles:change", function () { dirty = true; });

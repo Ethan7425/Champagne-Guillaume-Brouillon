@@ -18,6 +18,34 @@
   root.setAttribute("data-fonts", CONFIG.DEFAULT_FONT_PAIR || "pair-a");
   root.setAttribute("data-motion", CONFIG.DEFAULT_MOTION || "full");
 
+  // Optional effects: <html data-fx-NAME="on|off">. Scripts and CSS read these.
+  // A choice made in the test panel (saved as "proto.fx.NAME") wins over config.js;
+  // it is read here, early, because two features act before the panel exists.
+  function featureOn(name) {
+    var saved = null;
+    try { saved = localStorage.getItem("proto.fx." + name); } catch (e) { /* private mode */ }
+    if (saved === "on" || saved === "off") return saved === "on";
+    return !!(CONFIG.FEATURES || {})[name];
+  }
+  Object.keys(CONFIG.FEATURES || {}).forEach(function (name) {
+    root.setAttribute("data-fx-" + name, featureOn(name) ? "on" : "off");
+  });
+
+  var isHome = !!document.querySelector(".hero");
+  var query = new URLSearchParams(location.search);
+
+  // Feature "ringHome": the ring page takes the place of the home page.
+  // index.html?all=1 still shows the scroll-through page.
+  if (isHome && featureOn("ringHome") && !query.has("all")) {
+    location.replace("selection.html" + location.search);
+    return;
+  }
+
+  // Feature "intro": the loading screen covers the page from the first paint.
+  // (Not when arriving on a link to somewhere down the page, e.g. index.html#maison.)
+  var intro = isHome && featureOn("intro") && window.Loader && window.scrollY < 10 && location.hash.length < 2;
+  if (intro) window.Loader.show();
+
   function shopUrl(cuvee) {
     return (CONFIG.SHOPIFY_BASE_URL || "#") + cuvee.slug;
   }
@@ -26,7 +54,7 @@
   // The template uses "{i}" wherever the cuvée's position in the i18n array goes.
 
   function fillIndex(node, index) {
-    ["data-i18n", "data-i18n-attr"].forEach(function (attr) {
+    ["data-i18n", "data-i18n-attr", "data-checkpoint"].forEach(function (attr) {
       var targets = node.querySelectorAll("[" + attr + "]");
       for (var i = 0; i < targets.length; i++) {
         targets[i].setAttribute(attr, targets[i].getAttribute(attr).replace(/\{i\}/g, index));
@@ -55,7 +83,13 @@
       section.querySelector(".cuvee__name").id = titleId;
       section.querySelector(".cuvee__numeral").textContent = ROMAN[index] || String(index + 1);
       section.querySelector(".bottle-stage").setAttribute("data-cuvee", cuvee.id);
-      section.querySelector("[data-shop]").href = shopUrl(cuvee);
+      if (cuvee.soon) {
+        // Not released: no shop link, and the button reads as a notice.
+        section.setAttribute("data-soon", "");
+        section.querySelector("[data-shop]").removeAttribute("href");
+      } else {
+        section.querySelector("[data-shop]").href = shopUrl(cuvee);
+      }
 
       list.appendChild(fragment);
       return section;
@@ -116,11 +150,16 @@
         if (i === index) links[i].setAttribute("aria-current", "true");
         else links[i].removeAttribute("aria-current");
       }
+      // Other scripts (page tint) follow the cuvée currently on screen.
+      root.setAttribute("data-cuvee", index);
+      document.dispatchEvent(new CustomEvent("cuvee:current", { detail: { index: index } }));
       if (!bar) return;
       root.classList.toggle("has-buybar", index !== -1);
       bar.hidden = index === -1;
       if (index === -1) return;
-      bar.href = shopUrl(CUVEES[index]);
+      if (CUVEES[index].soon) bar.removeAttribute("href");
+      else bar.href = shopUrl(CUVEES[index]);
+      bar.classList.toggle("is-soon", !!CUVEES[index].soon);
       bar.querySelector(".buybar__label").setAttribute("data-i18n", "cuvees." + index + ".buy");
       bar.querySelector(".buybar__price").setAttribute("data-i18n", "cuvees." + index + ".price");
       if (window.I18n.lang) window.I18n.apply(bar);
@@ -149,6 +188,8 @@
   window.I18n.init().then(function () {
     window.AgeGate.init();
     window.Motion.init();
+    // The loader's bottle fills, then travels to the hero bottle and lands on it.
+    if (intro) window.Loader.play(1900, { into: document.querySelector(".hero__bottle") });
     if (window.Bottle3D) window.Bottle3D.init();
   });
 })();

@@ -45,8 +45,8 @@
       <span class="brand__name" data-i18n="brand.name"></span>
     </a>
     <nav class="site-nav" data-i18n-attr="aria-label:a11y.mainNav">
-      <a href="index.html#cuvees" data-i18n="nav.cuvees"></a>
-      <a href="index.html#maison" data-i18n="nav.house"></a>
+      <a href="index.html?all=1#cuvees" data-i18n="nav.cuvees"></a>
+      <a href="index.html?all=1#maison" data-i18n="nav.house"></a>
     </nav>
     <div class="lang" role="group" data-lang-switcher data-i18n-attr="aria-label:a11y.langSwitcher"></div>
   </header>
@@ -65,7 +65,7 @@
       </div>
 
       <!-- 01 · the ring -->
-      <section class="voyage__screen voyage__screen--ring" id="selection" data-ring-screen aria-labelledby="ring-name">
+      <section class="voyage__screen voyage__screen--ring" id="selection" data-ring-screen data-checkpoint="ring.navSelect" aria-labelledby="ring-name">
         <!-- I · II · III · IV, with the name of the one in front (buttons added by bottle-ring.js) -->
         <div class="ring__switch" role="group" data-ring-picker data-i18n-attr="aria-label:ring.pick"></div>
 
@@ -89,7 +89,7 @@
       </section>
 
       <!-- 02 · the chosen cuvée: the bottle slides aside, its sheet comes in -->
-      <section class="voyage__screen voyage__screen--text" id="details" data-settle data-ring-screen aria-labelledby="details-name">
+      <section class="voyage__screen voyage__screen--text" id="details" data-settle data-ring-screen data-checkpoint="ring.navSheet" aria-labelledby="details-name">
         <div class="voyage__text">
           <p class="label" data-i18n="ring.kicker"></p>
           <h2 class="voyage__title" id="details-name" data-ring-key="cuvees.{i}.name"></h2>
@@ -116,7 +116,7 @@
       </section>
 
       <!-- 03 · close-up: the top of the bottle -->
-      <section class="voyage__screen voyage__screen--text" id="coiffe" data-settle data-ring-screen aria-labelledby="closeup-a">
+      <section class="voyage__screen voyage__screen--text" id="coiffe" data-settle data-ring-screen data-checkpoint="ring.closeups.0.title" aria-labelledby="closeup-a">
         <div class="voyage__text">
           <p class="label" data-i18n="ring.bottle"></p>
           <h2 class="voyage__title" id="closeup-a" data-i18n="ring.closeups.0.title"></h2>
@@ -125,7 +125,7 @@
       </section>
 
       <!-- 04 · close-up: the label -->
-      <section class="voyage__screen voyage__screen--text" id="etiquette" data-settle data-ring-screen aria-labelledby="closeup-b">
+      <section class="voyage__screen voyage__screen--text" id="etiquette" data-settle data-ring-screen data-checkpoint="ring.closeups.1.title" aria-labelledby="closeup-b">
         <div class="voyage__text">
           <p class="label" data-i18n="ring.bottle"></p>
           <h2 class="voyage__title" id="closeup-b" data-i18n="ring.closeups.1.title"></h2>
@@ -134,8 +134,43 @@
       </section>
     </div>
 
+    <!-- The chosen cuvée in the glass (feature "glass"): a flute drawn in line, with rising bubbles -->
+    <section class="glass" id="verre" data-settle data-checkpoint="glass.title" aria-labelledby="glass-title">
+      <div class="glass__figures">
+        <canvas class="glass__canvas" data-glass-canvas aria-hidden="true"></canvas>
+        <!-- Aroma chart (feature "chart"), drawn by extras.js from config.js -->
+        <figure class="aroma">
+          <svg class="aroma__chart" data-aroma-chart viewBox="-150 -118 300 236" role="img" data-i18n-attr="aria-label:glass.chartNote"></svg>
+          <figcaption class="plate__caption" data-i18n="glass.chartNote"></figcaption>
+        </figure>
+      </div>
+      <div class="glass__text">
+        <p class="label" data-ring-key="cuvees.{i}.name"></p>
+        <h2 class="voyage__title" id="glass-title" data-i18n="glass.title"></h2>
+        <ul class="glass__tags">
+          <li data-ring-key="cuvees.{i}.tags.0"></li>
+          <li data-ring-key="cuvees.{i}.tags.1"></li>
+          <li data-ring-key="cuvees.{i}.tags.2"></li>
+        </ul>
+        <dl class="notes">
+          <div class="notes__row">
+            <dt class="label" data-i18n="glass.serviceLabel"></dt>
+            <dd class="label" data-i18n="glass.service"></dd>
+          </div>
+          <div class="notes__row">
+            <dt class="label" data-i18n="glass.glassLabel"></dt>
+            <dd class="label" data-i18n="glass.glass"></dd>
+          </div>
+          <div class="notes__row">
+            <dt class="label" data-i18n="glass.pairLabel"></dt>
+            <dd class="label" data-i18n="glass.pair"></dd>
+          </div>
+        </dl>
+      </div>
+    </section>
+
     <!-- 05 · photographs for the chosen cuvée: a row of tall plates (placeholders) -->
-    <section class="ring-photos" id="planches" data-settle aria-labelledby="photos-title">
+    <section class="ring-photos" id="planches" data-settle data-checkpoint="ring.photosTitle" aria-labelledby="photos-title">
       <header class="ring-photos__head">
         <div>
           <p class="label" data-ring-key="cuvees.{i}.name"></p>
@@ -214,6 +249,7 @@
   <script src="js/bottle-3d.js"></script>
   <script src="js/bottle-ring.js"></script>
   <script src="js/main.js"></script>
+  <script src="js/extras.js"></script>
   <!-- TESTING ONLY — delete this line before launch -->
   <script src="js/testing-panel.js"></script>
 </body>

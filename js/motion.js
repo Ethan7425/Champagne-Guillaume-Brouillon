@@ -202,6 +202,85 @@
     });
   }
 
+  /* ---- Gliding scroll ------------------------------------------------------- */
+  // Every scripted move of the page goes through here: the scroll settle below,
+  // the gauge's checkpoints, and links to a place on the same page (#cuvees…).
+  // It starts gently, travels, and eases into place; the browser's own smooth
+  // scroll is too brisk and cannot be slowed down. Longer trips take longer.
+  // Any scroll input from the visitor stops it at once.
+
+  var GLIDE_MIN_MS = 1000;  // a short trip (one screen)…
+  var GLIDE_MAX_MS = 2600;  // …and the longest (top to bottom)
+  var gliding = false;
+  var glideFrame = null;
+
+  function headerOffset() {
+    var header = document.querySelector(".site-header");
+    return header && getComputedStyle(header).position === "sticky" ? header.offsetHeight : 0;
+  }
+
+  function glide(target, duration) {
+    var from = window.scrollY;
+    var limit = document.documentElement.scrollHeight - window.innerHeight;
+    target = Math.max(0, Math.min(target, limit));
+    var distance = target - from;
+    if (Math.abs(distance) < 1) return;
+    if (get() !== "full") { // reduced or off: no travelling, go straight there
+      window.scrollTo({ top: target, behavior: "instant" });
+      return;
+    }
+    duration = duration || Math.max(GLIDE_MIN_MS, Math.min(GLIDE_MAX_MS, 750 + Math.abs(distance) * 0.42));
+    var start = null;
+
+    cancelAnimationFrame(glideFrame);
+    gliding = true;
+    root.classList.add("is-gliding"); // base.css: no scroll snapping meanwhile
+    function step(now) {
+      if (!gliding) return; // the visitor took over
+      if (start === null) start = now;
+      var t = Math.min((now - start) / duration, 1);
+      var eased = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; // ease-in-out cubic
+      window.scrollTo({ top: from + distance * eased, behavior: "instant" });
+      if (t < 1) glideFrame = requestAnimationFrame(step);
+      else glideFrame = requestAnimationFrame(release);
+    }
+    glideFrame = requestAnimationFrame(step);
+  }
+
+  function release() {
+    if (!gliding) return;
+    gliding = false;
+    cancelAnimationFrame(glideFrame);
+    root.classList.remove("is-gliding");
+  }
+
+  // Glide so that `element` sits just under the (sticky) header.
+  function glideTo(element) {
+    if (!element) return;
+    glide(element.getBoundingClientRect().top + window.scrollY - headerOffset());
+  }
+
+  // Any scroll input hands control straight back to the visitor.
+  ["wheel", "touchstart", "keydown", "mousedown"].forEach(function (type) {
+    window.addEventListener(type, release, { passive: true });
+  });
+
+  // Links to a place on this page glide there instead of jumping.
+  document.addEventListener("click", function (event) {
+    if (event.defaultPrevented || event.button || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    var link = event.target.closest && event.target.closest("a[href]");
+    if (!link) return;
+    // Placeholder links ("#", e.g. the legal pages for now) do nothing at all.
+    if (link.getAttribute("href") === "#") { event.preventDefault(); return; }
+    var url = new URL(link.href, location.href);
+    if (url.pathname !== location.pathname || url.search !== location.search || url.hash.length < 2) return;
+    var target = document.getElementById(decodeURIComponent(url.hash.slice(1)));
+    if (!target) return;
+    event.preventDefault();
+    history.pushState(null, "", url.hash);
+    glideTo(target);
+  });
+
   /* ---- Scroll settle ------------------------------------------------------ */
   // When scrolling stops near the top of a cuvée section, the page glides the
   // rest of the way so the bottle and its information sit squarely on screen.
@@ -214,7 +293,6 @@
 
   function setupSettle() {
     var sections = document.querySelectorAll("[data-settle]");
-    var header = document.querySelector(".site-header");
     if (!sections.length) return;
     // Touch screens lock with native CSS scroll snapping instead (base.css):
     // it follows the finger's momentum, which a scripted glide cannot do well.
@@ -222,12 +300,6 @@
 
     var touching = false;
     var timer = null;
-    var gliding = false;
-    var glideFrame = null;
-
-    function headerOffset() {
-      return header && getComputedStyle(header).position === "sticky" ? header.offsetHeight : 0;
-    }
 
     function settle() {
       if (gliding || get() !== "full" || touching || root.classList.contains("is-gated")) return;
@@ -243,40 +315,9 @@
       if (best === null || Math.abs(best) < 2) return;
       var limit = document.documentElement.scrollHeight - window.innerHeight;
       if (best > 0 && window.scrollY >= limit - 1) return; // nothing left to scroll
-      glide(Math.min(window.scrollY + best, limit));
+      var duration = Math.max(SETTLE_MIN_MS, Math.min(SETTLE_MAX_MS, SETTLE_MIN_MS + Math.abs(best) * 2));
+      glide(Math.min(window.scrollY + best, limit), duration);
     }
-
-    // Our own glide instead of the browser's smooth scroll, which is too brisk
-    // here: it starts gently, takes about a second and eases into place.
-    function glide(target) {
-      var from = window.scrollY;
-      var distance = target - from;
-      var duration = Math.max(SETTLE_MIN_MS, Math.min(SETTLE_MAX_MS, SETTLE_MIN_MS + Math.abs(distance) * 2));
-      var start = null;
-
-      gliding = true;
-      function step(now) {
-        if (!gliding) return; // the visitor took over
-        if (start === null) start = now;
-        var t = Math.min((now - start) / duration, 1);
-        var eased = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; // ease-in-out cubic
-        window.scrollTo({ top: from + distance * eased, behavior: "instant" });
-        if (t < 1) glideFrame = requestAnimationFrame(step);
-        else glideFrame = requestAnimationFrame(function () { gliding = false; });
-      }
-      glideFrame = requestAnimationFrame(step);
-    }
-
-    // Any scroll input hands control straight back to the visitor.
-    function release() {
-      if (!gliding) return;
-      gliding = false;
-      cancelAnimationFrame(glideFrame);
-    }
-
-    ["wheel", "touchstart", "keydown", "mousedown"].forEach(function (type) {
-      window.addEventListener(type, release, { passive: true });
-    });
 
     window.addEventListener("touchstart", function () { touching = true; }, { passive: true });
     window.addEventListener("touchend", function () { touching = false; }, { passive: true });
@@ -306,5 +347,5 @@
     setupSettle();
   }
 
-  window.Motion = { init: init, set: set, get: get, observe: observe, modes: MODES };
+  window.Motion = { init: init, set: set, get: get, observe: observe, modes: MODES, glide: glide, glideTo: glideTo };
 })();

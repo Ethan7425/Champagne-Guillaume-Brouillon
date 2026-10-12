@@ -61,6 +61,8 @@ html[data-theme="terre-vigneron"] {
   --frame-bg: rgba(216, 192, 142, 0.34);    /* paille, thinned */
   --focus: var(--fg);
 
+  --tint-strength: 55%; /* on a light page, a cuvée tint is darkened before use */
+
   /* Signature movement: slow fades. The bottle barely moves. */
   --float-distance: 3px;
   --bubbles-display: none;

@@ -20,6 +20,7 @@
     "legalNav": "Legal information"
   },
   "nav": {
+    "top": "Top of the page",
     "cuvees": "Cuvées",
     "house": "The house"
   },
@@ -91,6 +92,19 @@
       "buy": "Order [CUVÉE 4]",
       "caption": "Plate 04 — [CUVÉE 4], raking light, dark background",
       "alt": "Intended image: bottle of [CUVÉE 4], three-quarter front view, raking light from the left, dark background."
+    },
+    {
+      "name": "???",
+      "tags": ["In the cellar", "Not yet released", "[YEAR]"],
+      "meta": "Cuvée N° 05 · Not yet released",
+      "lead": "A fifth cuvée is still resting in the cellar. Its blend, its ageing and its release date will be given here once the producer has set them.",
+      "type": "TBD",
+      "blend": "To be announced",
+      "notes": "To be announced",
+      "price": "—",
+      "buy": "Coming soon",
+      "caption": "Plate 05 — bottle not yet revealed, raking light, dark background",
+      "alt": "Intended image: the silhouette of an unlabelled bottle, lit from behind, dark background."
     }
   ],
   "house": {
@@ -147,6 +161,20 @@
       { "caption": "Plate E — the hands, riddling at the rack", "alt": "Intended image: a hand turning bottles on a riddling rack, low light." }
     ],
     "details": "See the details"
+  },
+  "gauge": {
+    "label": "Cellar depth"
+  },
+  "glass": {
+    "axes": ["Fruit", "Floral", "Toast", "Mineral", "Freshness", "Length"],
+    "chartNote": "Placeholder profile, scale 0 to 5",
+    "title": "In the glass",
+    "serviceLabel": "Service",
+    "service": "[0] to [0] °C (placeholder)",
+    "glassLabel": "Glass",
+    "glass": "Tulip glass (placeholder)",
+    "pairLabel": "Pairing",
+    "pair": "[PAIRING TO BE CONFIRMED]"
   },
   "loader": {
     "label": "Loading"
