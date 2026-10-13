@@ -31,6 +31,15 @@
     root.setAttribute("data-fx-" + name, featureOn(name) ? "on" : "off");
   });
 
+  // Phone layout of the ring page: the test panel's choice, else config.js.
+  (function () {
+    var layouts = ["window", "fade", "rail"];
+    var saved = null;
+    try { saved = localStorage.getItem("proto.mlayout"); } catch (e) { /* private mode */ }
+    var wanted = layouts.indexOf(saved) !== -1 ? saved : CONFIG.MOBILE_LAYOUT;
+    root.setAttribute("data-mlayout", layouts.indexOf(wanted) !== -1 ? wanted : "window");
+  })();
+
   var isHome = !!document.querySelector(".hero");
   var query = new URLSearchParams(location.search);
 

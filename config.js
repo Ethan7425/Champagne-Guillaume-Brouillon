@@ -37,6 +37,14 @@ window.SITE_CONFIG = {
     { id: 5, slug: "", rose: false, soon: true, tint: "#4A5FB0", aromas: [0, 0, 0, 0, 0, 0] }
   ],
 
+  // Layout of the ring page on phones and tablets (below 960px wide):
+  //   "window"  the bottle in a window pinned to the top, text scrolls under it
+  //   "fade"    the bottle fills the screen; the text stays at the bottom and
+  //             fades from one part to the next as you scroll
+  //   "rail"    the bottle in a tall column on the left, text scrolls on the right
+  // The test panel ("Mobile layout") switches between them.
+  MOBILE_LAYOUT: "window",
+
   // Optional effects. Each one can also be switched in the test panel.
   FEATURES: {
     light: true,   // the light on the 3D bottles follows the pointer
@@ -47,7 +55,10 @@ window.SITE_CONFIG = {
     chart: true,   // aroma chart in the "In the glass" section
     intro: true,   // loading screen on arrival; its bottle lands on the hero bottle
     ringHome: true, // the ring page is the home page (the scroll page stays at index.html?all=1)
-    cursor: true    // custom cursor (mouse only): a dot and a trailing ring
+    cursor: true,   // custom cursor (mouse only): a dot and a trailing ring
+    keys: true,     // arrow up/down (and Page Up/Down) go to the previous/next section
+    noselect: true, // text on the site cannot be selected (highlighted) with the mouse
+    noscrollbar: true // the browser's own scrollbar is hidden; the page still scrolls
   },
 
   // The cellar gauge reads from the surface down to these values. PLACEHOLDERS.

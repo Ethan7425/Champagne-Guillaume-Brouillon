@@ -37,7 +37,10 @@
   var FOLLOW = 5.5;         // how briskly things reach their place (per second; lower = slower)
 
   /*
-   * One pose per screen, for wide screens and for phones (portrait).
+   * One pose per screen. `wide` is for the wide-screen layout, where the stage
+   * fills the screen and the text is laid over its left side. `window` is for
+   * phones and tablets, where the stage is a window at the top of the screen
+   * with nothing over it: the subject stays in the middle and fills the window.
    *   focus   0 = look at the middle of the ring, 1 = look at the chosen bottle
    *   look    height looked at, as a share of the bottle (0 base, 1 top)
    *   view    how much height the camera takes in, in bottle heights (0 = fit the ring)
@@ -54,11 +57,28 @@
       { focus: 1, look: 0.86, view: 0.46, pitch: 0.14, right: 0.2, up: 0, turn: 0.55, solo: 1 },
       { focus: 1, look: 0.3, view: 0.56, pitch: 0, right: 0.2, up: 0, turn: -0.5, solo: 1 }
     ],
-    tall: [
-      { focus: 0, look: 0.5, view: 0, pitch: 0.3, right: 0, up: 0.14, turn: 0, solo: 0 },
-      { focus: 1, look: 0.5, view: 3.0, pitch: 0.06, right: 0, up: 0.29, turn: -0.3, solo: 1 },
-      { focus: 1, look: 0.84, view: 1.0, pitch: 0.12, right: 0, up: 0.22, turn: 0.5, solo: 1 },
-      { focus: 1, look: 0.32, view: 1.15, pitch: 0, right: 0, up: 0.22, turn: -0.45, solo: 1 }
+    // Phone layout A: the stage is a window at the top, nothing over it.
+    window: [
+      { focus: 0, look: 0.5, view: 0, pitch: 0.24, right: 0, up: 0, turn: 0, solo: 0 },
+      { focus: 1, look: 0.5, view: 1.38, pitch: 0.05, right: 0, up: 0, turn: -0.35, solo: 1 },
+      { focus: 1, look: 0.84, view: 0.44, pitch: 0.12, right: 0, up: 0, turn: 0.5, solo: 1 },
+      { focus: 1, look: 0.3, view: 0.5, pitch: 0, right: 0, up: 0, turn: -0.45, solo: 1 }
+    ],
+    // Phone layout B: the stage fills the screen, the text sits over its lower
+    // third, so the subject keeps to the upper part.
+    fade: [
+      { focus: 0, look: 0.5, view: 0, pitch: 0.3, right: 0, up: 0.17, turn: 0, solo: 0 },
+      { focus: 1, look: 0.5, view: 2.5, pitch: 0.06, right: 0, up: 0.27, turn: -0.3, solo: 1 },
+      { focus: 1, look: 0.84, view: 0.9, pitch: 0.12, right: 0, up: 0.19, turn: 0.5, solo: 1 },
+      { focus: 1, look: 0.32, view: 1.05, pitch: 0, right: 0, up: 0.19, turn: -0.45, solo: 1 }
+    ],
+    // Phone layout C: the stage is a tall narrow column. One bottle at a time:
+    // the chosen one, standing the height of the rail.
+    rail: [
+      { focus: 1, look: 0.5, view: 2.1, pitch: 0.05, right: 0, up: 0.13, turn: 0, solo: 1 },
+      { focus: 1, look: 0.5, view: 1.9, pitch: 0.05, right: 0, up: 0.04, turn: -0.5, solo: 1 },
+      { focus: 1, look: 0.82, view: 0.9, pitch: 0.12, right: 0, up: 0.04, turn: 0.5, solo: 1 },
+      { focus: 1, look: 0.3, view: 1.5, pitch: 0, right: 0, up: 0.04, turn: -0.45, solo: 1 }
     ]
   };
   var POSE_KEYS = ["focus", "look", "view", "pitch", "right", "up", "turn", "solo"];
@@ -171,8 +191,54 @@
   /* ---- How far down the screens the page is ---------------------------------- */
   // 0 on the ring, 1 on the sheet, 2 and 3 on the close-ups, with every value in between.
 
+  // Which layout is showing: "wide" on wide screens, else the phone layout
+  // chosen in config.js or the test panel ("window", "fade" or "rail").
+  var wideScreen = window.matchMedia ? window.matchMedia("(min-width: 60em)") : { matches: true };
+
+  function layout() {
+    if (wideScreen.matches) return "wide";
+    var chosen = document.documentElement.getAttribute("data-mlayout");
+    return POSES[chosen] ? chosen : "window";
+  }
+
+  // In the bottle-window layout the screens rest under the stage, not on top of it.
+  function windowed() {
+    return (parseFloat(getComputedStyle(screens[0]).scrollMarginTop) || 0) > 0;
+  }
+
+  // Layout "fade": the text of each screen stays put at the bottom of the
+  // display and fades in as its screen arrives, out as it leaves. Each screen
+  // gets --cap (0 to 1) for its text's opacity; CSS does the rest.
+  var captionsQueued = false;
+
+  function updateCaptions() {
+    captionsQueued = false;
+    var fading = layout() === "fade";
+    var progress = fading ? scrollProgress() : 0;
+    // Past the last screen the stage scrolls away, and the text with it.
+    var leaving = fading ? Math.max(0, Math.min(1, (stage.getBoundingClientRect().bottom - window.innerHeight * 0.6) / (window.innerHeight * 0.25))) : 0;
+    for (var i = 0; i < screens.length; i++) {
+      var shown = fading ? Math.max(0, Math.min(1, 1 - Math.abs(progress - i) * 2.3)) * leaving : 0;
+      screens[i].style.setProperty("--cap", shown.toFixed(3));
+      screens[i].classList.toggle("is-on", shown > 0.5);
+    }
+  }
+
+  function queueCaptions() {
+    if (captionsQueued) return;
+    captionsQueued = true;
+    requestAnimationFrame(updateCaptions);
+  }
+
+  window.addEventListener("scroll", queueCaptions, { passive: true });
+  window.addEventListener("resize", queueCaptions);
+  window.addEventListener("load", queueCaptions);
+  document.addEventListener("mlayout:change", queueCaptions);
+  document.addEventListener("i18n:change", queueCaptions);
+
   function scrollProgress() {
-    var line = stage.getBoundingClientRect().top; // the stage is pinned here
+    var pinned = stage.getBoundingClientRect();
+    var line = windowed() ? pinned.bottom : pinned.top; // where a screen's top rests
     var tops = [];
     for (var i = 0; i < screens.length; i++) tops.push(screens[i].getBoundingClientRect().top - line);
     if (tops[0] > 0) return 0;
@@ -271,7 +337,7 @@
       holder.position.set(Math.sin(index * STEP) * radius, 0, Math.cos(index * STEP) * radius);
     });
     var ringDistance = 1; // camera distance that fits the whole ring; set in resize()
-    var tall = false;     // phone-shaped stage?
+    var mode = "wide";    // the layout in use: wide, window, fade or rail
 
     function resize() {
       var width = stage.clientWidth, height = stage.clientHeight;
@@ -279,13 +345,14 @@
       renderer.setSize(width, height, false);
       camera.aspect = width / height;
       camera.updateProjectionMatrix();
-      tall = camera.aspect < 0.85;
+      mode = layout();
       var vertical = THREE.MathUtils.degToRad(camera.fov / 2);
       var horizontal = Math.atan(Math.tan(vertical) * camera.aspect);
       var halfWidth = radius + widest * FRONT_SCALE;
       var halfHeight = (tallest * FRONT_SCALE) / 2 + radius * Math.sin(POSES.wide[0].pitch);
-      // The ring keeps to the upper part of the stage: the title sits under it.
-      ringDistance = Math.max(halfHeight / Math.tan(vertical) * 1.5, halfWidth / Math.tan(horizontal) * 1.08);
+      // Wide layout: the ring keeps to the upper part of the stage, the title sits
+      // under it. Bottle window: the ring has the whole window to itself.
+      ringDistance = Math.max(halfHeight / Math.tan(vertical) * (mode === "window" ? 1.1 : 1.5), halfWidth / Math.tan(horizontal) * 1.08);
       dirty = true;
     }
 
@@ -377,7 +444,7 @@
       last = time;
 
       progress = scrollProgress();
-      var wanted = poseAt(progress, tall ? POSES.tall : POSES.wide);
+      var wanted = poseAt(progress, POSES[mode]);
       var moving = Math.abs(goal - angle) > 0.0005;
       if (!now) { now = wanted; moving = true; }
       POSE_KEYS.forEach(function (key) {
@@ -495,6 +562,7 @@
     canvas.addEventListener("pointercancel", release);
     canvas.addEventListener("pointerleave", function () { hovered = -1; });
     document.addEventListener("fx:change", function () { dirty = true; });
+    document.addEventListener("mlayout:change", function () { now = null; resize(); });
 
     stage.appendChild(canvas);
     stage.classList.add("is-live");

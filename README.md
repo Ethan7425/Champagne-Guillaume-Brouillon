@@ -125,6 +125,9 @@ Five effects are listed under `FEATURES` in `config.js` and each has a switch in
 | `chart` | Aroma chart beside the flute: six axes, values from `aromas` per cuvée in `config.js` (placeholders) | `js/extras.js` |
 | `intro` | The loading screen plays on arrival at the home page and its bottle lands on the hero bottle | `js/loader.js`, `js/main.js` |
 | `cursor` | Custom cursor: a dot at the pointer and a ring that trails it and widens over links, buttons and bottles. Mouse only; the system cursor is hidden while it is on | `js/extras.js` |
+| `keys` | Arrow down / Page Down goes to the next section, arrow up / Page Up to the previous one, one press per section (the same sections as the gauge's checkpoints) | `js/motion.js` |
+| `noselect` | Text on the site cannot be selected. Form fields and the test panel stay selectable | `css/base.css` |
+| `noscrollbar` | The browser's own scrollbar is hidden; the page scrolls as before and the gauge shows progress | `css/base.css` |
 | `ringHome` | The ring page replaces the home page; the scroll page stays at `index.html?all=1` | `js/main.js` |
 
 ## Motion
@@ -190,7 +193,17 @@ Future: 3D bottle scroll animation (Three.js or similar) goes into the `.bottle-
 3. and 4. two close-ups of the bottle (top, then label) with a short text;
 5. a row of five tall photograph placeholders that scrolls sideways (`ring.photos` in the i18n files, `assets/placeholder-photo.svg`; shared by the four cuvées for now).
 
-The camera position for each screen is the `POSES` table at the top of `js/bottle-ring.js`, with one set for wide screens and one for phones. Reach it from the test panel ("Pages") or open `selection.html` directly. To remove it: delete `selection.html`, `js/bottle-ring.js`, the "Bottle ring" block in `css/components.css` and the `ring` / `meta.titleRing` keys in `i18n/*.json`.
+On phones and tablets (below 960px wide) the page has three layouts to compare, chosen by `MOBILE_LAYOUT` in `config.js` or the test panel ("Mobile layout"):
+
+| Layout | What it is |
+| --- | --- |
+| `window` (A) | The 3D stage is a solid window pinned to the top of the screen (`--stage-h`); each part of the text scrolls underneath it and rests just below |
+| `fade` (B) | The stage fills the screen. The text of each part stays put at the bottom and fades in and out as you scroll from one part to the next |
+| `rail` (C) | The stage is a tall column on the left showing one bottle; the text scrolls in a column on the right |
+
+The rules are in `css/components.css` ("Phone layouts B and C"; A is the base). In none of them does text move across the bottle.
+
+The camera position for each screen is the `POSES` table at the top of `js/bottle-ring.js`, with one set per layout (`wide`, `window`, `fade`, `rail`). Reach it from the test panel ("Pages") or open `selection.html` directly. To remove it: delete `selection.html`, `js/bottle-ring.js`, the "Bottle ring" block in `css/components.css` and the `ring` / `meta.titleRing` keys in `i18n/*.json`.
 - The placeholder image stays as the fallback: reduced or off motion, no WebGL, missing file, or the page opened by double-click (3D needs a local server).
 - To remove the test: delete `js/bottle-3d.js`, its `<script>` line and the import map in `index.html`, `MODELS` in `config.js`, and `assets/models/`.
 

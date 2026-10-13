@@ -131,7 +131,7 @@
         var shown = mark.section.getClientRects().length > 0; // e.g. the glass section can be switched off
         mark.button.hidden = !shown;
         if (!shown) return;
-        var top = mark.section.getBoundingClientRect().top + window.scrollY - offset;
+        var top = window.Motion.restTop(mark.section);
         mark.at = range > 0 ? Math.min(1, Math.max(0, top / range)) : 0;
         mark.button.style.setProperty("--at", mark.at.toFixed(4));
       });

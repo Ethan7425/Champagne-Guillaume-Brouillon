@@ -97,6 +97,26 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 
 ::selection { background: var(--accent); color: var(--on-accent); }
 
+/* Feature "noselect": text cannot be highlighted with the mouse or a long
+   press. Form fields stay selectable, and so does the test panel. */
+html[data-fx-noselect="on"] body {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+html[data-fx-noselect="on"] input,
+html[data-fx-noselect="on"] textarea,
+html[data-fx-noselect="on"] .test-panel {
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+/* Feature "noscrollbar": the browser's scrollbar is hidden. The page scrolls
+   exactly as before (wheel, trackpad, keys, touch); the cellar gauge on the
+   edge shows how far down it is. Panels with their own scrolling keep theirs. */
+html[data-fx-noscrollbar="on"] { scrollbar-width: none; }
+html[data-fx-noscrollbar="on"]::-webkit-scrollbar { display: none; }
+
 /* Cuvée hue (feature "tint", set by extras.js): the page itself keeps its
    colour. The hue lives in the 3D lighting around the bottle (bottle-3d.js),
    and the small details near it (numerals, rules, the gauge) take it too. */

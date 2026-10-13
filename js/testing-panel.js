@@ -188,7 +188,7 @@
     var pagesLegend = document.createElement("legend");
     pagesLegend.textContent = "Pages";
     pages.appendChild(pagesLegend);
-    [["index.html?all=1", "Scroll page (index.html)"], ["selection.html", "Bottle ring (selection.html)"]].forEach(function (page) {
+    [["index.html?all=1", "Scroll page (index.html)"], ["selection.html", "Bottle ring (selection.html)"], ["404.html", "Page not found (404.html)"]].forEach(function (page) {
       var link = document.createElement("a");
       link.href = page[0];
       link.textContent = page[1];
@@ -199,6 +199,34 @@
       pages.appendChild(link);
     });
     panel.appendChild(pages);
+
+    // Phone layouts of the ring page, to compare (they only differ below 960px wide).
+    var LAYOUTS = [
+      ["window", "A · Bottle window on top, text under it"],
+      ["fade", "B · Full-screen bottle, text fades in place"],
+      ["rail", "C · Bottle rail on the left, text on the right"]
+    ];
+    var layouts = document.createElement("fieldset");
+    var layoutsLegend = document.createElement("legend");
+    layoutsLegend.textContent = "Mobile layout (ring page)";
+    layouts.appendChild(layoutsLegend);
+    LAYOUTS.forEach(function (option) {
+      var button = document.createElement("button");
+      button.type = "button";
+      button.textContent = option[1];
+      button.setAttribute("aria-pressed", String(root.getAttribute("data-mlayout") === option[0]));
+      button.addEventListener("click", function () {
+        root.setAttribute("data-mlayout", option[0]);
+        store("mlayout", option[0]);
+        var all = layouts.querySelectorAll("button");
+        for (var i = 0; i < all.length; i++) all[i].setAttribute("aria-pressed", String(all[i] === button));
+        window.scrollTo({ top: 0, behavior: "instant" });
+        document.dispatchEvent(new CustomEvent("mlayout:change"));
+        window.dispatchEvent(new Event("resize")); // everything that measures the page measures again
+      });
+      layouts.appendChild(button);
+    });
+    panel.appendChild(layouts);
 
     // How "Order" hands over to Shopify (js/shop.js), to compare the options.
     if (window.Shop) {
@@ -240,7 +268,10 @@
       ["chart", "Aroma chart (in the glass section)"],
       ["intro", "Loading screen lands on the hero"],
       ["ringHome", "Ring page is the home page"],
-      ["cursor", "Custom cursor"]
+      ["cursor", "Custom cursor"],
+      ["keys", "Arrow keys step through sections"],
+      ["noselect", "Text cannot be selected"],
+      ["noscrollbar", "Hide the browser's scrollbar"]
     ];
     var effects = document.createElement("fieldset");
     var effectsLegend = document.createElement("legend");

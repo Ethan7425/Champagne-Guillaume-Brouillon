@@ -685,18 +685,30 @@ html[data-theme="art-deco-nuit"] .cuvee { border-top-color: transparent; }
 }
 
 /* ---- Bottle ring (TEST PAGE: selection.html) ---------------------------------- */
-/* The stage (the 3D bottles) is pinned to the screen. Four full-height screens
-   scroll over it: the ring, the cuvée sheet and two close-ups. A row of
-   photographs follows. Phones first; the desktop layout is at the end. */
+/* The stage (the 3D bottles) stays on screen while four "screens" go by: the
+   ring, the cuvée sheet and two close-ups. A row of photographs follows.
 
-.voyage { position: relative; }
+   Two layouts:
+   - Phones and tablets (below 60em): the BOTTLE WINDOW. The stage is a solid
+     panel pinned to the top of the screen; the text scrolls underneath and
+     disappears behind its lower edge. Nothing ever passes in front of the bottle.
+   - Wide screens (60em and up, at the end of this block): the stage fills the
+     screen and the text is laid over one side of it. */
+
+.voyage {
+  position: relative;
+  --stage-h: 44svh;   /* height of the bottle window */
+  --stage-top: 0px;   /* where it pins: under the header once the header is sticky */
+}
 
 .voyage__stage {
   position: sticky;
-  top: 0;
-  z-index: 0;
-  height: 100svh;
+  top: var(--stage-top);
+  z-index: 2; /* above the text that scrolls under it */
+  height: var(--stage-h);
   overflow: hidden;
+  background: var(--bg);
+  border-bottom: 1px solid var(--rule);
   touch-action: pan-y; /* vertical swipes still scroll the page */
 }
 
@@ -709,12 +721,12 @@ html[data-theme="art-deco-nuit"] .cuvee { border-top-color: transparent; }
   cursor: grab;
 }
 
-/* Without 3D: one placeholder bottle, kept to the upper part of the stage. */
+/* Without 3D: one placeholder bottle in the window. */
 .ring__fallback {
   position: absolute;
-  inset: 8% 0 auto;
+  inset: 6% 0;
   width: auto;
-  height: 42%;
+  height: 88%;
   margin-inline: auto;
 }
 
@@ -727,26 +739,26 @@ html[data-theme="art-deco-nuit"] .cuvee { border-top-color: transparent; }
 }
 .voyage__stage.is-live .ring__fallback { visibility: hidden; }
 
-/* A screen lets clicks through to the bottles, except on its own content. */
+/* A screen is one stop of the scroll: it fills the room under the bottle
+   window and comes to rest with its top at the window's lower edge. */
 .voyage__screen {
   position: relative;
   z-index: 1;
   display: grid;
-  min-height: 100svh;
+  align-content: start;
+  min-height: calc(100svh - var(--stage-h) - var(--stage-top));
   padding: 1.5rem var(--gutter) calc(var(--buybar-h) + 1.5rem);
-  pointer-events: none;
   scroll-snap-align: start;
+  scroll-margin-top: var(--stage-h);
 }
 
-.voyage__screen > * { pointer-events: auto; }
-
-/* 01 · the ring. Laid over the stage; on phones it stops short of the header's height. */
+/* 01 · the ring: the name and the controls, directly under the window. On a
+   phone the header is still on screen above, so this one is shorter. */
 .voyage__screen--ring {
-  align-content: end;
   justify-items: center;
-  gap: 1rem;
-  min-height: calc(100svh - 7.1rem);
-  margin-top: -100svh;
+  gap: 0.875rem;
+  min-height: calc(100svh - var(--stage-h) - 7.1rem);
+  padding-top: 1rem;
   scroll-snap-align: none;
 }
 
@@ -814,16 +826,25 @@ html[data-theme="art-deco-nuit"] .cuvee { border-top-color: transparent; }
   text-transform: uppercase;
 }
 
-/* 02 to 04 · text screens. On phones the bottle keeps the top of the screen
-   and the text sits on a solid band at the bottom. */
-.voyage__screen--text { align-content: end; padding-inline: 0; }
-
+/* 02 to 04 · text screens. */
 .voyage__text {
   display: grid;
   justify-items: start;
   gap: 0.875rem;
-  padding: 1.25rem var(--gutter) 0;
-  background: var(--bg);
+}
+
+/* Phones: the cuvée sheet keeps to what fits under the window in one view,
+   the name and the three rows. Its paragraph is shown from tablet size up. */
+@media (max-width: 47.99em) {
+  #details .voyage__body,
+  #details .voyage__text > .label { display: none; }
+}
+
+/* Short phones: a slightly lower window and no "Champagne" line above the name. */
+@media (max-width: 47.99em) and (max-height: 41.5em) {
+  .voyage { --stage-h: 40svh; }
+  .ring__title > .label { display: none; }
+  .voyage__screen { padding-top: 1rem; }
 }
 
 .voyage__title {
@@ -833,14 +854,6 @@ html[data-theme="art-deco-nuit"] .cuvee { border-top-color: transparent; }
 
 .voyage__body { max-width: 44ch; }
 
-/* Phones: the sheet's paragraph is cut to three lines so the bottle keeps its room. */
-.voyage__screen--text .voyage__body {
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3;
-  line-clamp: 3;
-  overflow: hidden;
-}
 
 /* Label-style rows: "BLEND   [00]% CHARDONNAY · …" */
 .notes { width: 100%; max-width: 34rem; padding-top: 0.875rem; border-top: 1px solid var(--rule-strong); }
@@ -897,16 +910,145 @@ html[data-theme="art-deco-nuit"] .cuvee { border-top-color: transparent; }
 
 .photo__frame img { width: 100%; height: 100%; object-fit: cover; }
 
+/* ---- Phone layouts B and C of the ring page (below 60em) -------------------------
+   Chosen with <html data-mlayout> (config.js: MOBILE_LAYOUT, or the test panel).
+   Layout A, the bottle window, is the set of rules above. */
+
+@media (max-width: 59.99em) {
+
+  /* B · "fade": the bottle fills the screen. The text of each part stays put
+     at the bottom and fades in and out (opacity --cap, set by bottle-ring.js). */
+  html[data-mlayout="fade"] .voyage__stage {
+    z-index: 0;
+    height: calc(100svh - var(--stage-top));
+    background: none;
+    border-bottom: 0;
+  }
+
+  /* A soft floor of page colour so the text has something calm to sit on. */
+  html[data-mlayout="fade"] .voyage__stage::after {
+    content: "";
+    position: absolute;
+    inset: auto 0 0 0;
+    height: 56%;
+    background: linear-gradient(to bottom, transparent, var(--bg) 58%);
+    pointer-events: none;
+  }
+
+  html[data-mlayout="fade"] .voyage__screen {
+    min-height: calc(100svh - var(--stage-top));
+    padding: 0;
+    scroll-margin-top: 0;
+    pointer-events: none; /* an empty stretch of scroll: its text is pinned below */
+  }
+
+  html[data-mlayout="fade"] .voyage__screen--ring {
+    min-height: calc(100svh - var(--stage-top) - 7.1rem);
+    margin-top: calc(var(--stage-top) - 100svh); /* laid over the stage */
+  }
+
+  html[data-mlayout="fade"] .voyage__screen > * {
+    position: fixed;
+    left: var(--gutter);
+    right: var(--gutter);
+    bottom: calc(var(--buybar-h) + 1.5rem);
+    width: auto;
+    opacity: var(--cap, 0);
+    pointer-events: none;
+    transition: opacity 0.2s linear;
+  }
+  html[data-mlayout="fade"] .voyage__screen.is-on > * { pointer-events: auto; }
+
+  /* The I–V switcher goes to the left edge, as on wide screens. */
+  html[data-mlayout="fade"] .ring__switch {
+    left: 0.25rem;
+    right: auto;
+    top: 40svh;
+    bottom: auto;
+    flex-direction: column;
+    transform: translateY(-50%);
+  }
+
+  /* C · "rail": the bottle stands in a tall column on the left that stays in
+     place; the text scrolls beside it in its own column. */
+  html[data-mlayout="rail"] .voyage {
+    display: grid;
+    grid-template-columns: 37% minmax(0, 1fr);
+  }
+
+  html[data-mlayout="rail"] .voyage__stage {
+    grid-column: 1;
+    grid-row: 1 / span 4;
+    align-self: start;
+    z-index: 0;
+    height: calc(100svh - var(--stage-top));
+    border-bottom: 0;
+    border-right: 1px solid var(--rule);
+  }
+
+  html[data-mlayout="rail"] .voyage__screen {
+    grid-column: 2;
+    align-content: center;
+    min-height: calc(100svh - var(--stage-top));
+    padding: 1.5rem var(--gutter) calc(var(--buybar-h) + 1.5rem) 1.125rem;
+    scroll-margin-top: 0;
+  }
+
+  html[data-mlayout="rail"] .voyage__screen--ring {
+    justify-items: start;
+    min-height: calc(100svh - var(--stage-top) - 7.1rem);
+  }
+
+  /* The ring's controls, set flush left in the narrow column: name first, arrows under it. */
+  html[data-mlayout="rail"] .ring__title { justify-items: start; text-align: left; }
+  html[data-mlayout="rail"] .ring__name-row { grid-template-columns: auto auto; justify-content: start; }
+  html[data-mlayout="rail"] .ring__name { grid-column: 1 / -1; grid-row: 1; font-size: calc(2.125rem * var(--heading-scale)); }
+  html[data-mlayout="rail"] .ring__tags { flex-direction: column; align-items: flex-start; gap: 0.125rem; }
+  html[data-mlayout="rail"] .ring__switch { flex-wrap: wrap; margin-left: -0.5rem; }
+  html[data-mlayout="rail"] .ring__switch button { min-width: 2.25rem; padding: 0 0.25rem; }
+  html[data-mlayout="rail"] .voyage__title { font-size: calc(1.875rem * var(--heading-scale)); }
+
+  /* Rows stack: the label over its value. The column scrolls, so the sheet's
+     paragraph and its small heading are back. */
+  html[data-mlayout="rail"] .notes__row { grid-template-columns: minmax(0, 1fr); gap: 0.125rem; padding: 0.375rem 0; }
+  html[data-mlayout="rail"] #details .voyage__body,
+  html[data-mlayout="rail"] #details .voyage__text > .label { display: block; }
+}
+
 @media (min-width: 48em) {
-  .voyage__stage { top: var(--header-h); height: calc(100svh - var(--header-h)); }
-  .voyage__screen,
+  /* Tablets keep the bottle window; it pins under the header, which is sticky from here. */
+  .voyage { --stage-top: var(--header-h); --stage-h: 46svh; }
+  .voyage__screen--ring { min-height: calc(100svh - var(--stage-h) - var(--stage-top)); }
+  .voyage__text { max-width: 40rem; }
   .ring-photos { min-height: calc(100svh - var(--header-h)); }
-  .voyage__screen--ring { margin-top: calc(var(--header-h) - 100svh); scroll-snap-align: start; }
-  .ring__fallback { inset: 6% 0 auto; height: 52%; }
 }
 
 @media (min-width: 60em) {
-  .voyage__screen { padding-block: 2.5rem; }
+  /* Wide screens: the stage fills the screen and the screens are laid over it. */
+  .voyage__stage {
+    z-index: 0;
+    height: calc(100svh - var(--header-h));
+    background: none;
+    border-bottom: 0;
+  }
+
+  /* A screen lets clicks through to the bottles, except on its own content. */
+  .voyage__screen {
+    min-height: calc(100svh - var(--header-h));
+    padding-block: 2.5rem;
+    scroll-margin-top: 0;
+    pointer-events: none;
+  }
+  .voyage__screen > * { pointer-events: auto; }
+
+  .voyage__screen--ring {
+    align-content: end;
+    gap: 1rem;
+    min-height: calc(100svh - var(--header-h));
+    margin-top: calc(var(--header-h) - 100svh); /* laid over the stage */
+    scroll-snap-align: start;
+  }
+
   .ring-photos { padding-block: 2.5rem; }
 
   /* The switcher moves to the left edge, as a short vertical list. */
@@ -922,9 +1064,8 @@ html[data-theme="art-deco-nuit"] .cuvee { border-top-color: transparent; }
   .ring__tags { gap: 0.25rem 3rem; }
 
   /* Text on the left, the bottle (moved by the camera) on the right. */
-  .voyage__screen--text { align-content: center; padding-inline: var(--gutter); }
-  .voyage__text { width: min(34rem, 44%); margin-left: 7%; padding: 0; background: none; }
-  .voyage__screen--text .voyage__body { display: block; overflow: visible; }
+  .voyage__screen--text { align-content: center; }
+  .voyage__text { width: min(34rem, 44%); max-width: none; margin-left: 7%; }
   .voyage__buy { display: flex; flex-wrap: wrap; align-items: center; gap: 1.5rem; margin-top: 0.5rem; }
   .ring__fallback { inset: 6% auto auto 62%; height: 58%; margin: 0; }
 }

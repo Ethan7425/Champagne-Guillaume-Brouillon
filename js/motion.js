@@ -213,6 +213,8 @@
   var GLIDE_MAX_MS = 2600;  // …and the longest (top to bottom)
   var gliding = false;
   var glideFrame = null;
+  var glideGoal = 0; // where the current glide is heading
+  var glideEnds = 0; // and when it is due to arrive (0 = none under way, or the visitor took over)
 
   function headerOffset() {
     var header = document.querySelector(".site-header");
@@ -233,6 +235,8 @@
     var start = null;
 
     cancelAnimationFrame(glideFrame);
+    glideGoal = target;
+    glideEnds = performance.now() + duration;
     gliding = true;
     root.classList.add("is-gliding"); // base.css: no scroll snapping meanwhile
     function step(now) {
@@ -242,27 +246,79 @@
       var eased = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; // ease-in-out cubic
       window.scrollTo({ top: from + distance * eased, behavior: "instant" });
       if (t < 1) glideFrame = requestAnimationFrame(step);
-      else glideFrame = requestAnimationFrame(release);
+      else glideFrame = requestAnimationFrame(function () { glideEnds = 0; release(); });
     }
     glideFrame = requestAnimationFrame(step);
   }
 
-  function release() {
+  function release(event) {
+    // A wheel, touch or click means the visitor took over: the planned arrival no longer counts.
+    // (A key press may be the next arrow step, which carries on from that arrival.)
+    if (event && event.type && event.type !== "keydown") glideEnds = 0;
     if (!gliding) return;
     gliding = false;
     cancelAnimationFrame(glideFrame);
     root.classList.remove("is-gliding");
   }
 
-  // Glide so that `element` sits just under the (sticky) header.
+  // The scroll position at which `element` is "in place": just under the sticky
+  // header, and under anything else pinned above it (its CSS scroll-margin-top,
+  // e.g. the bottle window on phones).
+  function restTop(element) {
+    var margin = parseFloat(getComputedStyle(element).scrollMarginTop) || 0;
+    return element.getBoundingClientRect().top + window.scrollY - headerOffset() - margin;
+  }
+
   function glideTo(element) {
-    if (!element) return;
-    glide(element.getBoundingClientRect().top + window.scrollY - headerOffset());
+    if (element) glide(restTop(element));
   }
 
   // Any scroll input hands control straight back to the visitor.
   ["wheel", "touchstart", "keydown", "mousedown"].forEach(function (type) {
     window.addEventListener(type, release, { passive: true });
+  });
+
+  /* ---- Arrow keys step through the sections (feature "keys") ------------------ */
+  // Arrow down (or Page Down) goes to the next section, arrow up (or Page Up) to
+  // the previous one, one press per section. The sections are the same ones the
+  // gauge marks as checkpoints (data-checkpoint), plus the very end of the page.
+  // Registered after the "release" listeners above, so the key press that starts
+  // a glide does not also cancel it.
+
+  window.addEventListener("keydown", function (event) {
+    var down = event.key === "ArrowDown" || event.key === "PageDown";
+    var up = event.key === "ArrowUp" || event.key === "PageUp";
+    if (!down && !up) return;
+    if (root.getAttribute("data-fx-keys") !== "on") return;
+    if (event.metaKey || event.ctrlKey || event.altKey || event.shiftKey) return;
+    // Not while something else owns the keys: a form field, an open panel, the age question.
+    var target = event.target;
+    if (target && target.closest && target.closest("input, textarea, select, [contenteditable], .test-panel, .basket, .age-gate")) return;
+    if (root.classList.contains("is-gated") || root.classList.contains("has-basket-open") || root.classList.contains("is-loading")) return;
+
+    var sections = document.querySelectorAll("[data-checkpoint]");
+    if (!sections.length) return;
+    var offset = headerOffset();
+    var limit = document.documentElement.scrollHeight - window.innerHeight;
+    var stops = [];
+    for (var i = 0; i < sections.length; i++) {
+      if (!sections[i].getClientRects().length) continue; // switched off or not laid out
+      stops.push(Math.max(0, Math.min(limit, Math.round(restTop(sections[i])))));
+    }
+    stops.push(limit); // the footer
+    stops.sort(function (a, b) { return a - b; });
+
+    // Pressing again mid-glide counts from where that glide is going, so
+    // several quick presses move several sections.
+    var from = performance.now() < glideEnds ? glideGoal : window.scrollY;
+    var next = null;
+    if (down) {
+      for (var d = 0; d < stops.length; d++) { if (stops[d] > from + 4) { next = stops[d]; break; } }
+    } else {
+      for (var u = stops.length - 1; u >= 0; u--) { if (stops[u] < from - 4) { next = stops[u]; break; } }
+    }
+    event.preventDefault(); // no small native scroll on top of the glide
+    if (next !== null) glide(next);
   });
 
   // Links to a place on this page glide there instead of jumping.
@@ -308,7 +364,7 @@
       var best = null;
       for (var i = 0; i < sections.length; i++) {
         if (!sections[i].getClientRects().length) continue; // dissolved on this screen size
-        var gap = sections[i].getBoundingClientRect().top - offset;
+        var gap = sections[i].getBoundingClientRect().top - offset - (parseFloat(getComputedStyle(sections[i]).scrollMarginTop) || 0);
         if (Math.abs(gap) <= range && (best === null || Math.abs(gap) < Math.abs(best))) best = gap;
       }
       // Under 2px counts as already in place (this also ends our own glide).
@@ -347,5 +403,5 @@
     setupSettle();
   }
 
-  window.Motion = { init: init, set: set, get: get, observe: observe, modes: MODES, glide: glide, glideTo: glideTo };
+  window.Motion = { init: init, set: set, get: get, observe: observe, modes: MODES, glide: glide, glideTo: glideTo, restTop: restTop };
 })();
