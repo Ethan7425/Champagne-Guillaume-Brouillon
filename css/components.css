@@ -1140,6 +1140,181 @@ html:not([data-fx-chart="on"]) .aroma { display: none; }
   .glass__text { grid-column: 8 / 13; }
 }
 
+/* ---- Basket (js/shop.js, shop modes "embed" and "basket") ---------------------- */
+/* A panel that slides over the right edge. In "basket" mode it wears the site's
+   design. In "embed" mode it is restyled to look like Shopify's own embedded
+   cart (.basket--shopify): a SIMULATION, there to compare the two. */
+
+.basket-open { display: none; }
+
+html[data-shop="embed"] .basket-open,
+html[data-shop="basket"] .basket-open {
+  grid-column: 2;
+  grid-row: 2;
+  justify-self: end;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  min-width: 2.75rem;
+  height: 2.75rem;
+  padding: 0 0.25rem;
+}
+
+.basket-open svg { width: 1.375rem; height: 1.375rem; fill: none; stroke: currentColor; stroke-width: 1.25; }
+
+.basket-open__count {
+  min-width: 1ch;
+  font-size: 0.8125rem;
+  font-weight: var(--weight-strong);
+  font-variant-numeric: tabular-nums;
+}
+
+@media (min-width: 48em) {
+  html[data-shop="embed"] .basket-open,
+  html[data-shop="basket"] .basket-open { grid-column: 3; grid-row: 1; }
+  /* The language switcher steps aside for it. */
+  html[data-shop="embed"] .lang,
+  html[data-shop="basket"] .lang { margin-right: 3.75rem; }
+}
+
+.basket-scrim {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-basket);
+  background: rgba(0, 0, 0, 0.55);
+}
+
+.basket {
+  position: fixed;
+  inset: 0 0 0 auto;
+  z-index: calc(var(--z-basket) + 1);
+  display: flex;
+  flex-direction: column;
+  width: min(27rem, 100%);
+  padding: 1.5rem;
+  overflow-y: auto;
+  background: var(--surface, var(--bg));
+  border-left: 1px solid var(--rule-strong);
+}
+
+.basket__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--rule-strong);
+}
+
+.basket__title { font-size: calc(2rem * var(--heading-scale)); }
+
+.basket__close,
+.basket__remove {
+  min-height: 2.75rem;
+  font-size: var(--fs-label);
+  font-weight: var(--weight-strong);
+  letter-spacing: var(--label-tracking, 0.14em);
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.basket__close:hover,
+.basket__remove:hover { color: var(--fg); }
+
+.basket__sim { display: none; }
+
+.basket__lines { flex: 1; margin: 0; padding: 0; list-style: none; } /* pushes the total to the bottom */
+
+.basket__line {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.25rem 1rem;
+  padding: 1.25rem 0;
+  border-bottom: 1px solid var(--rule);
+}
+
+.basket__name { font-family: var(--font-heading); font-size: 1.375rem; line-height: 1.2; }
+.basket__price { text-align: right; font-variant-numeric: tabular-nums; }
+.basket__remove { justify-self: end; min-height: 2rem; }
+
+.basket__qty { display: inline-flex; align-items: center; border: 1px solid var(--rule-strong); justify-self: start; }
+.basket__qty button { width: 2.5rem; height: 2.5rem; font-size: 1.125rem; }
+.basket__qty button:hover { background: var(--rule); }
+.basket__n { min-width: 2.25rem; text-align: center; font-variant-numeric: tabular-nums; }
+
+.basket__empty { padding: 1.5rem 0; color: var(--muted); }
+
+.basket__foot { display: grid; gap: 0.875rem; padding-top: 1.25rem; border-top: 1px solid var(--rule-strong); }
+
+.basket__total { display: flex; align-items: baseline; justify-content: space-between; }
+.basket__total span:last-child { font-family: var(--font-heading); font-size: 1.75rem; }
+
+.basket__note { font-size: var(--fs-small); color: var(--muted); }
+
+.basket__checkout { width: 100%; }
+
+/* "embed" mode: an approximation of Shopify's default embedded cart. Its
+   colours and fonts are deliberately not the site's. */
+.basket--shopify {
+  --heading-scale: 1;
+  padding: 1.25rem;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  font-weight: 400;
+  color: #202223;
+  background: #fff;
+  border-left: 0;
+  box-shadow: -8px 0 24px rgba(0, 0, 0, 0.18);
+}
+.basket--shopify .basket__head { border-bottom-color: #E1E3E5; }
+.basket--shopify .basket__title,
+.basket--shopify .basket__name,
+.basket--shopify .basket__total span:last-child {
+  font-family: inherit;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+}
+.basket--shopify .basket__title { font-size: 1.25rem; }
+.basket--shopify .basket__name { font-size: 1rem; }
+.basket--shopify .basket__total span:last-child { font-size: 1.125rem; }
+.basket--shopify .label,
+.basket--shopify .basket__close,
+.basket--shopify .basket__remove {
+  font-size: 0.875rem;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+  color: #6D7175;
+}
+.basket--shopify .basket__line,
+.basket--shopify .basket__foot { border-color: #E1E3E5; }
+.basket--shopify .basket__qty { border-color: #C9CCCF; border-radius: 6px; }
+.basket--shopify .basket__qty button:hover { background: #F1F2F3; }
+.basket--shopify .basket__note,
+.basket--shopify .basket__empty { color: #6D7175; }
+.basket--shopify .basket__checkout {
+  min-height: 3rem;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+  color: #fff;
+  background: #202223;
+  border-color: #202223;
+  border-radius: 6px;
+  box-shadow: none;
+}
+.basket--shopify .basket__checkout:hover { background: #3A3C3E; color: #fff; }
+.basket--shopify .basket__sim {
+  display: block;
+  margin: 0.875rem 0 0;
+  padding: 0.5rem 0.75rem;
+  font: 600 12px/1.4 ui-monospace, Menlo, Consolas, monospace;
+  color: #111;
+  background: #FFD400;
+}
+
 /* ---- Custom cursor (feature "cursor", js/extras.js) ---------------------------- */
 /* A dot at the pointer and a hairline ring that trails it. Mouse only. The
    system cursor is hidden only once the custom one has appeared (.has-cursor),

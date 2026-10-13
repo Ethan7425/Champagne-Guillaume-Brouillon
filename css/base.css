@@ -30,6 +30,7 @@
   --z-gauge: 80;
   --z-buybar: 90;
   --z-header: 100;
+  --z-basket: 850;
   --z-test: 900;
   --z-age-gate: 1000;
   --z-loader: 1050;
@@ -78,7 +79,7 @@ body {
 
 /* Text arrives from the i18n files; nothing shows until it is in place. */
 html.i18n-pending body { visibility: hidden; }
-html.is-gated, html.is-loading { overflow: hidden; }
+html.is-gated, html.is-loading, html.has-basket-open { overflow: hidden; }
 
 img, svg, canvas { display: block; max-width: 100%; }
 img { height: auto; }

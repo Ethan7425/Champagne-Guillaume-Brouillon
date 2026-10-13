@@ -176,6 +176,19 @@
     "pairLabel": "Maridaje",
     "pair": "[MARIDAJE POR CONFIRMAR]"
   },
+  "shop": {
+    "basket": "Cesta",
+    "close": "Cerrar",
+    "empty": "Su cesta está vacía.",
+    "subtotal": "Subtotal",
+    "note": "El envío y los impuestos se calculan en el pago.",
+    "checkout": "Ir al pago",
+    "remove": "Quitar",
+    "more": "Una botella más",
+    "less": "Una botella menos",
+    "simNote": "Simulación: así se vería la cesta integrada de Shopify.",
+    "demoNote": "Prototipo: todavía no hay ninguna tienda conectada. Los precios son provisionales."
+  },
   "loader": {
     "label": "Cargando"
   },

@@ -3,21 +3,36 @@
  * PROTOTYPE: all values below are placeholders.
  */
 window.SITE_CONFIG = {
-  // Shop links: SHOPIFY_BASE_URL + cuvée slug (opens in the same tab).
-  SHOPIFY_BASE_URL: "https://example.myshopify.com/products/",
+  // ---- Shop (see js/shop.js) -------------------------------------------------
+  // How an "Order" button hands over to Shopify:
+  //   "page"    opens the cuvée's product page (SHOPIFY_BASE_URL + slug)
+  //   "link"    LEVEL 1: straight to Shopify's checkout with one bottle in the cart
+  //   "embed"   LEVEL 2, simulated: a basket panel in the look of Shopify's embed
+  //   "basket"  LEVEL 3: a basket panel in the site's own design
+  // The test panel ("Shop") switches between them for comparison.
+  SHOP_MODE: "link",
+
+  // PLACEHOLDERS — replace with the real store:
+  SHOPIFY_DOMAIN: "example.myshopify.com",                     // the store's address, without https://
+  SHOPIFY_BASE_URL: "https://example.myshopify.com/products/", // product pages ("page" mode)
+  CURRENCY: "EUR",
 
   // One entry per cuvée section, in page order.
   // `rose` only drives the rosé accent of Direction B. Types are TBD:
   // cuvée 3 is flagged so the rosé accent can be reviewed.
   CUVEES: [
+    // `variantId` is the number Shopify gives each product variant (Shopify admin:
+    // open the product, then the variant; it is the long number at the end of
+    // the address). `price` is only used to total the basket in levels 2 and 3
+    // until prices are read from Shopify. Both are PLACEHOLDERS.
     // `tint` is the colour of the light around that cuvée's bottle
     // (feature "tint" below). PLACEHOLDER colours.
     // `aromas` feeds the aroma chart: fruit, floral, toast, mineral, freshness,
     // length, each from 0 to 5. PLACEHOLDER values.
-    { id: 1, slug: "placeholder-cuvee-1", rose: false, tint: "#C9A227", aromas: [4, 3, 2, 4, 5, 3] },
-    { id: 2, slug: "placeholder-cuvee-2", rose: false, tint: "#2F8F83", aromas: [3, 4, 3, 5, 4, 4] },
-    { id: 3, slug: "placeholder-cuvee-3", rose: true, tint: "#C4526E", aromas: [5, 3, 1, 2, 4, 3] },
-    { id: 4, slug: "placeholder-cuvee-4", rose: false, tint: "#B8612A", aromas: [3, 2, 5, 3, 2, 5] },
+    { id: 1, slug: "placeholder-cuvee-1", variantId: "00000000000001", price: 0, rose: false, tint: "#C9A227", aromas: [4, 3, 2, 4, 5, 3] },
+    { id: 2, slug: "placeholder-cuvee-2", variantId: "00000000000002", price: 0, rose: false, tint: "#2F8F83", aromas: [3, 4, 3, 5, 4, 4] },
+    { id: 3, slug: "placeholder-cuvee-3", variantId: "00000000000003", price: 0, rose: true, tint: "#C4526E", aromas: [5, 3, 1, 2, 4, 3] },
+    { id: 4, slug: "placeholder-cuvee-4", variantId: "00000000000004", price: 0, rose: false, tint: "#B8612A", aromas: [3, 2, 5, 3, 2, 5] },
     // Not released yet: shown as "???", no price, no order link.
     { id: 5, slug: "", rose: false, soon: true, tint: "#4A5FB0", aromas: [0, 0, 0, 0, 0, 0] }
   ],

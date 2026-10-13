@@ -200,6 +200,36 @@
     });
     panel.appendChild(pages);
 
+    // How "Order" hands over to Shopify (js/shop.js), to compare the options.
+    if (window.Shop) {
+      var SHOP = [
+        ["page", "0 · Shopify product page (first idea)"],
+        ["link", "1 · Straight to Shopify checkout"],
+        ["embed", "2 · Shopify's embedded cart (simulated)"],
+        ["basket", "3 · Our own basket, then checkout"]
+      ];
+      var shop = document.createElement("fieldset");
+      var shopLegend = document.createElement("legend");
+      shopLegend.textContent = "Shop";
+      shop.appendChild(shopLegend);
+      SHOP.forEach(function (option) {
+        var button = document.createElement("button");
+        button.type = "button";
+        button.textContent = option[1];
+        button.setAttribute("data-shop-mode", option[0]);
+        button.setAttribute("aria-pressed", String(window.Shop.mode() === option[0]));
+        button.addEventListener("click", function () {
+          root.setAttribute("data-shop", option[0]);
+          store("shop", option[0]);
+          var all = shop.querySelectorAll("button");
+          for (var i = 0; i < all.length; i++) all[i].setAttribute("aria-pressed", String(all[i] === button));
+          document.dispatchEvent(new CustomEvent("shop:change"));
+        });
+        shop.appendChild(button);
+      });
+      panel.appendChild(shop);
+    }
+
     // Optional effects (config.js: FEATURES), each with its own switch.
     var FEATURES = [
       ["light", "Light follows the pointer"],

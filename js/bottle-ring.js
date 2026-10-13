@@ -89,9 +89,9 @@
     }
     nodes = document.querySelectorAll("[data-ring-shop]");
     for (i = 0; i < nodes.length; i++) {
-      // An unreleased cuvée has no shop link: the button becomes a notice.
-      if (CUVEES[selected].soon) nodes[i].removeAttribute("href");
-      else nodes[i].href = (CONFIG.SHOPIFY_BASE_URL || "#") + CUVEES[selected].slug;
+      // shop.js decides where the button leads. An unreleased cuvée has no link:
+      // the button becomes a notice.
+      window.Shop.wire(nodes[i], selected);
       nodes[i].classList.toggle("is-soon", !!CUVEES[selected].soon);
     }
     nodes = picker.querySelectorAll("button");

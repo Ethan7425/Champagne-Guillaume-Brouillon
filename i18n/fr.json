@@ -176,6 +176,19 @@
     "pairLabel": "Accord",
     "pair": "[ACCORD À CONFIRMER]"
   },
+  "shop": {
+    "basket": "Panier",
+    "close": "Fermer",
+    "empty": "Votre panier est vide.",
+    "subtotal": "Sous-total",
+    "note": "Livraison et taxes calculées au moment du paiement.",
+    "checkout": "Passer au paiement",
+    "remove": "Retirer",
+    "more": "Une bouteille de plus",
+    "less": "Une bouteille de moins",
+    "simNote": "Simulation\u00a0: voici à quoi ressemblerait le panier intégré de Shopify.",
+    "demoNote": "Prototype\u00a0: aucune boutique n’est encore connectée. Les prix sont provisoires."
+  },
   "loader": {
     "label": "Chargement"
   },

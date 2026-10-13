@@ -46,9 +46,6 @@
   var intro = isHome && featureOn("intro") && window.Loader && window.scrollY < 10 && location.hash.length < 2;
   if (intro) window.Loader.show();
 
-  function shopUrl(cuvee) {
-    return (CONFIG.SHOPIFY_BASE_URL || "#") + cuvee.slug;
-  }
 
   /* ---- Cuvée sections ---------------------------------------------------- */
   // The template uses "{i}" wherever the cuvée's position in the i18n array goes.
@@ -83,13 +80,9 @@
       section.querySelector(".cuvee__name").id = titleId;
       section.querySelector(".cuvee__numeral").textContent = ROMAN[index] || String(index + 1);
       section.querySelector(".bottle-stage").setAttribute("data-cuvee", cuvee.id);
-      if (cuvee.soon) {
-        // Not released: no shop link, and the button reads as a notice.
-        section.setAttribute("data-soon", "");
-        section.querySelector("[data-shop]").removeAttribute("href");
-      } else {
-        section.querySelector("[data-shop]").href = shopUrl(cuvee);
-      }
+      if (cuvee.soon) section.setAttribute("data-soon", ""); // not released: the button reads as a notice
+      // shop.js decides where the button leads (or leaves it as a notice if unreleased).
+      window.Shop.wire(section.querySelector("[data-shop]"), index);
 
       list.appendChild(fragment);
       return section;
@@ -157,8 +150,7 @@
       root.classList.toggle("has-buybar", index !== -1);
       bar.hidden = index === -1;
       if (index === -1) return;
-      if (CUVEES[index].soon) bar.removeAttribute("href");
-      else bar.href = shopUrl(CUVEES[index]);
+      window.Shop.wire(bar, index);
       bar.classList.toggle("is-soon", !!CUVEES[index].soon);
       bar.querySelector(".buybar__label").setAttribute("data-i18n", "cuvees." + index + ".buy");
       bar.querySelector(".buybar__price").setAttribute("data-i18n", "cuvees." + index + ".price");

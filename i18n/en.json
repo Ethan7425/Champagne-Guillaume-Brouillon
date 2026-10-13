@@ -176,6 +176,19 @@
     "pairLabel": "Pairing",
     "pair": "[PAIRING TO BE CONFIRMED]"
   },
+  "shop": {
+    "basket": "Basket",
+    "close": "Close",
+    "empty": "Your basket is empty.",
+    "subtotal": "Subtotal",
+    "note": "Delivery and taxes are calculated at checkout.",
+    "checkout": "Go to checkout",
+    "remove": "Remove",
+    "more": "One more bottle",
+    "less": "One bottle fewer",
+    "simNote": "Simulation: this is how Shopify's own embedded cart would look.",
+    "demoNote": "Prototype: no store is connected yet. Prices are placeholders."
+  },
   "loader": {
     "label": "Loading"
   },

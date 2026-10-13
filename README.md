@@ -28,6 +28,7 @@ js/
   bottle-3d.js          PROTOTYPE TEST: 3D model in a bottle stage (loads Three.js on demand)
   bottle-ring.js        TEST PAGE only: the bottle ring of selection.html
   loader.js             TEST: loading screen, played from the test panel
+  shop.js               order links and basket: the four ways to reach Shopify
   extras.js             optional effects: cellar gauge, page tint, the glass
   age-gate.js           18+ overlay
   testing-panel.js      TESTING ONLY review panel
@@ -52,8 +53,11 @@ Browsers refuse to read JSON files from a page opened by double-click. For that 
 
 | Key | Value now |
 | --- | --- |
+| `SHOP_MODE` | `link` |
+| `SHOPIFY_DOMAIN` | `example.myshopify.com` (placeholder) |
 | `SHOPIFY_BASE_URL` | `https://example.myshopify.com/products/` (placeholder) |
 | `CUVEES[].slug` | `placeholder-cuvee-1` … `-4` |
+| `CUVEES[].variantId`, `.price` | placeholders (`00000000000001` …, `0`) |
 | `CUVEES[].rose` | `true` on cuvée 3 only, to preview the rosé accent of Direction B |
 | `AGE_GATE_ENABLED` | `true` |
 | `DEFAULT_LANGUAGE` | `en` |
@@ -61,7 +65,20 @@ Browsers refuse to read JSON files from a page opened by double-click. For that 
 | `DEFAULT_FONT_PAIR` | `pair-a` |
 | `DEFAULT_MOTION` | `full` |
 
-Each "Order" button and the mobile buy bar link to `SHOPIFY_BASE_URL + slug`, in the same tab. A cuvée marked `soon: true` (the fifth, "???") is unreleased: no price, no shop link, a "Coming soon" notice instead of the button, and a blacked-out 3D bottle (`mystery: true` in `MODELS`). To release it, give it a slug, remove `soon` and `mystery`, and fill in its text in the i18n files. Adding or removing an entry in `CUVEES` adds or removes a section (the i18n `cuvees` array needs a matching entry).
+### Shop: how "Order" reaches Shopify
+
+`js/shop.js` builds every order link. `SHOP_MODE` in `config.js` picks one of four ways, and the test panel ("Shop") switches between them so they can be compared:
+
+| Mode | What the visitor gets |
+| --- | --- |
+| `page` | The first idea: the cuvée's product page on Shopify (`SHOPIFY_BASE_URL + slug`) |
+| `link` (default, "level 1") | Straight to Shopify's checkout with one bottle in the cart: `https://SHOPIFY_DOMAIN/cart/VARIANT_ID:1` |
+| `embed` ("level 2", **simulated**) | A basket panel styled like Shopify's own embedded cart. A stand-in to judge the experience; the real one comes from Shopify once a store exists |
+| `basket` ("level 3") | A basket panel in the site's design, with quantities and a subtotal. "Go to checkout" sends the whole basket to Shopify in one link |
+
+To connect a real store: set `SHOPIFY_DOMAIN`, give each cuvée its `variantId` (Shopify admin, product, variant: the long number at the end of the address) and its `price`. Nothing talks to Shopify yet: prices in the basket come from `config.js`. Later, level 3 can read live prices and stock through Shopify's Storefront API without changing how the basket behaves.
+
+In every mode the link opens in the same tab. A cuvée marked `soon: true` (the fifth, "???") is unreleased: no price, no shop link, a "Coming soon" notice instead of the button, and a blacked-out 3D bottle (`mystery: true` in `MODELS`). To release it, give it a slug, remove `soon` and `mystery`, and fill in its text in the i18n files. Adding or removing an entry in `CUVEES` adds or removes a section (the i18n `cuvees` array needs a matching entry).
 
 ## Placeholders to replace
 
