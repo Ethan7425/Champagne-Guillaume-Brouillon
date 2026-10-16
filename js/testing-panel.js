@@ -188,7 +188,7 @@
     var pagesLegend = document.createElement("legend");
     pagesLegend.textContent = "Pages";
     pages.appendChild(pagesLegend);
-    [["index.html?all=1", "Scroll page (index.html)"], ["selection.html", "Bottle ring (selection.html)"], ["404.html", "Page not found (404.html)"]].forEach(function (page) {
+    [["index.html?all=1", "Scroll page (index.html)"], ["selection.html", "Bottle ring (selection.html)"], ["404.html", "Page not found (404.html)"], ["legal.html", "Legal information (legal.html)"], ["changes.html", "What changed (review notes)"]].forEach(function (page) {
       var link = document.createElement("a");
       link.href = page[0];
       link.textContent = page[1];
@@ -350,6 +350,12 @@
       window.Loader.play(1900, hero && root.getAttribute("data-fx-intro") === "on" ? { into: hero } : null);
     });
     panel.appendChild(loader);
+
+    var cookies = document.createElement("button");
+    cookies.type = "button";
+    cookies.textContent = "Show the cookie banner again";
+    cookies.addEventListener("click", function () { toggle(false); if (window.Consent) window.Consent.reset(); });
+    panel.appendChild(cookies);
 
     var reset = document.createElement("button");
     reset.type = "button";

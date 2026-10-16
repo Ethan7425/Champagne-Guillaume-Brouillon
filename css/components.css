@@ -20,6 +20,10 @@
 }
 
 html.has-buybar .proto-badge { bottom: var(--buybar-h); }
+/* While the cookie banner is open the badge moves to the top corner, out of its
+   way. (!important because the tablet/desktop rule for the order bar below also
+   sets `bottom`, and both together stretched the badge down the whole side.) */
+html.has-consent .proto-badge { top: 0 !important; bottom: auto !important; }
 
 /* ---- Buttons --------------------------------------------------------------- */
 
@@ -800,6 +804,9 @@ html[data-theme="art-deco-nuit"] .cuvee { border-top-color: transparent; }
 .ring__arrow:hover { border-color: var(--fg); }
 .ring__arrow svg { width: 1.25rem; height: 1.25rem; fill: none; stroke: currentColor; stroke-width: 1.25; }
 
+/* The cuvée's label line under its name: only the side-rail layout shows it. */
+.ring__meta--rail { display: none; }
+
 /* I · II · III · IV. The one in front also shows its name. */
 .ring__switch { display: flex; gap: 0.25rem; }
 
@@ -973,7 +980,7 @@ html[data-theme="art-deco-nuit"] .cuvee { border-top-color: transparent; }
      place; the text scrolls beside it in its own column. */
   html[data-mlayout="rail"] .voyage {
     display: grid;
-    grid-template-columns: 37% minmax(0, 1fr);
+    grid-template-columns: var(--rail, 47%) minmax(0, 1fr); /* --rail: the bottle's share of the width */
   }
 
   html[data-mlayout="rail"] .voyage__stage {
@@ -990,7 +997,7 @@ html[data-theme="art-deco-nuit"] .cuvee { border-top-color: transparent; }
     grid-column: 2;
     align-content: center;
     min-height: calc(100svh - var(--stage-top));
-    padding: 1.5rem var(--gutter) calc(var(--buybar-h) + 1.5rem) 1.125rem;
+    padding: 1.5rem 1rem calc(var(--buybar-h) + 1.5rem) 0.875rem;
     scroll-margin-top: 0;
   }
 
@@ -1002,11 +1009,65 @@ html[data-theme="art-deco-nuit"] .cuvee { border-top-color: transparent; }
   /* The ring's controls, set flush left in the narrow column: name first, arrows under it. */
   html[data-mlayout="rail"] .ring__title { justify-items: start; text-align: left; }
   html[data-mlayout="rail"] .ring__name-row { grid-template-columns: auto auto; justify-content: start; }
-  html[data-mlayout="rail"] .ring__name { grid-column: 1 / -1; grid-row: 1; font-size: calc(2.125rem * var(--heading-scale)); }
+  html[data-mlayout="rail"] .ring__name { grid-column: 1 / -1; grid-row: 1; font-size: calc(1.75rem * var(--heading-scale)); }
+  html[data-mlayout="rail"] .ring__arrow { width: 2.5rem; height: 2.5rem; }
+  html[data-mlayout="rail"] .ring__switch { gap: 0; }
+  html[data-mlayout="rail"] .ring__switch button { min-width: 1.875rem; padding: 0 0.125rem; }
+  html[data-mlayout="rail"] .voyage__text { gap: 0.625rem; }
+  html[data-mlayout="rail"] .voyage__body { font-size: 1rem; line-height: 1.55; }
+  html[data-mlayout="rail"] .notes__row dd { font-size: 0.6875rem; }
   html[data-mlayout="rail"] .ring__tags { flex-direction: column; align-items: flex-start; gap: 0.125rem; }
   html[data-mlayout="rail"] .ring__switch { flex-wrap: wrap; margin-left: -0.5rem; }
   html[data-mlayout="rail"] .ring__switch button { min-width: 2.25rem; padding: 0 0.25rem; }
-  html[data-mlayout="rail"] .voyage__title { font-size: calc(1.875rem * var(--heading-scale)); }
+  html[data-mlayout="rail"] .voyage__title { font-size: calc(1.625rem * var(--heading-scale)); }
+
+  /* The ring's first screen fills its column from top to bottom: the I–V
+     switcher at the top, then the name, its label line and the three tasting
+     words set large, and the two arrows at the foot, just above the order bar. */
+  html[data-mlayout="rail"] .voyage__screen--ring {
+    grid-template-rows: auto minmax(0, 1fr);
+    align-content: stretch;
+    gap: 1.5rem;
+    padding-top: 1.75rem;
+  }
+  html[data-mlayout="rail"] .ring__title {
+    grid-template-columns: max-content max-content minmax(0, 1fr); /* the two arrows sit side by side, left */
+    grid-template-rows: auto auto auto 1fr auto;
+    justify-content: start;
+    align-content: stretch;
+    gap: 0.75rem 1rem;
+  }
+  html[data-mlayout="rail"] .ring__title > .label:first-child { grid-column: 1 / -1; grid-row: 1; }
+  html[data-mlayout="rail"] .ring__name-row { display: contents; }
+  html[data-mlayout="rail"] .ring__name { grid-column: 1 / -1; grid-row: 2; font-size: calc(2.25rem * var(--heading-scale)); line-height: 1.05; }
+  html[data-mlayout="rail"] .ring__meta--rail { display: block; grid-column: 1 / -1; grid-row: 3; padding-top: 0.75rem; }
+  html[data-mlayout="rail"] .ring__tags {
+    grid-column: 1 / -1;
+    grid-row: 4;
+    align-self: center;
+    gap: 0.25rem;
+    margin: 0;
+  }
+  html[data-mlayout="rail"] .ring__tags li {
+    font-family: var(--font-heading);
+    font-size: calc(1.375rem * var(--heading-scale));
+    font-weight: var(--weight-heading);
+    line-height: 1.2;
+    letter-spacing: var(--heading-tracking);
+    text-transform: var(--heading-transform);
+    color: var(--muted);
+  }
+  html[data-mlayout="rail"] [data-ring-prev] { grid-column: 1; grid-row: 5; align-self: end; }
+  html[data-mlayout="rail"] [data-ring-next] { grid-column: 2; grid-row: 5; align-self: end; }
+
+  /* Short phones: the same, a size smaller, so the arrows stay clear of the order bar. */
+  @media (max-height: 41.5em) {
+    html[data-mlayout="rail"] .voyage__screen--ring { gap: 0.75rem; padding-top: 1rem; }
+    html[data-mlayout="rail"] .ring__title { gap: 0.5rem 0.75rem; }
+    html[data-mlayout="rail"] .ring__name { font-size: calc(1.875rem * var(--heading-scale)); }
+    html[data-mlayout="rail"] .ring__tags li { font-size: calc(1.125rem * var(--heading-scale)); }
+    html[data-mlayout="rail"] .ring__meta--rail { padding-top: 0.5rem; }
+  }
 
   /* Rows stack: the label over its value. The column scrolls, so the sheet's
      paragraph and its small heading are back. */
@@ -1455,6 +1516,195 @@ html[data-shop="basket"] .basket-open {
   color: #111;
   background: #FFD400;
 }
+
+/* ---- Forms: shared field styles ------------------------------------------------- */
+
+.newsletter input[type="email"],
+.basket__message textarea,
+.age-gate__country select {
+  width: 100%;
+  min-height: 3rem;
+  padding: 0.625rem 0.75rem;
+  font: inherit;
+  color: var(--fg);
+  background: transparent;
+  border: 1px solid var(--rule-strong);
+  border-radius: 0;
+}
+
+.newsletter input[type="email"]:focus-visible,
+.basket__message textarea:focus-visible,
+.age-gate__country select:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+input[type="checkbox"] { width: 1.125rem; height: 1.125rem; margin: 0.15rem 0 0; accent-color: var(--accent); flex: none; }
+
+/* ---- Release letter (footer, js/newsletter.js) ------------------------------------ */
+
+.newsletter {
+  display: grid;
+  gap: 0.75rem;
+  max-width: 40rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid var(--rule);
+}
+
+.newsletter__title { font-size: calc(1.75rem * var(--heading-scale)); }
+.newsletter__body { color: var(--muted); }
+.newsletter__row { display: grid; gap: 0.75rem; }
+.newsletter__field { display: grid; gap: 0.375rem; }
+.newsletter__consent { display: flex; gap: 0.75rem; align-items: flex-start; font-size: var(--fs-small); color: var(--muted); }
+.newsletter__status { min-height: 1.5em; font-size: var(--fs-small); }
+.newsletter.is-error .newsletter__status { color: var(--fg); }
+.newsletter.is-error .newsletter__status::before { content: "— "; }
+.newsletter.is-done .newsletter__status { color: var(--fg); }
+
+@media (min-width: 48em) {
+  .newsletter { grid-column: 1 / -1; }
+  .newsletter__row { grid-template-columns: minmax(0, 1fr) auto; align-items: end; }
+}
+
+.site-footer__cookies {
+  padding: 0.5rem 0;
+  font-size: var(--fs-small);
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+  text-decoration-thickness: 1px;
+}
+
+/* ---- Cookie banner (js/consent.js) -------------------------------------------- */
+/* Refuse, choose and accept carry the same weight on purpose: refusing must be
+   as easy as accepting. */
+
+.consent {
+  position: fixed;
+  inset: auto 0.75rem 0.75rem 0.75rem;
+  z-index: var(--z-consent);
+  display: grid;
+  gap: 0.875rem;
+  max-width: 34rem;
+  max-height: calc(100svh - 1.5rem);
+  padding: 1.25rem;
+  overflow-y: auto;
+  background: var(--surface, var(--bg));
+  border: 1px solid var(--rule-strong);
+}
+
+.consent__title { font-size: calc(1.5rem * var(--heading-scale)); }
+.consent__body { font-size: var(--fs-small); line-height: 1.55; }
+.consent__choices { display: grid; gap: 0.625rem; padding: 0.75rem 0; border-block: 1px solid var(--rule); }
+.consent__row { display: flex; gap: 0.75rem; align-items: flex-start; font-size: var(--fs-small); }
+.consent__row span { display: grid; gap: 0.125rem; }
+.consent__row strong { font-weight: var(--weight-strong); }
+.consent__row span span { color: var(--muted); }
+.consent__row--fixed { padding-left: 1.875rem; }
+.consent__actions { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.consent__actions .btn { flex: 1 1 8rem; min-height: 2.75rem; padding-inline: 0.75rem; }
+
+@media (min-width: 48em) { .consent { inset: auto auto 1rem 1rem; } }
+
+/* ---- Age question: the country (js/age-gate.js) ----------------------------------- */
+
+.age-gate__country { display: grid; gap: 0.375rem; width: min(100%, 20rem); margin: 0 auto 1.5rem; text-align: left; }
+.age-gate__country select { appearance: none; background-image: linear-gradient(45deg, transparent 50%, currentColor 50%), linear-gradient(-45deg, transparent 50%, currentColor 50%); background-position: right 1.1rem center, right 0.8rem center; background-size: 0.3rem 0.3rem; background-repeat: no-repeat; padding-right: 2rem; }
+.age-gate__country option { color: #111; }
+
+/* ---- Gift (basket, js/shop.js) -------------------------------------------------- */
+
+.basket__gift { display: flex; gap: 0.75rem; align-items: center; }
+.basket__message { display: grid; gap: 0.375rem; }
+.basket__message textarea { min-height: 5rem; resize: vertical; }
+.basket--shopify .basket__message textarea { color: #202223; border-color: #C9CCCF; border-radius: 6px; }
+
+/* ---- The house: father and son (selection.html) ---------------------------------- */
+
+.about,
+.contact {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 2rem;
+  max-width: var(--page-max);
+  margin-inline: auto;
+  padding: clamp(3rem, 8vh, 5rem) var(--gutter) calc(var(--buybar-h) + 3rem);
+  background: var(--bg);
+  border-top: 1px solid var(--rule);
+  scroll-snap-align: start;
+}
+
+.about__head,
+.contact__head { display: grid; gap: 0.75rem; max-width: 40rem; }
+.about__body { max-width: 52ch; }
+
+.person { display: grid; gap: 1rem; margin: 0; }
+.person .photo__frame { aspect-ratio: 4 / 5; }
+.person figcaption { display: grid; gap: 0.375rem; }
+.person__name { font-family: var(--font-heading); font-size: calc(1.625rem * var(--heading-scale)); line-height: 1.2; }
+.person__quote { margin: 0.5rem 0 0; padding-left: 1rem; border-left: 1px solid var(--cuvee-accent); font-style: italic; max-width: 40ch; }
+
+@media (min-width: 48em) {
+  .about { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--col-gap); }
+  .about__head, .about__facts { grid-column: 1 / -1; }
+  .about__facts { max-width: 44rem; }
+}
+@media (min-width: 60em) {
+  .about { grid-template-columns: repeat(12, minmax(0, 1fr)); align-items: start; padding-block: 5rem; }
+  .about__head { grid-column: 1 / 6; grid-row: 1 / span 2; }
+  .about .person:nth-of-type(1) { grid-column: 7 / 10; }
+  .about .person:nth-of-type(2) { grid-column: 10 / 13; margin-top: 4rem; }
+  .about__facts { grid-column: 1 / 6; grid-row: 3; align-self: end; }
+  .ledger.about__facts .ledger__row { grid-template-columns: 9rem 1fr; gap: 1.5rem; }
+}
+
+/* ---- Visits and contact (selection.html) ----------------------------------------- */
+
+.contact__map { display: grid; gap: 0.75rem; justify-items: start; margin: 0; }
+.contact__map .photo__frame { width: 100%; aspect-ratio: 3 / 2; height: auto; }
+.contact__details { display: grid; gap: 0.5rem; }
+.contact__details address { display: grid; font-style: normal; font-family: var(--font-heading); font-size: calc(1.375rem * var(--heading-scale)); line-height: 1.35; margin-bottom: 0.5rem; }
+.contact__details .label { display: inline-block; min-width: 7rem; }
+.contact__hours h3 { font-family: var(--font-body); }
+.contact__hours ul { margin: 0.5rem 0 0; padding: 0; list-style: none; display: grid; gap: 0.25rem; }
+.contact__note { margin-top: 1rem; color: var(--muted); font-size: var(--fs-small); }
+
+@media (min-width: 60em) {
+  .contact { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--col-gap); align-items: start; padding-block: 5rem; }
+  .contact__head { grid-column: 1 / 6; }
+  .contact__map { grid-column: 7 / 13; grid-row: 1 / span 3; }
+  .contact__details { grid-column: 1 / 6; }
+  .contact__hours { grid-column: 1 / 6; }
+}
+
+/* ---- Legal page (legal.html) --------------------------------------------------- */
+
+.legal {
+  display: grid;
+  gap: 3rem;
+  max-width: 46rem;
+  margin-inline: auto;
+  padding: clamp(2.5rem, 7vh, 5rem) var(--gutter) 4rem;
+}
+
+.legal__head { display: grid; gap: 1rem; }
+.legal__title { font-size: calc(var(--fs-title) * var(--heading-scale)); }
+.legal__draft { padding: 0.75rem 1rem; border: 1px dashed var(--rule-strong); color: var(--muted); font-size: var(--fs-small); }
+.legal__toc { display: flex; flex-wrap: wrap; gap: 0.25rem 1.5rem; font-size: var(--fs-small); }
+.legal__toc a { padding: 0.375rem 0; }
+.legal__part { display: grid; gap: 1rem; padding-top: 2rem; border-top: 1px solid var(--rule); scroll-margin-top: 1rem; }
+.legal__heading { font-size: calc(1.75rem * var(--heading-scale)); }
+.legal__list { margin: 0; padding-left: 1.125rem; display: grid; gap: 0.5rem; }
+.legal__part .btn { justify-self: start; }
+.legal__back { justify-self: start; }
+
+/* ---- What changed (changes.html, TESTING ONLY) -------------------------------------- */
+
+.page-changes { padding-bottom: 4rem; }
+.changes { display: grid; gap: 2rem; max-width: 44rem; margin-inline: auto; padding: 3rem var(--gutter); }
+.changes__title { font-size: calc(var(--fs-title) * var(--heading-scale)); }
+.changes__intro { color: var(--muted); }
+.changes__entry { display: grid; gap: 0.75rem; padding-top: 1.5rem; border-top: 1px solid var(--rule); }
+.changes__date { font-size: calc(1.375rem * var(--heading-scale)); }
+.changes__entry ul { margin: 0; padding-left: 1.125rem; display: grid; gap: 0.5rem; }
+.changes code { font-size: 0.9em; }
 
 /* ---- Custom cursor (feature "cursor", js/extras.js) ---------------------------- */
 /* A dot at the pointer and a hairline ring that trails it. Mouse only. The

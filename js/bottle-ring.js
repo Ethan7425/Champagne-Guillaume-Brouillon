@@ -75,10 +75,10 @@
     // Phone layout C: the stage is a tall narrow column. One bottle at a time:
     // the chosen one, standing the height of the rail.
     rail: [
-      { focus: 1, look: 0.5, view: 2.1, pitch: 0.05, right: 0, up: 0.13, turn: 0, solo: 1 },
-      { focus: 1, look: 0.5, view: 1.9, pitch: 0.05, right: 0, up: 0.04, turn: -0.5, solo: 1 },
-      { focus: 1, look: 0.82, view: 0.9, pitch: 0.12, right: 0, up: 0.04, turn: 0.5, solo: 1 },
-      { focus: 1, look: 0.3, view: 1.5, pitch: 0, right: 0, up: 0.04, turn: -0.45, solo: 1 }
+      { focus: 1, look: 0.5, view: 1.85, pitch: 0.05, right: 0, up: 0.19, turn: 0, solo: 1 },
+      { focus: 1, look: 0.5, view: 1.45, pitch: 0.05, right: 0, up: 0.04, turn: -0.5, solo: 1 },
+      { focus: 1, look: 0.82, view: 0.7, pitch: 0.12, right: 0, up: 0.04, turn: 0.5, solo: 1 },
+      { focus: 1, look: 0.3, view: 1.15, pitch: 0, right: 0, up: 0.04, turn: -0.45, solo: 1 }
     ]
   };
   var POSE_KEYS = ["focus", "look", "view", "pitch", "right", "up", "turn", "solo"];

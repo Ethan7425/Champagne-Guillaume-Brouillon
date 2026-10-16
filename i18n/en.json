@@ -3,7 +3,8 @@
     "title": "[BRAND NAME] · Champagne (prototype)",
     "titleRing": "Bottle selection · [BRAND NAME] (prototype)",
     "title404": "Page not found · [BRAND NAME]",
-    "description": "Placeholder description: [BRAND NAME], grower champagne from [VILLAGE]. Four cuvées, their blends, ageing and tasting notes."
+    "description": "Placeholder description: [BRAND NAME], grower champagne from [VILLAGE]. Four cuvées, their blends, ageing and tasting notes.",
+    "titleLegal": "Legal information · [BRAND NAME]"
   },
   "proto": {
     "badge": "PROTOTYPE — NOT FOR PUBLICATION"
@@ -22,7 +23,8 @@
   "nav": {
     "top": "Top of the page",
     "cuvees": "Cuvées",
-    "house": "The house"
+    "house": "The house",
+    "contact": "Contact"
   },
   "hero": {
     "label": "Champagne · [VILLAGE] · Grower-producer",
@@ -38,12 +40,17 @@
     "blendLabel": "Blend",
     "makingLabel": "Winemaking",
     "notesLabel": "Tasting notes",
-    "priceLabel": "Price, 75 cl"
+    "priceLabel": "Price, 75 cl",
+    "pairingLabel": "Pairing"
   },
   "cuvees": [
     {
       "name": "[CUVÉE 1]",
-      "tags": ["White fruit", "Fresh almond", "Chalk"],
+      "tags": [
+        "White fruit",
+        "Fresh almond",
+        "Chalk"
+      ],
       "meta": "Cuvée N° 01 · Type: TBD · [00] months on lees · dosage [0] g/L",
       "lead": "Placeholder: the house blend, drawn from [PARCEL A] and [PARCEL B] on chalk subsoil. Pressed within hours of picking, vinified in [VESSEL TBD].",
       "type": "TBD",
@@ -52,11 +59,16 @@
       "price": "€00.00",
       "buy": "Order [CUVÉE 1]",
       "caption": "Plate 01 — [CUVÉE 1], raking light, dark background",
-      "alt": "Intended image: bottle of [CUVÉE 1], three-quarter front view, raking light from the left, dark background."
+      "alt": "Intended image: bottle of [CUVÉE 1], three-quarter front view, raking light from the left, dark background.",
+      "pairing": "Oysters · grilled sea bass · aged Comté (placeholder)"
     },
     {
       "name": "[CUVÉE 2]",
-      "tags": ["Citrus zest", "White flowers", "Toasted bread"],
+      "tags": [
+        "Citrus zest",
+        "White flowers",
+        "Toasted bread"
+      ],
       "meta": "Cuvée N° 02 · Type: TBD · [00] months on lees · dosage [0] g/L",
       "lead": "Placeholder: a single-parcel wine from [PARCEL C], vines planted in [YEAR]. Each plot is fermented separately before blending.",
       "type": "TBD",
@@ -65,11 +77,16 @@
       "price": "€00.00",
       "buy": "Order [CUVÉE 2]",
       "caption": "Plate 02 — [CUVÉE 2], raking light, dark background",
-      "alt": "Intended image: bottle of [CUVÉE 2], three-quarter front view, raking light from the left, dark background."
+      "alt": "Intended image: bottle of [CUVÉE 2], three-quarter front view, raking light from the left, dark background.",
+      "pairing": "Scallops · sushi · goat's cheese (placeholder)"
     },
     {
       "name": "[CUVÉE 3]",
-      "tags": ["Red berries", "Blood orange", "Fine tannin"],
+      "tags": [
+        "Red berries",
+        "Blood orange",
+        "Fine tannin"
+      ],
       "meta": "Cuvée N° 03 · Type: TBD · [00] months on lees · dosage [0] g/L",
       "lead": "Placeholder: a cuvée built on Pinot Noir from [PARCEL D]. Maceration time and colour are to be confirmed with the producer.",
       "type": "TBD",
@@ -78,11 +95,16 @@
       "price": "€00.00",
       "buy": "Order [CUVÉE 3]",
       "caption": "Plate 03 — [CUVÉE 3], raking light, dark background",
-      "alt": "Intended image: bottle of [CUVÉE 3], three-quarter front view, raking light from the left, dark background."
+      "alt": "Intended image: bottle of [CUVÉE 3], three-quarter front view, raking light from the left, dark background.",
+      "pairing": "Duck breast · red berries · tarte tatin (placeholder)"
     },
     {
       "name": "[CUVÉE 4]",
-      "tags": ["Dried fruit", "Hazelnut", "Brioche"],
+      "tags": [
+        "Dried fruit",
+        "Hazelnut",
+        "Brioche"
+      ],
       "meta": "Cuvée N° 04 · Type: TBD · [00] months on lees · dosage [0] g/L",
       "lead": "Placeholder: the longest ageing in the cellar. Reserve wines from [YEARS TBD], kept in [VESSEL TBD] and bottled in small numbers.",
       "type": "TBD",
@@ -91,11 +113,16 @@
       "price": "€00.00",
       "buy": "Order [CUVÉE 4]",
       "caption": "Plate 04 — [CUVÉE 4], raking light, dark background",
-      "alt": "Intended image: bottle of [CUVÉE 4], three-quarter front view, raking light from the left, dark background."
+      "alt": "Intended image: bottle of [CUVÉE 4], three-quarter front view, raking light from the left, dark background.",
+      "pairing": "Poultry with morels · truffle · aged Parmesan (placeholder)"
     },
     {
       "name": "???",
-      "tags": ["In the cellar", "Not yet released", "[YEAR]"],
+      "tags": [
+        "In the cellar",
+        "Not yet released",
+        "[YEAR]"
+      ],
       "meta": "Cuvée N° 05 · Not yet released",
       "lead": "A fifth cuvée is still resting in the cellar. Its blend, its ageing and its release date will be given here once the producer has set them.",
       "type": "TBD",
@@ -104,17 +131,30 @@
       "price": "—",
       "buy": "Coming soon",
       "caption": "Plate 05 — bottle not yet revealed, raking light, dark background",
-      "alt": "Intended image: the silhouette of an unlabelled bottle, lit from behind, dark background."
+      "alt": "Intended image: the silhouette of an unlabelled bottle, lit from behind, dark background.",
+      "pairing": "To be announced"
     }
   ],
   "house": {
     "title": "Two generations, [00] parcels, one press.",
     "body": "Placeholder text: [FIRST NAME] and [FIRST NAME], father and son, farm the family vines in [VILLAGE]. They pick by hand, press on site and bottle every cuvée themselves. This paragraph will be replaced by the producer's own account.",
     "facts": [
-      { "term": "Vineyard", "value": "[0.0] ha in [VILLAGE], [SUB-REGION TBD]" },
-      { "term": "Parcels", "value": "[00] parcels on chalk, average vine age [00] years" },
-      { "term": "Pressing", "value": "Traditional [0,000] kg press, within [0] hours of picking" },
-      { "term": "Ageing", "value": "[00] to [00] months in chalk cellars at [00] °C" }
+      {
+        "term": "Vineyard",
+        "value": "[0.0] ha in [VILLAGE], [SUB-REGION TBD]"
+      },
+      {
+        "term": "Parcels",
+        "value": "[00] parcels on chalk, average vine age [00] years"
+      },
+      {
+        "term": "Pressing",
+        "value": "Traditional [0,000] kg press, within [0] hours of picking"
+      },
+      {
+        "term": "Ageing",
+        "value": "[00] to [00] months in chalk cellars at [00] °C"
+      }
     ]
   },
   "footer": {
@@ -127,13 +167,15 @@
     "copyright": "© [YEAR] [BRAND NAME]"
   },
   "age": {
-    "question": "Are you aged 18 or over?",
+    "question": "Are you aged {age} or over?",
     "note": "This site presents wines and is intended for adults of legal drinking age in their country of residence.",
     "yes": "Yes",
     "no": "No",
     "exitTitle": "Thank you for your honesty.",
     "exitBody": "This site is reserved for adults. We cannot show you its content.",
-    "back": "I made a mistake"
+    "back": "I made a mistake",
+    "country": "Country of residence",
+    "other": "Other country"
   },
   "ring": {
     "label": "Test page · choose a cuvée",
@@ -144,8 +186,14 @@
     "kicker": "Champagne",
     "bottle": "The bottle",
     "closeups": [
-      { "title": "Foil and wire cage", "body": "Placeholder: the foil colour and the cage plate are still to be chosen. This screen will describe the closure: cork origin, cage, capsule design." },
-      { "title": "The label", "body": "Placeholder: the label will carry the appellation, the village, the dosage and the disgorgement date. Paper and printing are to be confirmed." }
+      {
+        "title": "Foil and wire cage",
+        "body": "Placeholder: the foil colour and the cage plate are still to be chosen. This screen will describe the closure: cork origin, cage, capsule design."
+      },
+      {
+        "title": "The label",
+        "body": "Placeholder: the label will carry the appellation, the village, the dosage and the disgorgement date. Paper and printing are to be confirmed."
+      }
     ],
     "photosPrev": "Previous plates",
     "photosNext": "Next plates",
@@ -154,11 +202,26 @@
     "navPlates": "Plates",
     "photosTitle": "Plates",
     "photos": [
-      { "caption": "Plate A — the parcel, vine rows in early morning", "alt": "Intended image: rows of vines on a chalk slope, early morning light, no people." },
-      { "caption": "Plate B — the cellar, bottles on laths", "alt": "Intended image: bottles stacked on laths in a chalk cellar, low side light." },
-      { "caption": "Plate C — the glass, fine bead, raking light", "alt": "Intended image: a single glass of the cuvée on a dark surface, fine bubbles, raking light." },
-      { "caption": "Plate D — the press, first juice", "alt": "Intended image: the traditional press at harvest, juice running, close framing." },
-      { "caption": "Plate E — the hands, riddling at the rack", "alt": "Intended image: a hand turning bottles on a riddling rack, low light." }
+      {
+        "caption": "Plate A — the parcel, vine rows in early morning",
+        "alt": "Intended image: rows of vines on a chalk slope, early morning light, no people."
+      },
+      {
+        "caption": "Plate B — the cellar, bottles on laths",
+        "alt": "Intended image: bottles stacked on laths in a chalk cellar, low side light."
+      },
+      {
+        "caption": "Plate C — the glass, fine bead, raking light",
+        "alt": "Intended image: a single glass of the cuvée on a dark surface, fine bubbles, raking light."
+      },
+      {
+        "caption": "Plate D — the press, first juice",
+        "alt": "Intended image: the traditional press at harvest, juice running, close framing."
+      },
+      {
+        "caption": "Plate E — the hands, riddling at the rack",
+        "alt": "Intended image: a hand turning bottles on a riddling rack, low light."
+      }
     ],
     "details": "See the details"
   },
@@ -166,7 +229,14 @@
     "label": "Cellar depth"
   },
   "glass": {
-    "axes": ["Fruit", "Floral", "Toast", "Mineral", "Freshness", "Length"],
+    "axes": [
+      "Fruit",
+      "Floral",
+      "Toast",
+      "Mineral",
+      "Freshness",
+      "Length"
+    ],
     "chartNote": "Placeholder profile, scale 0 to 5",
     "title": "In the glass",
     "serviceLabel": "Service",
@@ -187,7 +257,10 @@
     "more": "One more bottle",
     "less": "One bottle fewer",
     "simNote": "Simulation: this is how Shopify's own embedded cart would look.",
-    "demoNote": "Prototype: no store is connected yet. Prices are placeholders."
+    "demoNote": "Prototype: no store is connected yet. Prices are placeholders.",
+    "giftCheck": "This is a gift",
+    "giftLabel": "Gift message, printed on a card",
+    "giftHint": "Up to 200 characters."
   },
   "loader": {
     "label": "Loading"
@@ -197,5 +270,103 @@
     "title": "This bottle has not yet left our cellars.",
     "body": "The page you are looking for does not exist or has been moved.",
     "cta": "Back to the home page"
+  },
+  "consent": {
+    "title": "Cookies",
+    "body": "We use the cookies needed for the site and the shop to work. With your permission, we would also measure visits (statistics) and our advertising (marketing). You can change your choice at any time from the foot of the page.",
+    "accept": "Accept all",
+    "refuse": "Refuse",
+    "choose": "Choose",
+    "save": "Save my choice",
+    "manage": "Cookie settings",
+    "necessary": "Necessary (always on)",
+    "necessaryNote": "Language, basket, your answer to the age question, checkout.",
+    "statistics": "Statistics",
+    "statisticsNote": "An anonymous count of visits and pages viewed.",
+    "marketing": "Marketing",
+    "marketingNote": "Measuring our advertising campaigns."
+  },
+  "newsletter": {
+    "title": "Release letter",
+    "body": "One email when a cuvée is released or disgorged. Nothing else.",
+    "label": "Email address",
+    "consent": "I agree to receive this letter and can unsubscribe at any time.",
+    "submit": "Subscribe",
+    "thanks": "Thank you. (Prototype: nothing was sent.)",
+    "invalid": "Please enter a valid email address.",
+    "consentMissing": "Please tick the box to subscribe."
+  },
+  "about": {
+    "title": "Father and son",
+    "kicker": "The house",
+    "people": [
+      {
+        "name": "[FIRST NAME] [SURNAME]",
+        "role": "Father · vines and pressing",
+        "quote": "Placeholder: one sentence in his own words about the vines and the chalk.",
+        "alt": "Intended image: portrait of the father in the vines, natural light, looking away from the camera."
+      },
+      {
+        "name": "[FIRST NAME] [SURNAME]",
+        "role": "Son · cellar and blending",
+        "quote": "Placeholder: one sentence in his own words about the cellar and the blends.",
+        "alt": "Intended image: portrait of the son in the cellar among the bottles, low light."
+      }
+    ]
+  },
+  "contact": {
+    "title": "Visits and contact",
+    "kicker": "Come and see us",
+    "address": [
+      "[ADDRESS LINE]",
+      "[POSTCODE] [VILLAGE], France"
+    ],
+    "hoursTitle": "Opening hours for visits",
+    "hours": [
+      "Monday to Friday: [00:00–00:00] (placeholder)",
+      "Saturday: by appointment",
+      "Sunday: closed"
+    ],
+    "phoneLabel": "Telephone",
+    "phone": "+33 [0 00 00 00 00]",
+    "emailLabel": "Email",
+    "email": "[contact@yourdomain]",
+    "map": "Open in a map",
+    "mapAlt": "Map placeholder: location of the house in [VILLAGE]",
+    "note": "Visits and tastings by appointment only (placeholder)."
+  },
+  "legal": {
+    "title": "Legal information",
+    "draft": "Placeholder text: to be written and checked by a lawyer before launch.",
+    "back": "Back to the site",
+    "mentions": [
+      "Publisher: [COMPANY NAME], [LEGAL FORM] with a capital of [000] €",
+      "Registered office: [ADDRESS]",
+      "Registration: RCS [CITY] [000 000 000] · VAT number [FR00 000000000]",
+      "Director of publication: [NAME]",
+      "Website host: [HOST NAME AND ADDRESS]"
+    ],
+    "cgv": [
+      "[To be drafted by a lawyer: scope, prices, ordering, payment, delivery, right of withdrawal, guarantees, disputes.]",
+      "Sale of alcohol is restricted to adults of legal drinking age in the country of delivery."
+    ],
+    "privacy": [
+      "Data controller: [COMPANY NAME]",
+      "Data collected: name, address, email, order details, and cookies according to your choice.",
+      "Purposes: processing orders, sending the release letter if you subscribe, statistics if you accept them.",
+      "Your rights: access, correction, deletion and objection. Write to [EMAIL].",
+      "[To be completed and checked by a lawyer.]"
+    ],
+    "cookies": [
+      "Necessary cookies: language, basket, your answer to the age question, checkout. They cannot be switched off.",
+      "Statistics and marketing cookies: only with your consent.",
+      "You can change your choice at any time."
+    ],
+    "headings": [
+      "Legal notice",
+      "Terms of sale",
+      "Privacy policy",
+      "Cookie notice"
+    ]
   }
 }

@@ -127,6 +127,11 @@ html[data-theme="art-deco-nuit"] {
   padding: 0.5rem 0.75rem;
 }
 
+/* Phones: a smaller tab, tucked into the corner, so it does not sit on the site's own controls. */
+@media (max-width: 47.99em) {
+  .test-tab { right: 0.375rem; padding: 0.375rem 0.5rem; font-size: 11px; }
+}
+
 .test-panel {
   bottom: 3.25rem;
   width: min(19rem, calc(100vw - 1.5rem));

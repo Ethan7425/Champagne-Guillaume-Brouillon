@@ -83,6 +83,23 @@ window.SITE_CONFIG = {
 
   AGE_GATE_ENABLED: true,
 
+  // Legal drinking age per country (ISO code), for the age question.
+  // PLACEHOLDERS — TO BE CONFIRMED BY A LAWYER for every market served. Some
+  // countries allow wine from 16 (for example Germany, Switzerland, Belgium);
+  // the stricter 18 is used for them here. "default" covers every other country.
+  AGE_BY_COUNTRY: {
+    FR: 18, BE: 18, CH: 18, DE: 18, ES: 18, IT: 18, NL: 18, GB: 18, IE: 18,
+    US: 21, CA: 19, JP: 20, KR: 19, default: 18
+  },
+
+  // Release letter: where the sign-up form sends the address (for example a
+  // Shopify customer form or a mailing service). Empty = prototype: nothing is
+  // sent and the visitor sees a thank-you note.
+  NEWSLETTER_ACTION: "",
+
+  // Map link in the contact section. PLACEHOLDER.
+  MAP_URL: "",
+
   LANGUAGES: ["fr", "en", "es", "ja"],
   DEFAULT_LANGUAGE: "en",
 

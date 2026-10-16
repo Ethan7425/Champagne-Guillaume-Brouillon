@@ -153,10 +153,21 @@
       '<p class="basket__empty" data-basket-empty data-i18n="shop.empty"></p>' +
       '<footer class="basket__foot">' +
         '<p class="basket__total"><span class="label" data-i18n="shop.subtotal"></span><span data-basket-total></span></p>' +
+        '<label class="basket__gift"><input type="checkbox" data-gift> <span data-i18n="shop.giftCheck"></span></label>' +
+        '<label class="basket__message" data-gift-box hidden><span class="label" data-i18n="shop.giftLabel"></span>' +
+          '<textarea data-gift-text maxlength="200" rows="3"></textarea><span class="basket__note" data-i18n="shop.giftHint"></span></label>' +
         '<p class="basket__note" data-i18n="shop.note"></p>' +
         '<a class="btn btn--primary basket__checkout" data-basket-checkout data-i18n="shop.checkout"></a>' +
         '<p class="basket__note" data-i18n="shop.demoNote"></p>' +
       '</footer>';
+
+    panel.addEventListener("change", function (event) {
+      if (event.target.hasAttribute("data-gift")) panel.querySelector("[data-gift-box]").hidden = !event.target.checked;
+      render();
+    });
+    panel.addEventListener("input", function (event) {
+      if (event.target.hasAttribute("data-gift-text")) render();
+    });
 
     panel.addEventListener("click", function (event) {
       var button = event.target.closest("button");
@@ -219,13 +230,21 @@
     panel.querySelector(".basket__foot").hidden = all.length === 0;
     panel.querySelector("[data-basket-total]").textContent = money(total);
     var checkout = panel.querySelector("[data-basket-checkout]");
-    if (all.length) checkout.href = checkoutUrl(all);
+    if (all.length) checkout.href = checkoutUrl(all) + giftQuery();
     else checkout.removeAttribute("href");
 
     var n = count();
     opener.querySelector("[data-basket-count]").textContent = n ? String(n) : "";
     opener.setAttribute("aria-label", t("shop.basket") + (n ? " (" + n + ")" : ""));
     panel.classList.toggle("basket--shopify", mode() === "embed");
+  }
+
+  // Gift: Shopify carries a note and attributes from the link to the order.
+  // TO CHECK with the real store that its checkout keeps them.
+  function giftQuery() {
+    if (!panel || !panel.querySelector("[data-gift]").checked) return "";
+    var message = panel.querySelector("[data-gift-text]").value.trim().slice(0, 200);
+    return "?attributes[gift]=yes" + (message ? "&note=" + encodeURIComponent(message) : "");
   }
 
   function open() {

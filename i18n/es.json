@@ -3,7 +3,8 @@
     "title": "[BRAND NAME] · Champagne (prototipo)",
     "titleRing": "Selección de botellas · [BRAND NAME] (prototipo)",
     "title404": "Página no encontrada · [BRAND NAME]",
-    "description": "Descripción provisional: [BRAND NAME], champagne de viticultor en [VILLAGE]. Cuatro cuvées, sus ensamblajes, su crianza y sus notas de cata."
+    "description": "Descripción provisional: [BRAND NAME], champagne de viticultor en [VILLAGE]. Cuatro cuvées, sus ensamblajes, su crianza y sus notas de cata.",
+    "titleLegal": "Información legal · [BRAND NAME]"
   },
   "proto": {
     "badge": "PROTOTYPE — NOT FOR PUBLICATION"
@@ -22,7 +23,8 @@
   "nav": {
     "top": "Inicio de la página",
     "cuvees": "Cuvées",
-    "house": "La casa"
+    "house": "La casa",
+    "contact": "Contacto"
   },
   "hero": {
     "label": "Champagne · [VILLAGE] · Cosechero-elaborador",
@@ -38,12 +40,17 @@
     "blendLabel": "Ensamblaje",
     "makingLabel": "Vinificación",
     "notesLabel": "Notas de cata",
-    "priceLabel": "Precio, 75 cl"
+    "priceLabel": "Precio, 75 cl",
+    "pairingLabel": "Maridaje"
   },
   "cuvees": [
     {
       "name": "[CUVÉE 1]",
-      "tags": ["Fruta blanca", "Almendra fresca", "Creta"],
+      "tags": [
+        "Fruta blanca",
+        "Almendra fresca",
+        "Creta"
+      ],
       "meta": "Cuvée N.º 01 · Tipo: TBD · [00] meses sobre lías · dosage [0] g/L",
       "lead": "Texto provisional: el ensamblaje de la casa, procedente de [PARCELA A] y [PARCELA B], sobre subsuelo de creta. Prensado pocas horas después de la vendimia, vinificación en [RECIPIENTE POR DEFINIR].",
       "type": "TBD",
@@ -52,11 +59,16 @@
       "price": "00,00 €",
       "buy": "Pedir [CUVÉE 1]",
       "caption": "Lámina 01 — [CUVÉE 1], luz rasante, fondo oscuro",
-      "alt": "Imagen prevista: botella de [CUVÉE 1], vista de tres cuartos, luz rasante desde la izquierda, fondo oscuro."
+      "alt": "Imagen prevista: botella de [CUVÉE 1], vista de tres cuartos, luz rasante desde la izquierda, fondo oscuro.",
+      "pairing": "Ostras · lubina a la parrilla · comté curado (provisional)"
     },
     {
       "name": "[CUVÉE 2]",
-      "tags": ["Piel de cítricos", "Flores blancas", "Pan tostado"],
+      "tags": [
+        "Piel de cítricos",
+        "Flores blancas",
+        "Pan tostado"
+      ],
       "meta": "Cuvée N.º 02 · Tipo: TBD · [00] meses sobre lías · dosage [0] g/L",
       "lead": "Texto provisional: un vino de parcela única, [PARCELA C], con viñas plantadas en [AÑO]. Cada lote se vinifica por separado antes del ensamblaje.",
       "type": "TBD",
@@ -65,11 +77,16 @@
       "price": "00,00 €",
       "buy": "Pedir [CUVÉE 2]",
       "caption": "Lámina 02 — [CUVÉE 2], luz rasante, fondo oscuro",
-      "alt": "Imagen prevista: botella de [CUVÉE 2], vista de tres cuartos, luz rasante desde la izquierda, fondo oscuro."
+      "alt": "Imagen prevista: botella de [CUVÉE 2], vista de tres cuartos, luz rasante desde la izquierda, fondo oscuro.",
+      "pairing": "Vieiras · sushi · queso de cabra (provisional)"
     },
     {
       "name": "[CUVÉE 3]",
-      "tags": ["Frutos rojos", "Naranja sanguina", "Tanino fino"],
+      "tags": [
+        "Frutos rojos",
+        "Naranja sanguina",
+        "Tanino fino"
+      ],
       "meta": "Cuvée N.º 03 · Tipo: TBD · [00] meses sobre lías · dosage [0] g/L",
       "lead": "Texto provisional: una cuvée construida sobre el pinot noir de [PARCELA D]. El tiempo de maceración y el color quedan por confirmar con el productor.",
       "type": "TBD",
@@ -78,11 +95,16 @@
       "price": "00,00 €",
       "buy": "Pedir [CUVÉE 3]",
       "caption": "Lámina 03 — [CUVÉE 3], luz rasante, fondo oscuro",
-      "alt": "Imagen prevista: botella de [CUVÉE 3], vista de tres cuartos, luz rasante desde la izquierda, fondo oscuro."
+      "alt": "Imagen prevista: botella de [CUVÉE 3], vista de tres cuartos, luz rasante desde la izquierda, fondo oscuro.",
+      "pairing": "Magret de pato · frutos rojos · tarta tatin (provisional)"
     },
     {
       "name": "[CUVÉE 4]",
-      "tags": ["Frutos secos", "Avellana", "Brioche"],
+      "tags": [
+        "Frutos secos",
+        "Avellana",
+        "Brioche"
+      ],
       "meta": "Cuvée N.º 04 · Tipo: TBD · [00] meses sobre lías · dosage [0] g/L",
       "lead": "Texto provisional: la crianza más larga de la bodega. Vinos de reserva de [AÑOS POR DEFINIR], guardados en [RECIPIENTE POR DEFINIR] y embotellados en pequeña cantidad.",
       "type": "TBD",
@@ -91,11 +113,16 @@
       "price": "00,00 €",
       "buy": "Pedir [CUVÉE 4]",
       "caption": "Lámina 04 — [CUVÉE 4], luz rasante, fondo oscuro",
-      "alt": "Imagen prevista: botella de [CUVÉE 4], vista de tres cuartos, luz rasante desde la izquierda, fondo oscuro."
+      "alt": "Imagen prevista: botella de [CUVÉE 4], vista de tres cuartos, luz rasante desde la izquierda, fondo oscuro.",
+      "pairing": "Ave con colmenillas · trufa · parmesano curado (provisional)"
     },
     {
       "name": "???",
-      "tags": ["En la cava", "Próximamente", "[AÑO]"],
+      "tags": [
+        "En la cava",
+        "Próximamente",
+        "[AÑO]"
+      ],
       "meta": "Cuvée N.º 05 · Próximamente",
       "lead": "Una quinta cuvée reposa todavía en la cava. Su ensamblaje, su crianza y su fecha de salida se indicarán aquí cuando el productor los haya fijado.",
       "type": "TBD",
@@ -104,17 +131,30 @@
       "price": "—",
       "buy": "Próximamente",
       "caption": "Lámina 05 — botella aún no revelada, luz rasante, fondo oscuro",
-      "alt": "Imagen prevista: la silueta de una botella sin etiqueta, iluminada a contraluz, fondo oscuro."
+      "alt": "Imagen prevista: la silueta de una botella sin etiqueta, iluminada a contraluz, fondo oscuro.",
+      "pairing": "Por anunciar"
     }
   ],
   "house": {
     "title": "Dos generaciones, [00] parcelas, una prensa.",
     "body": "Texto provisional: [NOMBRE] y [NOMBRE], padre e hijo, cultivan las viñas de la familia en [VILLAGE]. Vendimian a mano, prensan en la propia finca y embotellan ellos mismos cada cuvée. Este párrafo será sustituido por el relato del productor.",
     "facts": [
-      { "term": "Viñedo", "value": "[0,0] ha en [VILLAGE], [SUBREGIÓN POR DEFINIR]" },
-      { "term": "Parcelas", "value": "[00] parcelas sobre creta, edad media de las viñas: [00] años" },
-      { "term": "Prensado", "value": "Prensa tradicional de [0000] kg, en las [0] horas siguientes a la vendimia" },
-      { "term": "Crianza", "value": "De [00] a [00] meses en cavas de creta, a [00] °C" }
+      {
+        "term": "Viñedo",
+        "value": "[0,0] ha en [VILLAGE], [SUBREGIÓN POR DEFINIR]"
+      },
+      {
+        "term": "Parcelas",
+        "value": "[00] parcelas sobre creta, edad media de las viñas: [00] años"
+      },
+      {
+        "term": "Prensado",
+        "value": "Prensa tradicional de [0000] kg, en las [0] horas siguientes a la vendimia"
+      },
+      {
+        "term": "Crianza",
+        "value": "De [00] a [00] meses en cavas de creta, a [00] °C"
+      }
     ]
   },
   "footer": {
@@ -127,13 +167,15 @@
     "copyright": "© [AÑO] [BRAND NAME]"
   },
   "age": {
-    "question": "¿Tiene usted 18 años o más?",
+    "question": "¿Tiene usted {age} años o más?",
     "note": "Este sitio presenta vinos y está dirigido a personas con la edad legal para consumir alcohol en su país de residencia.",
     "yes": "Sí",
     "no": "No",
     "exitTitle": "Gracias por su sinceridad.",
     "exitBody": "Este sitio está reservado a personas mayores de edad. No podemos mostrarle su contenido.",
-    "back": "Me he equivocado"
+    "back": "Me he equivocado",
+    "country": "País de residencia",
+    "other": "Otro país"
   },
   "ring": {
     "label": "Página de prueba · elegir una cuvée",
@@ -144,8 +186,14 @@
     "kicker": "Champagne",
     "bottle": "La botella",
     "closeups": [
-      { "title": "Cápsula y bozal", "body": "Texto provisional: el color de la cápsula y la placa del bozal están por elegir. Esta pantalla describirá el cierre: origen del corcho, bozal, diseño de la chapa." },
-      { "title": "La etiqueta", "body": "Texto provisional: la etiqueta llevará la denominación, el pueblo, el dosage y la fecha de degüelle. Papel e impresión por confirmar." }
+      {
+        "title": "Cápsula y bozal",
+        "body": "Texto provisional: el color de la cápsula y la placa del bozal están por elegir. Esta pantalla describirá el cierre: origen del corcho, bozal, diseño de la chapa."
+      },
+      {
+        "title": "La etiqueta",
+        "body": "Texto provisional: la etiqueta llevará la denominación, el pueblo, el dosage y la fecha de degüelle. Papel e impresión por confirmar."
+      }
     ],
     "photosPrev": "Láminas anteriores",
     "photosNext": "Láminas siguientes",
@@ -154,11 +202,26 @@
     "navPlates": "Láminas",
     "photosTitle": "Láminas",
     "photos": [
-      { "caption": "Lámina A — la parcela, hileras de viña al amanecer", "alt": "Imagen prevista: hileras de viña en una ladera de creta, luz del amanecer, sin personas." },
-      { "caption": "Lámina B — la cava, botellas en rima", "alt": "Imagen prevista: botellas apiladas en rima en una cava de creta, luz lateral baja." },
-      { "caption": "Lámina C — la copa, burbuja fina, luz rasante", "alt": "Imagen prevista: una copa de la cuvée sobre una superficie oscura, burbuja fina, luz rasante." },
-      { "caption": "Lámina D — la prensa, primeros mostos", "alt": "Imagen prevista: la prensa tradicional durante la vendimia, el mosto corriendo, encuadre cerrado." },
-      { "caption": "Lámina E — las manos, removido en pupitre", "alt": "Imagen prevista: una mano girando las botellas en un pupitre de removido, luz baja." }
+      {
+        "caption": "Lámina A — la parcela, hileras de viña al amanecer",
+        "alt": "Imagen prevista: hileras de viña en una ladera de creta, luz del amanecer, sin personas."
+      },
+      {
+        "caption": "Lámina B — la cava, botellas en rima",
+        "alt": "Imagen prevista: botellas apiladas en rima en una cava de creta, luz lateral baja."
+      },
+      {
+        "caption": "Lámina C — la copa, burbuja fina, luz rasante",
+        "alt": "Imagen prevista: una copa de la cuvée sobre una superficie oscura, burbuja fina, luz rasante."
+      },
+      {
+        "caption": "Lámina D — la prensa, primeros mostos",
+        "alt": "Imagen prevista: la prensa tradicional durante la vendimia, el mosto corriendo, encuadre cerrado."
+      },
+      {
+        "caption": "Lámina E — las manos, removido en pupitre",
+        "alt": "Imagen prevista: una mano girando las botellas en un pupitre de removido, luz baja."
+      }
     ],
     "details": "Ver el detalle"
   },
@@ -166,7 +229,14 @@
     "label": "Profundidad de la cava"
   },
   "glass": {
-    "axes": ["Fruta", "Floral", "Tostado", "Mineral", "Frescura", "Persistencia"],
+    "axes": [
+      "Fruta",
+      "Floral",
+      "Tostado",
+      "Mineral",
+      "Frescura",
+      "Persistencia"
+    ],
     "chartNote": "Perfil provisional, escala de 0 a 5",
     "title": "En la copa",
     "serviceLabel": "Servicio",
@@ -187,7 +257,10 @@
     "more": "Una botella más",
     "less": "Una botella menos",
     "simNote": "Simulación: así se vería la cesta integrada de Shopify.",
-    "demoNote": "Prototipo: todavía no hay ninguna tienda conectada. Los precios son provisionales."
+    "demoNote": "Prototipo: todavía no hay ninguna tienda conectada. Los precios son provisionales.",
+    "giftCheck": "Es un regalo",
+    "giftLabel": "Mensaje de regalo, impreso en una tarjeta",
+    "giftHint": "200 caracteres como máximo."
   },
   "loader": {
     "label": "Cargando"
@@ -197,5 +270,103 @@
     "title": "Esta botella aún no ha salido de nuestras cavas.",
     "body": "La página que busca no existe o ha sido trasladada.",
     "cta": "Volver al inicio"
+  },
+  "consent": {
+    "title": "Cookies",
+    "body": "Usamos las cookies necesarias para que funcionen el sitio y la tienda. Con su permiso, también mediríamos las visitas (estadísticas) y nuestra publicidad (marketing). Puede cambiar su elección en cualquier momento desde el pie de página.",
+    "accept": "Aceptar todo",
+    "refuse": "Rechazar",
+    "choose": "Elegir",
+    "save": "Guardar mi elección",
+    "manage": "Configuración de cookies",
+    "necessary": "Necesarias (siempre activas)",
+    "necessaryNote": "Idioma, cesta, su respuesta a la pregunta de edad, pago.",
+    "statistics": "Estadísticas",
+    "statisticsNote": "Un recuento anónimo de visitas y páginas vistas.",
+    "marketing": "Marketing",
+    "marketingNote": "La medición de nuestras campañas publicitarias."
+  },
+  "newsletter": {
+    "title": "Carta de lanzamientos",
+    "body": "Un correo cuando sale o se degüella una cuvée. Nada más.",
+    "label": "Correo electrónico",
+    "consent": "Acepto recibir esta carta y puedo darme de baja en cualquier momento.",
+    "submit": "Suscribirse",
+    "thanks": "Gracias. (Prototipo: no se ha enviado nada.)",
+    "invalid": "Indique un correo electrónico válido.",
+    "consentMissing": "Marque la casilla para suscribirse."
+  },
+  "about": {
+    "title": "Padre e hijo",
+    "kicker": "La casa",
+    "people": [
+      {
+        "name": "[NOMBRE] [APELLIDO]",
+        "role": "El padre · la viña y la prensa",
+        "quote": "Texto provisional: una frase, con sus palabras, sobre la viña y la creta.",
+        "alt": "Imagen prevista: retrato del padre en las viñas, luz natural, mirada fuera de cuadro."
+      },
+      {
+        "name": "[NOMBRE] [APELLIDO]",
+        "role": "El hijo · la cava y el ensamblaje",
+        "quote": "Texto provisional: una frase, con sus palabras, sobre la cava y los ensamblajes.",
+        "alt": "Imagen prevista: retrato del hijo en la cava entre las botellas, luz baja."
+      }
+    ]
+  },
+  "contact": {
+    "title": "Visitas y contacto",
+    "kicker": "Venga a vernos",
+    "address": [
+      "[DIRECCIÓN]",
+      "[CÓDIGO POSTAL] [VILLAGE], Francia"
+    ],
+    "hoursTitle": "Horario de visitas",
+    "hours": [
+      "De lunes a viernes: [00:00–00:00] (provisional)",
+      "Sábado: con cita previa",
+      "Domingo: cerrado"
+    ],
+    "phoneLabel": "Teléfono",
+    "phone": "+33 [0 00 00 00 00]",
+    "emailLabel": "Correo electrónico",
+    "email": "[contacto@sudominio]",
+    "map": "Abrir en un mapa",
+    "mapAlt": "Mapa provisional: ubicación de la casa en [VILLAGE]",
+    "note": "Visitas y catas solo con cita previa (provisional)."
+  },
+  "legal": {
+    "title": "Información legal",
+    "draft": "Texto provisional: debe redactarlo y revisarlo un abogado antes del lanzamiento.",
+    "back": "Volver al sitio",
+    "mentions": [
+      "Editor: [RAZÓN SOCIAL], [FORMA JURÍDICA] con un capital de [000] €",
+      "Domicilio social: [DIRECCIÓN]",
+      "Registro: RCS [CIUDAD] [000 000 000] · NIF-IVA [FR00 000000000]",
+      "Director de la publicación: [NOMBRE]",
+      "Alojamiento web: [NOMBRE Y DIRECCIÓN DEL PROVEEDOR]"
+    ],
+    "cgv": [
+      "[A redactar por un abogado: ámbito, precios, pedido, pago, entrega, derecho de desistimiento, garantías, litigios.]",
+      "La venta de alcohol está reservada a personas mayores de edad según la ley del país de entrega."
+    ],
+    "privacy": [
+      "Responsable del tratamiento: [RAZÓN SOCIAL]",
+      "Datos recogidos: nombre, dirección, correo, detalle de los pedidos, y cookies según su elección.",
+      "Finalidades: tramitar los pedidos, enviar la carta de lanzamientos si se suscribe, estadísticas si las acepta.",
+      "Sus derechos: acceso, rectificación, supresión y oposición. Escriba a [CORREO].",
+      "[A completar y revisar por un abogado.]"
+    ],
+    "cookies": [
+      "Cookies necesarias: idioma, cesta, su respuesta a la pregunta de edad, pago. No se pueden desactivar.",
+      "Cookies de estadísticas y de marketing: solo con su consentimiento.",
+      "Puede cambiar su elección en cualquier momento."
+    ],
+    "headings": [
+      "Aviso legal",
+      "Condiciones generales de venta",
+      "Política de privacidad",
+      "Aviso de cookies"
+    ]
   }
 }

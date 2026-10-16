@@ -33,7 +33,9 @@
           '<img class="age-gate__logo" src="assets/logo-placeholder.svg" width="160" height="64" alt="" data-i18n-attr="alt:brand.logoAlt">' +
         '</div>' +
         '<div class="age-gate__view" data-view="question">' +
-          '<h2 class="age-gate__title" id="age-gate-title" tabindex="-1" data-i18n="age.question"></h2>' +
+          '<label class="age-gate__country"><span class="label" data-i18n="age.country"></span>' +
+            '<select data-age-country></select></label>' +
+          '<h2 class="age-gate__title" id="age-gate-title" tabindex="-1" data-age-question></h2>' +
           '<p class="age-gate__note" data-i18n="age.note"></p>' +
           '<div class="age-gate__actions">' +
             '<button type="button" class="btn btn--primary" data-answer="yes" data-i18n="age.yes"></button>' +
@@ -56,6 +58,7 @@
       if (!button) return;
       var answer = button.getAttribute("data-answer");
       if (answer === "yes") {
+        try { localStorage.setItem(COUNTRY_KEY, overlay.querySelector("[data-age-country]").value); } catch (e) { /* private mode */ }
         writeAnswer("yes");
         close();
       } else if (answer === "no") {
@@ -67,6 +70,59 @@
       }
     });
     return el;
+  }
+
+  /* ---- Country: the question asks for the age that applies there ---------- */
+
+  var COUNTRY_KEY = "site.country";
+
+  function ages() {
+    var config = window.SITE_CONFIG || {};
+    return config.AGE_BY_COUNTRY || { default: 18 };
+  }
+
+  // The visitor's country: chosen before, else guessed from the browser's
+  // language setting ("fr-FR" → FR), else the language of the page.
+  function guessCountry() {
+    try { var saved = localStorage.getItem(COUNTRY_KEY); if (saved) return saved; } catch (e) { /* private mode */ }
+    var table = ages();
+    var languages = navigator.languages || [navigator.language || ""];
+    for (var i = 0; i < languages.length; i++) {
+      var region = (languages[i].split("-")[1] || "").toUpperCase();
+      if (region && table[region]) return region;
+    }
+    var byLanguage = { fr: "FR", es: "ES", ja: "JP", en: "GB" };
+    var guess = byLanguage[(window.I18n && window.I18n.lang) || "en"];
+    return table[guess] ? guess : "default";
+  }
+
+  function fillCountries() {
+    var select = overlay.querySelector("[data-age-country]");
+    var chosen = select.value || guessCountry();
+    var lang = (window.I18n && window.I18n.lang) || "en";
+    var names = null;
+    try { names = new Intl.DisplayNames([lang], { type: "region" }); } catch (e) { /* older browser: codes are shown */ }
+    var codes = Object.keys(ages()).filter(function (code) { return code !== "default"; });
+    var options = codes.map(function (code) { return { code: code, name: names ? names.of(code) : code }; });
+    options.sort(function (a, b) { return a.name.localeCompare(b.name, lang); });
+    options.push({ code: "default", name: window.I18n ? window.I18n.t("age.other") : "Other" });
+    select.textContent = "";
+    options.forEach(function (option) {
+      var item = document.createElement("option");
+      item.value = option.code;
+      item.textContent = option.name;
+      select.appendChild(item);
+    });
+    select.value = chosen;
+    askAge();
+  }
+
+  function askAge() {
+    var select = overlay.querySelector("[data-age-country]");
+    var table = ages();
+    var age = table[select.value] || table.default || 18;
+    var text = window.I18n ? window.I18n.t("age.question") : "{age}+?";
+    overlay.querySelector("[data-age-question]").textContent = text.replace("{age}", age);
   }
 
   function show(view) {
@@ -93,6 +149,8 @@
     document.documentElement.classList.add("is-gated");
     window.I18n.mountSwitchers(overlay);
     window.I18n.apply(overlay);
+    overlay.querySelector("[data-age-country]").addEventListener("change", askAge);
+    fillCountries();
     show(view);
   }
 
@@ -111,6 +169,9 @@
     if (answer === "yes") return;
     open(answer === "no" ? "exit" : "question");
   }
+
+  // Country names and the question follow the language.
+  document.addEventListener("i18n:change", function () { if (overlay) fillCountries(); });
 
   window.AgeGate = {
     init: init,

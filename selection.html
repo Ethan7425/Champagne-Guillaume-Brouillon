@@ -45,8 +45,9 @@
       <span class="brand__name" data-i18n="brand.name"></span>
     </a>
     <nav class="site-nav" data-i18n-attr="aria-label:a11y.mainNav">
-      <a href="index.html?all=1#cuvees" data-i18n="nav.cuvees"></a>
-      <a href="index.html?all=1#maison" data-i18n="nav.house"></a>
+      <a href="#selection" data-i18n="nav.cuvees"></a>
+      <a href="#maison" data-i18n="nav.house"></a>
+      <a href="#contact" data-i18n="nav.contact"></a>
     </nav>
     <div class="lang" role="group" data-lang-switcher data-i18n-attr="aria-label:a11y.langSwitcher"></div>
   </header>
@@ -80,6 +81,8 @@
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h16m-6-6 6 6-6 6"/></svg>
             </button>
           </div>
+          <!-- Shown only in the phone side-rail layout, where the column has room for it -->
+          <p class="label ring__meta ring__meta--rail" data-ring-key="cuvees.{i}.meta"></p>
           <ul class="ring__tags">
             <li class="label" data-ring-key="cuvees.{i}.tags.0"></li>
             <li class="label" data-ring-key="cuvees.{i}.tags.1"></li>
@@ -163,7 +166,7 @@
           </div>
           <div class="notes__row">
             <dt class="label" data-i18n="glass.pairLabel"></dt>
-            <dd class="label" data-i18n="glass.pair"></dd>
+            <dd class="label" data-ring-key="cuvees.{i}.pairing"></dd>
           </div>
         </dl>
       </div>
@@ -220,15 +223,112 @@
       </div>
     </section>
 
+    <!-- The house: father and son (portraits are placeholders) -->
+    <section class="about" id="maison" data-settle data-checkpoint="about.title" aria-labelledby="about-title">
+      <header class="about__head">
+        <p class="label" data-i18n="about.kicker"></p>
+        <h2 class="voyage__title" id="about-title" data-i18n="about.title"></h2>
+        <p class="about__body" data-i18n="house.body"></p>
+      </header>
+      <figure class="person">
+        <div class="photo__frame">
+          <img src="assets/placeholder-photo.svg" width="1200" height="900" loading="lazy" alt="" data-i18n-attr="alt:about.people.0.alt">
+        </div>
+        <figcaption>
+          <p class="person__name" data-i18n="about.people.0.name"></p>
+          <p class="label" data-i18n="about.people.0.role"></p>
+          <blockquote class="person__quote" data-i18n="about.people.0.quote"></blockquote>
+        </figcaption>
+      </figure>
+      <figure class="person">
+        <div class="photo__frame">
+          <img src="assets/placeholder-photo.svg" width="1200" height="900" loading="lazy" alt="" data-i18n-attr="alt:about.people.1.alt">
+        </div>
+        <figcaption>
+          <p class="person__name" data-i18n="about.people.1.name"></p>
+          <p class="label" data-i18n="about.people.1.role"></p>
+          <blockquote class="person__quote" data-i18n="about.people.1.quote"></blockquote>
+        </figcaption>
+      </figure>
+      <dl class="ledger about__facts">
+        <div class="ledger__row">
+          <dt class="label" data-i18n="house.facts.0.term"></dt>
+          <dd data-i18n="house.facts.0.value"></dd>
+        </div>
+        <div class="ledger__row">
+          <dt class="label" data-i18n="house.facts.1.term"></dt>
+          <dd data-i18n="house.facts.1.value"></dd>
+        </div>
+        <div class="ledger__row">
+          <dt class="label" data-i18n="house.facts.2.term"></dt>
+          <dd data-i18n="house.facts.2.value"></dd>
+        </div>
+        <div class="ledger__row">
+          <dt class="label" data-i18n="house.facts.3.term"></dt>
+          <dd data-i18n="house.facts.3.value"></dd>
+        </div>
+      </dl>
+    </section>
+
+    <!-- Visits and contact. Phone, email and map are PLACEHOLDERS (also in config.js: MAP_URL). -->
+    <section class="contact" id="contact" data-settle data-checkpoint="contact.title" aria-labelledby="contact-title">
+      <header class="contact__head">
+        <p class="label" data-i18n="contact.kicker"></p>
+        <h2 class="voyage__title" id="contact-title" data-i18n="contact.title"></h2>
+      </header>
+      <figure class="contact__map">
+        <div class="photo__frame">
+          <img src="assets/placeholder-photo.svg" width="1200" height="900" loading="lazy" alt="" data-i18n-attr="alt:contact.mapAlt">
+        </div>
+        <a class="btn btn--ghost" href="#" data-map-link data-i18n="contact.map"></a>
+      </figure>
+      <div class="contact__details">
+        <address>
+          <span data-i18n="contact.address.0"></span>
+          <span data-i18n="contact.address.1"></span>
+        </address>
+        <p><span class="label" data-i18n="contact.phoneLabel"></span> <a href="tel:+33000000000" data-i18n="contact.phone"></a></p>
+        <p><span class="label" data-i18n="contact.emailLabel"></span> <a href="mailto:contact@example.com" data-i18n="contact.email"></a></p>
+      </div>
+      <div class="contact__hours">
+        <h3 class="label" data-i18n="contact.hoursTitle"></h3>
+        <ul>
+          <li data-i18n="contact.hours.0"></li>
+          <li data-i18n="contact.hours.1"></li>
+          <li data-i18n="contact.hours.2"></li>
+        </ul>
+        <p class="contact__note" data-i18n="contact.note"></p>
+      </div>
+    </section>
+
   </main>
 
   <footer class="site-footer">
+    <!-- Release letter sign-up (js/newsletter.js) -->
+    <form class="newsletter" data-newsletter novalidate>
+      <h2 class="newsletter__title" data-i18n="newsletter.title"></h2>
+      <p class="newsletter__body" data-i18n="newsletter.body"></p>
+      <div class="newsletter__row">
+        <label class="newsletter__field">
+          <span class="label" data-i18n="newsletter.label"></span>
+          <input type="email" name="email" autocomplete="email" required>
+        </label>
+        <button type="submit" class="btn btn--primary" data-i18n="newsletter.submit"></button>
+      </div>
+      <label class="newsletter__consent">
+        <input type="checkbox" name="consent" required>
+        <span data-i18n="newsletter.consent"></span>
+      </label>
+      <p class="newsletter__status" data-newsletter-status aria-live="polite"></p>
+    </form>
+
     <p class="site-footer__brand" data-i18n="brand.name"></p>
     <nav class="site-footer__legal" data-i18n-attr="aria-label:a11y.legalNav">
-      <a href="#" data-i18n="footer.mentions"></a>
-      <a href="#" data-i18n="footer.cgv"></a>
-      <a href="#" data-i18n="footer.privacy"></a>
-      <a href="#" data-i18n="footer.cookies"></a>
+      <a href="legal.html#mentions" data-i18n="footer.mentions"></a>
+      <a href="legal.html#cgv" data-i18n="footer.cgv"></a>
+      <a href="legal.html#privacy" data-i18n="footer.privacy"></a>
+      <a href="legal.html#cookies" data-i18n="footer.cookies"></a>
+      <button type="button" class="site-footer__cookies" data-consent-open data-i18n="consent.manage"></button>
     </nav>
     <p class="label site-footer__label" data-i18n="footer.label"></p>
     <p class="site-footer__health" data-i18n="footer.health"></p>
@@ -247,6 +347,8 @@
   <script src="js/age-gate.js"></script>
   <script src="js/loader.js"></script>
   <script src="js/shop.js"></script>
+  <script src="js/consent.js"></script>
+  <script src="js/newsletter.js"></script>
   <script src="js/bottle-3d.js"></script>
   <script src="js/bottle-ring.js"></script>
   <script src="js/main.js"></script>

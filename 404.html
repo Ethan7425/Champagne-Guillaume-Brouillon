@@ -40,12 +40,31 @@
   </main>
 
   <footer class="site-footer">
+    <!-- Release letter sign-up (js/newsletter.js) -->
+    <form class="newsletter" data-newsletter novalidate>
+      <h2 class="newsletter__title" data-i18n="newsletter.title"></h2>
+      <p class="newsletter__body" data-i18n="newsletter.body"></p>
+      <div class="newsletter__row">
+        <label class="newsletter__field">
+          <span class="label" data-i18n="newsletter.label"></span>
+          <input type="email" name="email" autocomplete="email" required>
+        </label>
+        <button type="submit" class="btn btn--primary" data-i18n="newsletter.submit"></button>
+      </div>
+      <label class="newsletter__consent">
+        <input type="checkbox" name="consent" required>
+        <span data-i18n="newsletter.consent"></span>
+      </label>
+      <p class="newsletter__status" data-newsletter-status aria-live="polite"></p>
+    </form>
+
     <p class="site-footer__brand" data-i18n="brand.name"></p>
     <nav class="site-footer__legal" data-i18n-attr="aria-label:a11y.legalNav">
-      <a href="#" data-i18n="footer.mentions"></a>
-      <a href="#" data-i18n="footer.cgv"></a>
-      <a href="#" data-i18n="footer.privacy"></a>
-      <a href="#" data-i18n="footer.cookies"></a>
+      <a href="legal.html#mentions" data-i18n="footer.mentions"></a>
+      <a href="legal.html#cgv" data-i18n="footer.cgv"></a>
+      <a href="legal.html#privacy" data-i18n="footer.privacy"></a>
+      <a href="legal.html#cookies" data-i18n="footer.cookies"></a>
+      <button type="button" class="site-footer__cookies" data-consent-open data-i18n="consent.manage"></button>
     </nav>
     <p class="label site-footer__label" data-i18n="footer.label"></p>
     <p class="site-footer__health" data-i18n="footer.health"></p>
@@ -58,6 +77,8 @@
   <script src="js/age-gate.js"></script>
   <script src="js/loader.js"></script>
   <script src="js/shop.js"></script>
+  <script src="js/consent.js"></script>
+  <script src="js/newsletter.js"></script>
   <script src="js/main.js"></script>
   <!-- TESTING ONLY — delete this line before launch -->
   <script src="js/testing-panel.js"></script>

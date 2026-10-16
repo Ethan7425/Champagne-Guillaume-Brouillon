@@ -1,0 +1,130 @@
+<!doctype html>
+<!-- PROTOTYPE — NOT FOR PUBLICATION. Legal information: four parts, reached from the footer links.
+     All text comes from /i18n ("legal"). PLACEHOLDER WORDING: to be written and checked by a lawyer. -->
+<html lang="en" class="i18n-pending" data-theme="craie-cave" data-fonts="pair-a" data-motion="full">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title data-i18n="meta.titleLegal"></title>
+
+  <!-- Japanese fallback only. The Latin review fonts are bundled: see css/fonts.css. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;600&family=Noto+Serif+JP:wght@400;600&display=swap">
+
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/themes.css">
+  <link rel="stylesheet" href="css/fonts.css">
+  <link rel="stylesheet" href="css/components.css">
+  <noscript><style>html.i18n-pending body { visibility: visible; }</style></noscript>
+</head>
+<body class="page-legal">
+  <a class="skip-link" href="#main" data-i18n="a11y.skip"></a>
+  <p class="proto-badge" data-i18n="proto.badge"></p>
+
+  <header class="site-header">
+    <a class="brand" href="index.html" data-i18n-attr="aria-label:brand.home">
+      <img class="brand__logo" src="assets/logo-placeholder.svg" width="200" height="56" alt="">
+      <span class="brand__name" data-i18n="brand.name"></span>
+    </a>
+    <div class="lang" role="group" data-lang-switcher data-i18n-attr="aria-label:a11y.langSwitcher"></div>
+  </header>
+
+  <main id="main">
+    <article class="legal">
+      <header class="legal__head">
+        <h1 class="legal__title" data-i18n="legal.title"></h1>
+        <p class="legal__draft" data-i18n="legal.draft"></p>
+        <nav class="legal__toc" data-i18n-attr="aria-label:a11y.legalNav">
+          <a href="#mentions" data-i18n="legal.headings.0"></a>
+          <a href="#cgv" data-i18n="legal.headings.1"></a>
+          <a href="#privacy" data-i18n="legal.headings.2"></a>
+          <a href="#cookies" data-i18n="legal.headings.3"></a>
+        </nav>
+      </header>
+      <section class="legal__part" id="mentions" data-checkpoint="legal.headings.0" aria-labelledby="legal-mentions">
+        <h2 class="legal__heading" id="legal-mentions" data-i18n="legal.headings.0"></h2>
+        <ul class="legal__list">
+          <li data-i18n="legal.mentions.0"></li>
+          <li data-i18n="legal.mentions.1"></li>
+          <li data-i18n="legal.mentions.2"></li>
+          <li data-i18n="legal.mentions.3"></li>
+          <li data-i18n="legal.mentions.4"></li>
+        </ul>
+      </section>
+      <section class="legal__part" id="cgv" data-checkpoint="legal.headings.1" aria-labelledby="legal-cgv">
+        <h2 class="legal__heading" id="legal-cgv" data-i18n="legal.headings.1"></h2>
+        <ul class="legal__list">
+          <li data-i18n="legal.cgv.0"></li>
+          <li data-i18n="legal.cgv.1"></li>
+        </ul>
+      </section>
+      <section class="legal__part" id="privacy" data-checkpoint="legal.headings.2" aria-labelledby="legal-privacy">
+        <h2 class="legal__heading" id="legal-privacy" data-i18n="legal.headings.2"></h2>
+        <ul class="legal__list">
+          <li data-i18n="legal.privacy.0"></li>
+          <li data-i18n="legal.privacy.1"></li>
+          <li data-i18n="legal.privacy.2"></li>
+          <li data-i18n="legal.privacy.3"></li>
+          <li data-i18n="legal.privacy.4"></li>
+        </ul>
+      </section>
+      <section class="legal__part" id="cookies" data-checkpoint="legal.headings.3" aria-labelledby="legal-cookies">
+        <h2 class="legal__heading" id="legal-cookies" data-i18n="legal.headings.3"></h2>
+        <ul class="legal__list">
+          <li data-i18n="legal.cookies.0"></li>
+          <li data-i18n="legal.cookies.1"></li>
+          <li data-i18n="legal.cookies.2"></li>
+        </ul>
+        <button type="button" class="btn btn--ghost" data-consent-open data-i18n="consent.manage"></button>
+      </section>
+      <a class="btn btn--primary legal__back" href="index.html" data-i18n="legal.back"></a>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <!-- Release letter sign-up (js/newsletter.js) -->
+    <form class="newsletter" data-newsletter novalidate>
+      <h2 class="newsletter__title" data-i18n="newsletter.title"></h2>
+      <p class="newsletter__body" data-i18n="newsletter.body"></p>
+      <div class="newsletter__row">
+        <label class="newsletter__field">
+          <span class="label" data-i18n="newsletter.label"></span>
+          <input type="email" name="email" autocomplete="email" required>
+        </label>
+        <button type="submit" class="btn btn--primary" data-i18n="newsletter.submit"></button>
+      </div>
+      <label class="newsletter__consent">
+        <input type="checkbox" name="consent" required>
+        <span data-i18n="newsletter.consent"></span>
+      </label>
+      <p class="newsletter__status" data-newsletter-status aria-live="polite"></p>
+    </form>
+
+    <p class="site-footer__brand" data-i18n="brand.name"></p>
+    <nav class="site-footer__legal" data-i18n-attr="aria-label:a11y.legalNav">
+      <a href="legal.html#mentions" data-i18n="footer.mentions"></a>
+      <a href="legal.html#cgv" data-i18n="footer.cgv"></a>
+      <a href="legal.html#privacy" data-i18n="footer.privacy"></a>
+      <a href="legal.html#cookies" data-i18n="footer.cookies"></a>
+      <button type="button" class="site-footer__cookies" data-consent-open data-i18n="consent.manage"></button>
+    </nav>
+    <p class="label site-footer__label" data-i18n="footer.label"></p>
+    <p class="site-footer__health" data-i18n="footer.health"></p>
+    <p class="label site-footer__copyright" data-i18n="footer.copyright"></p>
+  </footer>
+
+  <script src="config.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/motion.js"></script>
+  <script src="js/age-gate.js"></script>
+  <script src="js/loader.js"></script>
+  <script src="js/shop.js"></script>
+  <script src="js/consent.js"></script>
+  <script src="js/newsletter.js"></script>
+  <script src="js/main.js"></script>
+  <!-- TESTING ONLY — delete this line before launch -->
+  <script src="js/testing-panel.js"></script>
+</body>
+</html>

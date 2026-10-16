@@ -181,6 +181,10 @@
 
   /* ---- Start ------------------------------------------------------------- */
 
+  // Map link in the contact section (config.js: MAP_URL; "#" until it is set).
+  var mapLink = document.querySelector("[data-map-link]");
+  if (mapLink && CONFIG.MAP_URL) mapLink.href = CONFIG.MAP_URL;
+
   var sections = buildCuvees();
   buildIndex();
   buildSunbursts();

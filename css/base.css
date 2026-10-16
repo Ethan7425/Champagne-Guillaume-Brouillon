@@ -32,6 +32,7 @@
   --z-header: 100;
   --z-basket: 850;
   --z-test: 900;
+  --z-consent: 950;
   --z-age-gate: 1000;
   --z-loader: 1050;
   --z-badge: 1100;
@@ -106,7 +107,10 @@ html[data-fx-noselect="on"] body {
 }
 html[data-fx-noselect="on"] input,
 html[data-fx-noselect="on"] textarea,
-html[data-fx-noselect="on"] .test-panel {
+html[data-fx-noselect="on"] .test-panel,
+html[data-fx-noselect="on"] .contact__details,
+html[data-fx-noselect="on"] .contact__details *,
+html[data-fx-noselect="on"] .legal__list {
   -webkit-user-select: text;
   user-select: text;
 }

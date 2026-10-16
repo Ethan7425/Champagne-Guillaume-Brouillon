@@ -30,6 +30,8 @@ js/
   loader.js             TEST: loading screen, played from the test panel
   shop.js               order links and basket: the four ways to reach Shopify
   extras.js             optional effects: cellar gauge, page tint, the glass
+  consent.js            cookie banner and the visitor's cookie choice
+  newsletter.js         release letter sign-up form
   age-gate.js           18+ overlay
   testing-panel.js      TESTING ONLY review panel
 i18n/
@@ -151,6 +153,17 @@ Set by `<html data-motion>`: `full`, `reduced` or `off` (`js/motion.js`).
 5. Remove the `.proto-badge` element and its styles, and the `noindex` meta tag.
 
 The panel opens with the `T` key, `?test=1`, or the "Test (T)" tab. URL shortcuts: `?theme=`, `?fonts=`, `?lang=`, `?motion=`, `?age=ok`, `?age=reset`.
+
+## Pages and parts added for launch
+
+- `legal.html`: legal notice, terms of sale, privacy policy, cookie notice. Every footer links to it. PLACEHOLDER wording, to be written and checked by a lawyer.
+- Cookie banner (`js/consent.js`): refuse, choose or accept, with equal weight; "Cookie settings" in the footer reopens it. Anything that later sets statistics or marketing cookies must first check `Consent.has("statistics")` / `Consent.has("marketing")`.
+- Age question by country (`js/age-gate.js`): the visitor picks a country and is asked for the age that applies there (`AGE_BY_COUNTRY` in `config.js`, values to confirm).
+- Food pairing per cuvée (`cuvees.N.pairing` in the i18n files): on the scroll page's cellar card and in the ring page's "In the glass".
+- Gift option in the basket (shop modes `embed` and `basket`): a checkbox and a message, sent to Shopify in the checkout link as `attributes[gift]` and `note`. To check with the real store that its checkout keeps them.
+- Release letter sign-up in every footer (`js/newsletter.js`). `NEWSLETTER_ACTION` in `config.js` says where to send it; empty means nothing is sent (prototype).
+- Ring page: "Father and son" (`#maison`, two portrait placeholders and the house facts) and "Visits and contact" (`#contact`, address, hours, phone, email, map link from `MAP_URL`). Phone, email and address are placeholders.
+- `changes.html` (TESTING ONLY): what changed in each version shared for review. Add an entry each time; delete before launch.
 
 ## Legal
 

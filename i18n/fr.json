@@ -3,7 +3,8 @@
     "title": "[BRAND NAME] · Champagne (prototype)",
     "titleRing": "Sélection des bouteilles · [BRAND NAME] (prototype)",
     "title404": "Page introuvable · [BRAND NAME]",
-    "description": "Description provisoire : [BRAND NAME], champagne de vigneron à [VILLAGE]. Quatre cuvées, leurs assemblages, leur élevage et leurs notes de dégustation."
+    "description": "Description provisoire : [BRAND NAME], champagne de vigneron à [VILLAGE]. Quatre cuvées, leurs assemblages, leur élevage et leurs notes de dégustation.",
+    "titleLegal": "Informations légales · [BRAND NAME]"
   },
   "proto": {
     "badge": "PROTOTYPE — NOT FOR PUBLICATION"
@@ -22,7 +23,8 @@
   "nav": {
     "top": "Haut de la page",
     "cuvees": "Cuvées",
-    "house": "La maison"
+    "house": "La maison",
+    "contact": "Contact"
   },
   "hero": {
     "label": "Champagne · [VILLAGE] · Récoltant-manipulant",
@@ -38,12 +40,17 @@
     "blendLabel": "Assemblage",
     "makingLabel": "Vinification",
     "notesLabel": "Dégustation",
-    "priceLabel": "Prix, 75 cl"
+    "priceLabel": "Prix, 75 cl",
+    "pairingLabel": "Accord"
   },
   "cuvees": [
     {
       "name": "[CUVÉE 1]",
-      "tags": ["Fruits blancs", "Amande fraîche", "Craie"],
+      "tags": [
+        "Fruits blancs",
+        "Amande fraîche",
+        "Craie"
+      ],
       "meta": "Cuvée N° 01 · Type : TBD · [00] mois sur lattes · dosage [0] g/L",
       "lead": "Texte provisoire : l’assemblage de la maison, issu de [PARCELLE A] et de [PARCELLE B], sur sous-sol de craie. Pressurage dans les heures qui suivent la cueillette, vinification en [CONTENANT À PRÉCISER].",
       "type": "TBD",
@@ -52,11 +59,16 @@
       "price": "00,00 €",
       "buy": "Commander [CUVÉE 1]",
       "caption": "Planche 01 — [CUVÉE 1], lumière rasante, fond sombre",
-      "alt": "Image prévue : bouteille de [CUVÉE 1], vue de trois quarts face, lumière rasante venant de la gauche, fond sombre."
+      "alt": "Image prévue : bouteille de [CUVÉE 1], vue de trois quarts face, lumière rasante venant de la gauche, fond sombre.",
+      "pairing": "Huîtres · bar grillé · comté affiné (provisoire)"
     },
     {
       "name": "[CUVÉE 2]",
-      "tags": ["Zeste d’agrumes", "Fleurs blanches", "Pain grillé"],
+      "tags": [
+        "Zeste d’agrumes",
+        "Fleurs blanches",
+        "Pain grillé"
+      ],
       "meta": "Cuvée N° 02 · Type : TBD · [00] mois sur lattes · dosage [0] g/L",
       "lead": "Texte provisoire : un vin de parcelle unique, [PARCELLE C], vignes plantées en [ANNÉE]. Chaque lot est vinifié séparément avant l’assemblage.",
       "type": "TBD",
@@ -65,11 +77,16 @@
       "price": "00,00 €",
       "buy": "Commander [CUVÉE 2]",
       "caption": "Planche 02 — [CUVÉE 2], lumière rasante, fond sombre",
-      "alt": "Image prévue : bouteille de [CUVÉE 2], vue de trois quarts face, lumière rasante venant de la gauche, fond sombre."
+      "alt": "Image prévue : bouteille de [CUVÉE 2], vue de trois quarts face, lumière rasante venant de la gauche, fond sombre.",
+      "pairing": "Saint-jacques · sushis · fromage de chèvre (provisoire)"
     },
     {
       "name": "[CUVÉE 3]",
-      "tags": ["Fruits rouges", "Orange sanguine", "Tanin fin"],
+      "tags": [
+        "Fruits rouges",
+        "Orange sanguine",
+        "Tanin fin"
+      ],
       "meta": "Cuvée N° 03 · Type : TBD · [00] mois sur lattes · dosage [0] g/L",
       "lead": "Texte provisoire : une cuvée construite sur le pinot noir de [PARCELLE D]. La durée de macération et la couleur restent à confirmer avec le producteur.",
       "type": "TBD",
@@ -78,11 +95,16 @@
       "price": "00,00 €",
       "buy": "Commander [CUVÉE 3]",
       "caption": "Planche 03 — [CUVÉE 3], lumière rasante, fond sombre",
-      "alt": "Image prévue : bouteille de [CUVÉE 3], vue de trois quarts face, lumière rasante venant de la gauche, fond sombre."
+      "alt": "Image prévue : bouteille de [CUVÉE 3], vue de trois quarts face, lumière rasante venant de la gauche, fond sombre.",
+      "pairing": "Magret de canard · fruits rouges · tarte tatin (provisoire)"
     },
     {
       "name": "[CUVÉE 4]",
-      "tags": ["Fruits secs", "Noisette", "Brioche"],
+      "tags": [
+        "Fruits secs",
+        "Noisette",
+        "Brioche"
+      ],
       "meta": "Cuvée N° 04 · Type : TBD · [00] mois sur lattes · dosage [0] g/L",
       "lead": "Texte provisoire : le plus long vieillissement de la cave. Vins de réserve de [ANNÉES À PRÉCISER], conservés en [CONTENANT À PRÉCISER] et tirés en petite quantité.",
       "type": "TBD",
@@ -91,11 +113,16 @@
       "price": "00,00 €",
       "buy": "Commander [CUVÉE 4]",
       "caption": "Planche 04 — [CUVÉE 4], lumière rasante, fond sombre",
-      "alt": "Image prévue : bouteille de [CUVÉE 4], vue de trois quarts face, lumière rasante venant de la gauche, fond sombre."
+      "alt": "Image prévue : bouteille de [CUVÉE 4], vue de trois quarts face, lumière rasante venant de la gauche, fond sombre.",
+      "pairing": "Volaille aux morilles · truffe · parmesan affiné (provisoire)"
     },
     {
       "name": "???",
-      "tags": ["En cave", "À paraître", "[ANNÉE]"],
+      "tags": [
+        "En cave",
+        "À paraître",
+        "[ANNÉE]"
+      ],
       "meta": "Cuvée N° 05 · À paraître",
       "lead": "Une cinquième cuvée repose encore en cave. Son assemblage, son élevage et sa date de sortie seront indiqués ici dès que le producteur les aura arrêtés.",
       "type": "TBD",
@@ -104,17 +131,30 @@
       "price": "—",
       "buy": "Bientôt disponible",
       "caption": "Planche 05 — bouteille non dévoilée, lumière rasante, fond sombre",
-      "alt": "Image prévue : la silhouette d’une bouteille sans étiquette, éclairée à contre-jour, fond sombre."
+      "alt": "Image prévue : la silhouette d’une bouteille sans étiquette, éclairée à contre-jour, fond sombre.",
+      "pairing": "À annoncer"
     }
   ],
   "house": {
     "title": "Deux générations, [00] parcelles, un pressoir.",
     "body": "Texte provisoire : [PRÉNOM] et [PRÉNOM], père et fils, cultivent les vignes de la famille à [VILLAGE]. Ils vendangent à la main, pressent sur place et tirent eux-mêmes chaque cuvée. Ce paragraphe sera remplacé par le récit du producteur.",
     "facts": [
-      { "term": "Vignoble", "value": "[0,0] ha à [VILLAGE], [SOUS-RÉGION À PRÉCISER]" },
-      { "term": "Parcelles", "value": "[00] parcelles sur craie, âge moyen des vignes : [00] ans" },
-      { "term": "Pressurage", "value": "Pressoir traditionnel de [0 000] kg, dans les [0] heures après la cueillette" },
-      { "term": "Vieillissement", "value": "[00] à [00] mois en cave de craie, à [00] °C" }
+      {
+        "term": "Vignoble",
+        "value": "[0,0] ha à [VILLAGE], [SOUS-RÉGION À PRÉCISER]"
+      },
+      {
+        "term": "Parcelles",
+        "value": "[00] parcelles sur craie, âge moyen des vignes : [00] ans"
+      },
+      {
+        "term": "Pressurage",
+        "value": "Pressoir traditionnel de [0 000] kg, dans les [0] heures après la cueillette"
+      },
+      {
+        "term": "Vieillissement",
+        "value": "[00] à [00] mois en cave de craie, à [00] °C"
+      }
     ]
   },
   "footer": {
@@ -127,13 +167,15 @@
     "copyright": "© [ANNÉE] [BRAND NAME]"
   },
   "age": {
-    "question": "Êtes-vous âgé(e) de 18 ans ou plus ?",
+    "question": "Êtes-vous âgé(e) de {age} ans ou plus ?",
     "note": "Ce site présente des vins et s’adresse aux personnes ayant l’âge légal de consommer de l’alcool dans leur pays de résidence.",
     "yes": "Oui",
     "no": "Non",
     "exitTitle": "Merci de votre franchise.",
     "exitBody": "Ce site est réservé aux personnes majeures. Nous ne pouvons pas vous en montrer le contenu.",
-    "back": "Je me suis trompé(e)"
+    "back": "Je me suis trompé(e)",
+    "country": "Pays de résidence",
+    "other": "Autre pays"
   },
   "ring": {
     "label": "Page de test · choisir une cuvée",
@@ -144,8 +186,14 @@
     "kicker": "Champagne",
     "bottle": "La bouteille",
     "closeups": [
-      { "title": "Coiffe et muselet", "body": "Texte provisoire : la couleur de la coiffe et la plaque de muselet restent à choisir. Cet écran décrira le bouchage : origine du liège, muselet, dessin de la capsule." },
-      { "title": "L’étiquette", "body": "Texte provisoire : l’étiquette portera l’appellation, le village, le dosage et la date de dégorgement. Papier et impression à confirmer." }
+      {
+        "title": "Coiffe et muselet",
+        "body": "Texte provisoire : la couleur de la coiffe et la plaque de muselet restent à choisir. Cet écran décrira le bouchage : origine du liège, muselet, dessin de la capsule."
+      },
+      {
+        "title": "L’étiquette",
+        "body": "Texte provisoire : l’étiquette portera l’appellation, le village, le dosage et la date de dégorgement. Papier et impression à confirmer."
+      }
     ],
     "photosPrev": "Planches précédentes",
     "photosNext": "Planches suivantes",
@@ -154,11 +202,26 @@
     "navPlates": "Planches",
     "photosTitle": "Planches",
     "photos": [
-      { "caption": "Planche A — la parcelle, rangs de vigne au petit matin", "alt": "Image prévue : rangs de vigne sur un coteau de craie, lumière du petit matin, sans personnage." },
-      { "caption": "Planche B — la cave, bouteilles sur lattes", "alt": "Image prévue : bouteilles empilées sur lattes dans une cave de craie, lumière latérale basse." },
-      { "caption": "Planche C — le verre, bulle fine, lumière rasante", "alt": "Image prévue : un verre de la cuvée posé sur une surface sombre, bulle fine, lumière rasante." },
-      { "caption": "Planche D — le pressoir, premiers jus", "alt": "Image prévue : le pressoir traditionnel pendant la vendange, le jus qui coule, cadrage serré." },
-      { "caption": "Planche E — les mains, remuage sur pupitre", "alt": "Image prévue : une main tournant les bouteilles sur un pupitre de remuage, lumière basse." }
+      {
+        "caption": "Planche A — la parcelle, rangs de vigne au petit matin",
+        "alt": "Image prévue : rangs de vigne sur un coteau de craie, lumière du petit matin, sans personnage."
+      },
+      {
+        "caption": "Planche B — la cave, bouteilles sur lattes",
+        "alt": "Image prévue : bouteilles empilées sur lattes dans une cave de craie, lumière latérale basse."
+      },
+      {
+        "caption": "Planche C — le verre, bulle fine, lumière rasante",
+        "alt": "Image prévue : un verre de la cuvée posé sur une surface sombre, bulle fine, lumière rasante."
+      },
+      {
+        "caption": "Planche D — le pressoir, premiers jus",
+        "alt": "Image prévue : le pressoir traditionnel pendant la vendange, le jus qui coule, cadrage serré."
+      },
+      {
+        "caption": "Planche E — les mains, remuage sur pupitre",
+        "alt": "Image prévue : une main tournant les bouteilles sur un pupitre de remuage, lumière basse."
+      }
     ],
     "details": "Voir le détail"
   },
@@ -166,7 +229,14 @@
     "label": "Profondeur de cave"
   },
   "glass": {
-    "axes": ["Fruit", "Floral", "Grillé", "Minéral", "Fraîcheur", "Longueur"],
+    "axes": [
+      "Fruit",
+      "Floral",
+      "Grillé",
+      "Minéral",
+      "Fraîcheur",
+      "Longueur"
+    ],
     "chartNote": "Profil provisoire, échelle de 0 à 5",
     "title": "Dans le verre",
     "serviceLabel": "Service",
@@ -186,8 +256,11 @@
     "remove": "Retirer",
     "more": "Une bouteille de plus",
     "less": "Une bouteille de moins",
-    "simNote": "Simulation\u00a0: voici à quoi ressemblerait le panier intégré de Shopify.",
-    "demoNote": "Prototype\u00a0: aucune boutique n’est encore connectée. Les prix sont provisoires."
+    "simNote": "Simulation : voici à quoi ressemblerait le panier intégré de Shopify.",
+    "demoNote": "Prototype : aucune boutique n’est encore connectée. Les prix sont provisoires.",
+    "giftCheck": "C’est un cadeau",
+    "giftLabel": "Message cadeau, imprimé sur une carte",
+    "giftHint": "200 caractères au plus."
   },
   "loader": {
     "label": "Chargement"
@@ -197,5 +270,103 @@
     "title": "Cette bouteille n’est pas encore sortie de nos caves.",
     "body": "La page que vous cherchez n’existe pas ou a été déplacée.",
     "cta": "Retour à l’accueil"
+  },
+  "consent": {
+    "title": "Cookies",
+    "body": "Nous utilisons les cookies nécessaires au fonctionnement du site et de la boutique. Avec votre accord, nous mesurerions aussi les visites (statistiques) et nos publicités (marketing). Vous pouvez modifier votre choix à tout moment depuis le bas de page.",
+    "accept": "Tout accepter",
+    "refuse": "Refuser",
+    "choose": "Choisir",
+    "save": "Enregistrer mon choix",
+    "manage": "Gestion des cookies",
+    "necessary": "Nécessaires (toujours actifs)",
+    "necessaryNote": "Langue, panier, votre réponse à la question de l’âge, paiement.",
+    "statistics": "Statistiques",
+    "statisticsNote": "Un décompte anonyme des visites et des pages vues.",
+    "marketing": "Marketing",
+    "marketingNote": "La mesure de nos campagnes publicitaires."
+  },
+  "newsletter": {
+    "title": "Lettre des sorties",
+    "body": "Un e-mail quand une cuvée sort ou est dégorgée. Rien d’autre.",
+    "label": "Adresse e-mail",
+    "consent": "J’accepte de recevoir cette lettre et peux me désinscrire à tout moment.",
+    "submit": "S’inscrire",
+    "thanks": "Merci. (Prototype : rien n’a été envoyé.)",
+    "invalid": "Merci d’indiquer une adresse e-mail valide.",
+    "consentMissing": "Merci de cocher la case pour vous inscrire."
+  },
+  "about": {
+    "title": "Le père et le fils",
+    "kicker": "La maison",
+    "people": [
+      {
+        "name": "[PRÉNOM] [NOM]",
+        "role": "Le père · la vigne et le pressoir",
+        "quote": "Texte provisoire : une phrase, avec ses mots, sur la vigne et la craie.",
+        "alt": "Image prévue : portrait du père dans les vignes, lumière naturelle, regard hors champ."
+      },
+      {
+        "name": "[PRÉNOM] [NOM]",
+        "role": "Le fils · la cave et l’assemblage",
+        "quote": "Texte provisoire : une phrase, avec ses mots, sur la cave et les assemblages.",
+        "alt": "Image prévue : portrait du fils dans la cave parmi les bouteilles, lumière basse."
+      }
+    ]
+  },
+  "contact": {
+    "title": "Visites et contact",
+    "kicker": "Venir nous voir",
+    "address": [
+      "[ADRESSE]",
+      "[CODE POSTAL] [VILLAGE], France"
+    ],
+    "hoursTitle": "Horaires des visites",
+    "hours": [
+      "Du lundi au vendredi : [00 h–00 h] (provisoire)",
+      "Samedi : sur rendez-vous",
+      "Dimanche : fermé"
+    ],
+    "phoneLabel": "Téléphone",
+    "phone": "+33 [0 00 00 00 00]",
+    "emailLabel": "E-mail",
+    "email": "[contact@votredomaine]",
+    "map": "Ouvrir dans une carte",
+    "mapAlt": "Carte provisoire : emplacement de la maison à [VILLAGE]",
+    "note": "Visites et dégustations sur rendez-vous uniquement (provisoire)."
+  },
+  "legal": {
+    "title": "Informations légales",
+    "draft": "Texte provisoire : à rédiger et à faire vérifier par un juriste avant la mise en ligne.",
+    "back": "Retour au site",
+    "mentions": [
+      "Éditeur : [RAISON SOCIALE], [FORME JURIDIQUE] au capital de [000] €",
+      "Siège social : [ADRESSE]",
+      "Immatriculation : RCS [VILLE] [000 000 000] · TVA intracommunautaire [FR00 000000000]",
+      "Directeur de la publication : [NOM]",
+      "Hébergeur : [NOM ET ADRESSE DE L’HÉBERGEUR]"
+    ],
+    "cgv": [
+      "[À rédiger par un juriste : champ d’application, prix, commande, paiement, livraison, droit de rétractation, garanties, litiges.]",
+      "La vente d’alcool est réservée aux personnes majeures selon la loi du pays de livraison."
+    ],
+    "privacy": [
+      "Responsable du traitement : [RAISON SOCIALE]",
+      "Données collectées : nom, adresse, e-mail, détail des commandes, et cookies selon votre choix.",
+      "Finalités : traiter les commandes, envoyer la lettre des sorties si vous y êtes inscrit(e), statistiques si vous les acceptez.",
+      "Vos droits : accès, rectification, effacement et opposition. Écrire à [E-MAIL].",
+      "[À compléter et à faire vérifier par un juriste.]"
+    ],
+    "cookies": [
+      "Cookies nécessaires : langue, panier, votre réponse à la question de l’âge, paiement. Ils ne peuvent pas être désactivés.",
+      "Cookies de statistiques et de marketing : uniquement avec votre accord.",
+      "Vous pouvez modifier votre choix à tout moment."
+    ],
+    "headings": [
+      "Mentions légales",
+      "Conditions générales de vente",
+      "Politique de confidentialité",
+      "Gestion des cookies"
+    ]
   }
 }
